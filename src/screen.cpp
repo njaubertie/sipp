@@ -135,7 +135,7 @@ static void _screen_error(int fatal, bool use_errno, int error, const char *fmt,
                 sprintf(c, "%s: Unable to create '%s': %s.\n",
                         screen_exename, screen_logfile, strerror(errno));
             }
-            sipp_exit(EXIT_FATAL_ERROR);
+            sipp_exit(EXIT_FATAL_ERROR, 0, 0);
         }
     }
 
@@ -169,9 +169,9 @@ static void _screen_error(int fatal, bool use_errno, int error, const char *fmt,
             }
         } else {
             if (error == EADDRINUSE) {
-                sipp_exit(EXIT_BIND_ERROR);
+                sipp_exit(EXIT_BIND_ERROR, 0, 0);
             } else {
-                sipp_exit(EXIT_FATAL_ERROR);
+                sipp_exit(EXIT_FATAL_ERROR, 0, 0);
             }
         }
     }
