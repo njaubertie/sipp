@@ -1159,7 +1159,7 @@ int JLSRTP::resetCipherState()
 
 int JLSRTP::deriveSessionEncryptionKey()
 {
-    std::vector<unsigned char> input_vector;		// Input vector (built from applicable keyid_XXXs)
+    std::vector<unsigned char> input_vector;  // Input vector (built from applicable keyid_XXXs)
     std::vector<unsigned char> keyid_encryption;
     int saltSize = 0;
     int retVal = -1;
@@ -1236,7 +1236,7 @@ int JLSRTP::deriveSessionEncryptionKey()
 
 int JLSRTP::deriveSessionSaltingKey()
 {
-    std::vector<unsigned char> input_vector;		// Input vector (built from applicable keyid_XXXs)
+    std::vector<unsigned char> input_vector;  // Input vector (built from applicable keyid_XXXs)
     std::vector<unsigned char> keyid_salting;
     int saltSize = 0;
     int retVal = -1;
@@ -1313,7 +1313,7 @@ int JLSRTP::deriveSessionSaltingKey()
 
 int JLSRTP::deriveSessionAuthenticationKey()
 {
-    std::vector<unsigned char> input_vector;		// Input vector (built from applicable keyid_XXXs)
+    std::vector<unsigned char> input_vector;  // Input vector (built from applicable keyid_XXXs)
     std::vector<unsigned char> keyid_authentication;
     int saltSize = 0;
     int retVal = -1;
@@ -3081,35 +3081,35 @@ int JLSRTP::swapCrypto()
 {
     int retVal = 0;
 
-    CipherType    			cipher_algorithm = INVALID_CIPHER;
-    HashType    			hmac_algorithm = INVALID_HASH;
-    bool           			MKI = false;
-    unsigned int   			MKI_length = 0;
-    unsigned long  			active_MKI = 0;
-    std::vector<unsigned char> 		master_key;
-    unsigned long  			master_key_counter = 0;
-    unsigned short 			n_e = 0;
-    unsigned short 			n_a = 0;
-    std::vector<unsigned char> 		master_salt;
-    unsigned long  			master_key_derivation_rate = 0;
-    unsigned long  			master_mki_value = 0;
-    unsigned short 			n_s = 0;
-    unsigned int                    	tag = 0;
+    CipherType                  cipher_algorithm = INVALID_CIPHER;
+    HashType                    hmac_algorithm = INVALID_HASH;
+    bool                        MKI = false;
+    unsigned int                MKI_length = 0;
+    unsigned long               active_MKI = 0;
+    std::vector<unsigned char>  master_key;
+    unsigned long               master_key_counter = 0;
+    unsigned short              n_e = 0;
+    unsigned short              n_a = 0;
+    std::vector<unsigned char>  master_salt;
+    unsigned long               master_key_derivation_rate = 0;
+    unsigned long               master_mki_value = 0;
+    unsigned short              n_s = 0;
+    unsigned int                tag = 0;
 
-    cipher_algorithm                             = _primary_crypto.cipher_algorithm;
-    hmac_algorithm                               = _primary_crypto.hmac_algorithm;
-    MKI                                          = _primary_crypto.MKI;
-    MKI_length                                   = _primary_crypto.MKI_length;
-    active_MKI                                   = _primary_crypto.active_MKI;
-    master_key                                   = _primary_crypto.master_key;
-    master_key_counter                           = _primary_crypto.master_key_counter;
-    n_e                                          = _primary_crypto.n_e;
-    n_a                                          = _primary_crypto.n_a;
-    master_salt                                  = _primary_crypto.master_salt;
-    master_key_derivation_rate                   = _primary_crypto.master_key_derivation_rate;
-    master_mki_value                             = _primary_crypto.master_mki_value;
-    n_s                                          = _primary_crypto.n_s;
-    tag                                          = _primary_crypto.tag;
+    cipher_algorithm            = _primary_crypto.cipher_algorithm;
+    hmac_algorithm              = _primary_crypto.hmac_algorithm;
+    MKI                         = _primary_crypto.MKI;
+    MKI_length                  = _primary_crypto.MKI_length;
+    active_MKI                  = _primary_crypto.active_MKI;
+    master_key                  = _primary_crypto.master_key;
+    master_key_counter          = _primary_crypto.master_key_counter;
+    n_e                         = _primary_crypto.n_e;
+    n_a                         = _primary_crypto.n_a;
+    master_salt                 = _primary_crypto.master_salt;
+    master_key_derivation_rate  = _primary_crypto.master_key_derivation_rate;
+    master_mki_value            = _primary_crypto.master_mki_value;
+    n_s                         = _primary_crypto.n_s;
+    tag                         = _primary_crypto.tag;
 
     _primary_crypto.cipher_algorithm             = _secondary_crypto.cipher_algorithm;
     _primary_crypto.hmac_algorithm               = _secondary_crypto.hmac_algorithm;
@@ -3321,5 +3321,3 @@ JLSRTP::~JLSRTP()
 {
     RAND_cleanup();
 }
-
-

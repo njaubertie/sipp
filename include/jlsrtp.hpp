@@ -25,24 +25,24 @@
 #include <string>
 #include <vector>
 
-#define JLSRTP_VERSION				0.3
-#define JLSRTP_ENCRYPTION_KEY_LENGTH		16  // bytes
-#define JLSRTP_SALTING_KEY_LENGTH       	14  // bytes
-#define JLSRTP_AUTHENTICATION_KEY_LENGTH  	20  // bytes
+#define JLSRTP_VERSION                          0.3
+#define JLSRTP_ENCRYPTION_KEY_LENGTH            16  // bytes
+#define JLSRTP_SALTING_KEY_LENGTH               14  // bytes
+#define JLSRTP_AUTHENTICATION_KEY_LENGTH        20  // bytes
 
-#define JLSRTP_MAX_SEQUENCE_NUMBERS     	65536
+#define JLSRTP_MAX_SEQUENCE_NUMBERS             65536
 
-#define JLSRTP_PSEUDORANDOM_BITS 		128
-#define JLSRTP_KEY_ENCRYPTION_LABEL		0x00
-#define JLSRTP_KEY_AUTHENTICATION_LABEL		0x01
-#define JLSRTP_KEY_SALTING_LABEL		0x02
+#define JLSRTP_PSEUDORANDOM_BITS                128
+#define JLSRTP_KEY_ENCRYPTION_LABEL             0x00
+#define JLSRTP_KEY_AUTHENTICATION_LABEL         0x01
+#define JLSRTP_KEY_SALTING_LABEL                0x02
 
-#define	JLSRTP_SHA1_HASH_LENGTH			20
+#define JLSRTP_SHA1_HASH_LENGTH                 20
 
-#define	JLSRTP_SRTP_DEFAULT_HEADER_SIZE		12  // bytes
+#define JLSRTP_SRTP_DEFAULT_HEADER_SIZE         12  // bytes
 
-#define	JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80	10  // bytes
-#define	JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32	4   // bytes
+#define JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80  10  // bytes
+#define JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32  4   // bytes
 
 static const std::string base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -89,20 +89,20 @@ typedef enum _HashType
 
 typedef struct _CryptoAttribute
 {
-    CipherType    			cipher_algorithm;
-    HashType    			hmac_algorithm;
-    bool           			MKI;
-    unsigned int   			MKI_length;
-    unsigned long  			active_MKI;
-    std::vector<unsigned char> 		master_key;
-    unsigned long  			master_key_counter;
-    unsigned short 			n_e;
-    unsigned short 			n_a;
-    std::vector<unsigned char> 		master_salt;
-    unsigned long  			master_key_derivation_rate;
-    unsigned long  			master_mki_value;
-    unsigned short 			n_s;
-    unsigned int                    	tag;
+    CipherType                          cipher_algorithm;
+    HashType                            hmac_algorithm;
+    bool                                MKI;
+    unsigned int                        MKI_length;
+    unsigned long                       active_MKI;
+    std::vector<unsigned char>          master_key;
+    unsigned long                       master_key_counter;
+    unsigned short                      n_e;
+    unsigned short                      n_a;
+    std::vector<unsigned char>          master_salt;
+    unsigned long                       master_key_derivation_rate;
+    unsigned long                       master_mki_value;
+    unsigned short                      n_s;
+    unsigned int                        tag;
 } CryptoAttribute;
 
 typedef enum _ActiveCrypto
@@ -116,31 +116,31 @@ typedef enum _ActiveCrypto
 class JLSRTP
 {
     private:
-        CryptoContextID			_id;
-        unsigned long  			_ROC;
-        unsigned short 			_s_l;
-        CryptoAttribute			_primary_crypto;
+        CryptoContextID                 _id;
+        unsigned long                   _ROC;
+        unsigned short                  _s_l;
+        CryptoAttribute                 _primary_crypto;
         CryptoAttribute                 _secondary_crypto;
-        ActiveCrypto			_active_crypto;
-        std::vector<unsigned char>	_session_enc_key;
-        std::vector<unsigned char>	_session_salt_key;
-        std::vector<unsigned char>	_session_auth_key;
+        ActiveCrypto                    _active_crypto;
+        std::vector<unsigned char>      _session_enc_key;
+        std::vector<unsigned char>      _session_salt_key;
+        std::vector<unsigned char>      _session_auth_key;
         std::vector<unsigned char>      _packetIV;
         AESState                        _pseudorandomstate;
         AESState                        _cipherstate;
         AES_KEY                         _aes_key;
-        unsigned int			_srtp_header_size;
-	unsigned int			_srtp_payload_size;
+        unsigned int                    _srtp_header_size;
+        unsigned int                    _srtp_payload_size;
 
         /**
          * isBase64
          *
          * Checks whether the given character satisfies base64 criterias (true) or not (false)
          *
-         * @param[in]	c	Unsigned character to examine
+         * @param[in]   c       Unsigned character to examine
          *
-         * @return  TRUE	Given character satisfies base64 criterias
-         * @return  FALSE	Given character DOES NOT satisfy base64 criterias
+         * @return  TRUE        Given character satisfies base64 criterias
+         * @return  FALSE       Given character DOES NOT satisfy base64 criterias
          */
         bool isBase64(unsigned char c);
 
@@ -149,10 +149,10 @@ class JLSRTP
          *
          * Resets the state of the AES counter mode pseudo random function
          *
-         * @param[in]		iv	Input vector to use
+         * @param[in]           iv      Input vector to use
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int resetPseudoRandomState(std::vector<unsigned char> iv);
 
@@ -161,15 +161,15 @@ class JLSRTP
          *
          * Generates the given number of key stream bits from the given master key and input vector
          *
-         * @param[in]	iv		Input vector to use
-         * @param[in]	n		Number of keystream bits to generate
-         * @param[out]	output		Generated keystream bits
+         * @param[in]   iv              Input vector to use
+         * @param[in]   n               Number of keystream bits to generate
+         * @param[out]  output          Generated keystream bits
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Incorrect salting key length
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Incorrect salting key length
          * @return  -2  FAILURE -- Incorrect encryption key length
          * @return  -3  FAILURE -- Could not set encryption key
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int pseudorandomFunction(std::vector<unsigned char> iv, int n, std::vector<unsigned char> &output);
 
@@ -178,12 +178,12 @@ class JLSRTP
          *
          * Shifts a given vector to the left by a predetermined number of bytes
          *
-         * @param[out]	shifted_vec	Shifted vector
-         * @param[in]	original_vec	Original vector to shift
-         * @param[in]	shift_value	Number of bytes to shift original vector by
+         * @param[out]  shifted_vec     Shifted vector
+         * @param[in]   original_vec    Original vector to shift
+         * @param[in]   shift_value     Number of bytes to shift original vector by
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int shiftVectorLeft(std::vector<unsigned char> &shifted_vec, std::vector<unsigned char> &original_vec, int shift_value);
 
@@ -192,12 +192,12 @@ class JLSRTP
          *
          * Shifts a given vector to the right by a predetermined number of bytes
          *
-         * @param[out]	shifted_vec	Shifted vector
-         * @param[in]	original_vec	Original vector to shift
-         * @param[in]	shift_value	Number of bytes to shift original vector by
+         * @param[out]  shifted_vec     Shifted vector
+         * @param[in]   original_vec    Original vector to shift
+         * @param[in]   shift_value     Number of bytes to shift original vector by
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int shiftVectorRight(std::vector<unsigned char> &shifted_vec, std::vector<unsigned char> &original_vec, int shift_value);
 
@@ -206,12 +206,12 @@ class JLSRTP
          *
          * Performs bitwise exclusive-OR operation between the two given vectors
          *
-         * @param[in]	a		First vector to use for exclusive-OR operation
-         * @param[in]	b		Second vector to use for exclusive-OR operation
-         * @param[out]	result		Result of exclusive-OR operation
+         * @param[in]   a               First vector to use for exclusive-OR operation
+         * @param[in]   b               Second vector to use for exclusive-OR operation
+         * @param[out]  result          Result of exclusive-OR operation
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Input vector sizes do not match
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Input vector sizes do not match
          */
         int xorVector(std::vector<unsigned char> &a, std::vector<unsigned char> &b, std::vector<unsigned char> &result);
 
@@ -220,8 +220,8 @@ class JLSRTP
          *
          * Checks whether the current machine uses BIG ENDIAN byte ordering or not
          *
-         * @return  1	Current machine uses BIG ENDIAN byte ordering
-         * @return  0	Current machine does NOT use BIG ENDIAN byte ordering
+         * @return  1   Current machine uses BIG ENDIAN byte ordering
+         * @return  0   Current machine does NOT use BIG ENDIAN byte ordering
          */
         int isBigEndian();
 
@@ -230,8 +230,8 @@ class JLSRTP
          *
          * Checks whether the current machine uses LITTLE ENDIAN byte ordering or not
          *
-         * @return  1	Current machine uses LITTLE ENDIAN byte ordering
-         * @return  0	Current machine does NOT use LITTLE ENDIAN byte ordering
+         * @return  1   Current machine uses LITTLE ENDIAN byte ordering
+         * @return  0   Current machine does NOT use LITTLE ENDIAN byte ordering
          */
         int isLittleEndian();
 
@@ -240,11 +240,11 @@ class JLSRTP
          *
          * Converts the given numeric 32-bit ssrc to its vector version
          *
-         * @param[in]	ssrc	Numerical SSRC to convert
-         * @param[out]	result	Vector-based SSRC
+         * @param[in]   ssrc    Numerical SSRC to convert
+         * @param[out]  result  Vector-based SSRC
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int convertSsrc(unsigned long ssrc, std::vector<unsigned char> &result);
 
@@ -253,11 +253,11 @@ class JLSRTP
          *
          * Converts the given numeric 48-bit packet index to its vector version
          *
-         * @param[in]	ssrc	Numerical packet index to convert
-         * @param[out]	result	Vector-based packet index
+         * @param[in]   ssrc    Numerical packet index to convert
+         * @param[out]  result  Vector-based packet index
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int convertPacketIndex(unsigned long long i, std::vector<unsigned char> &result);
 
@@ -266,11 +266,11 @@ class JLSRTP
          *
          * Converts the given numeric 32-bit roll-over-counter to its vector version
          *
-         * @param[in]	roc	Numerical roll-over-counter to convert
-         * @param[out]  result	Vector-based roll-over-counter
+         * @param[in]   roc     Numerical roll-over-counter to convert
+         * @param[out]  result  Vector-based roll-over-counter
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int convertROC(unsigned long ROC, std::vector<unsigned char> &result);
 
@@ -344,8 +344,8 @@ class JLSRTP
          *
          * Sets the current computed packet IV into the cipher state prior to encryption/decryption of a packet
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int setPacketIV();
 
@@ -354,10 +354,10 @@ class JLSRTP
          *
          * Computes the Input Vector for the given session salting key / ssrc / packet index
          *
-         * @param[in]	i			Packet index to use
+         * @param[in]   i                       Packet index to use
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Incorrect salting key length
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Incorrect salting key length
          */
         int computePacketIV(unsigned long long i);
 
@@ -373,14 +373,14 @@ class JLSRTP
          *
          * Encrypts the given plaintext input vector into the ciphertext output one using selected session encryption key
          *
-         * @param[in]	invdata			Input plaintext vector
-         * @param[out]	ciphertext_output	Output ciphertext vector
+         * @param[in]   invdata                 Input plaintext vector
+         * @param[out]  ciphertext_output       Output ciphertext vector
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Empty input data vector
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Empty input data vector
          * @return  -2  FAILURE -- AES key rounds is ZERO
-         * @return  -3	FAILURE -- Invalid cipher type specified
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  -3  FAILURE -- Invalid cipher type specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int encryptVector(std::vector<unsigned char> &invdata, std::vector<unsigned char> &ciphertext_output);
 
@@ -389,14 +389,14 @@ class JLSRTP
          *
          * Decrypts the given ciphertext input vector into the plaintext output one using selected session decryption key
          *
-         * @param[in]	ciphertext_input	Input ciphertext vector
-         * @param[out]	outvdata		Output plaintext vector
+         * @param[in]   ciphertext_input        Input ciphertext vector
+         * @param[out]  outvdata                Output plaintext vector
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Empty input data vector
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Empty input data vector
          * @return  -2  FAILURE -- AES key rounds is ZERO
-         * @return  -3	FAILURE -- Invalid cipher type specified
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  -3  FAILURE -- Invalid cipher type specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int decryptVector(std::vector<unsigned char> &ciphertext_input, std::vector<unsigned char> &outvdata);
 
@@ -405,15 +405,15 @@ class JLSRTP
          *
          * Issues a SHA1 hash of a given bit length from the provided data using the given authentication key
          *
-         * @param[in]	data		Data to hash
-         * @param[out]	hash		Hash
+         * @param[in]   data            Data to hash
+         * @param[out]  hash            Hash
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Empty session authentication key
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Empty session authentication key
          * @return  -2  FAILURE -- Internal error generating digest
-         * @return  -3	FAILURE -- Invalid HMAC algorithm specified
-         * @return  -4	FAILURE -- Internal error converting ROC
-         * @return  -5	FAILURE -- Invalid crypto attribute specified
+         * @return  -3  FAILURE -- Invalid HMAC algorithm specified
+         * @return  -4  FAILURE -- Internal error converting ROC
+         * @return  -5  FAILURE -- Invalid crypto attribute specified
          */
         int issueAuthenticationTag(std::vector<unsigned char> &data, std::vector<unsigned char> &hash);
 
@@ -422,14 +422,14 @@ class JLSRTP
          *
          * Extracts SHA1 hash of a given bit length from the provided SRTP packet
          *
-         * @param[in]	srtp_packet	SRTP packet to extract SHA1 hash from
-         * @param[out]	hash		Hash
+         * @param[in]   srtp_packet     SRTP packet to extract SHA1 hash from
+         * @param[out]  hash            Hash
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Empty session authentication key
-         * @return  -2	FAILURE -- Given SRTP packet smaller than authentication tag size
-         * @return  -3	FAILURE -- Invalid HMAC algorithm specified
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Empty session authentication key
+         * @return  -2  FAILURE -- Given SRTP packet smaller than authentication tag size
+         * @return  -3  FAILURE -- Invalid HMAC algorithm specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int extractAuthenticationTag(std::vector<unsigned char> srtp_packet, std::vector<unsigned char> &hash);
 
@@ -438,12 +438,12 @@ class JLSRTP
          *
          * Extracts the SRTP header from the provided SRTP packet
          *
-         * @param[in]	srtp_packet	SRTP packet to extract SRTP header from
-         * @param[out]	header		SRTP header
+         * @param[in]   srtp_packet     SRTP packet to extract SRTP header from
+         * @param[out]  header          SRTP header
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- SRTP header size is ZERO
-         * @return  -2	FAILURE -- Given SRTP packet smaller than SRTP header size
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- SRTP header size is ZERO
+         * @return  -2  FAILURE -- Given SRTP packet smaller than SRTP header size
          */
         int extractSRTPHeader(std::vector<unsigned char> srtp_packet, std::vector<unsigned char> &header);
 
@@ -452,13 +452,13 @@ class JLSRTP
          *
          * Extracts the SRTP payload from the provided SRTP packet
          *
-         * @param[in]	srtp_packet	SRTP packet to extract SRTP payload from
-         * @param[out]	payload		SRTP payload
+         * @param[in]   srtp_packet     SRTP packet to extract SRTP payload from
+         * @param[out]  payload         SRTP payload
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- SRTP header size is ZERO
-         * @return  -2	FAILURE -- SRTP payload size is ZERO
-         * @return  -3	FAILURE -- Given SRTP packet smaller than SRTP header+payload size
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- SRTP header size is ZERO
+         * @return  -2  FAILURE -- SRTP payload size is ZERO
+         * @return  -3  FAILURE -- Given SRTP packet smaller than SRTP header+payload size
          */
         int extractSRTPPayload(std::vector<unsigned char> srtp_packet, std::vector<unsigned char> &payload);
 
@@ -489,8 +489,8 @@ class JLSRTP
          *
          * Resets the block offset of the AES counter mode encryption/decryption cipher
          *
-         * @return 0	SUCCESS
-         * @return -1	FAILURE
+         * @return 0    SUCCESS
+         * @return -1   FAILURE
          */
         int resetCipherBlockOffset();
 
@@ -499,8 +499,8 @@ class JLSRTP
          *
          * Resets the output block of the AES counter mode encryption/decryption cipher
          *
-         * @return 0	SUCCESS
-         * @return -1	FAILURE
+         * @return 0    SUCCESS
+         * @return -1   FAILURE
          */
         int resetCipherOutputBlock();
 
@@ -509,8 +509,8 @@ class JLSRTP
          *
          * Resets the block counter of the AES counter mode encryption/decryption cipher
          *
-         * @return 0	SUCCESS
-         * @return -1	FAILURE
+         * @return 0    SUCCESS
+         * @return -1   FAILURE
          */
         int resetCipherBlockCounter();
 
@@ -521,9 +521,9 @@ class JLSRTP
          *
          * Resets crypto context
          *
-         * @param[in]		sssrc		SSRC ID
-         * @param[in]		ipAddress	IP address
-         * @param[in]		port		Port
+         * @param[in]           sssrc           SSRC ID
+         * @param[in]           ipAddress       IP address
+         * @param[in]           port            Port
          */
         void resetCryptoContext(unsigned int ssrc, std::string ipAddress, unsigned short port);
 
@@ -532,8 +532,8 @@ class JLSRTP
          *
          * Resets the state of the AES counter mode encryption/decryption cipher
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Incorrect salting key length
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Incorrect salting key length
          */
         int resetCipherState();
 
@@ -544,11 +544,11 @@ class JLSRTP
          *
          * @li Assumes the key derivation rate is ZERO
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Incorrect salting key length
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Incorrect salting key length
          * @return  -2  FAILURE -- Incorrect encryption key length
          * @return  -3  FAILURE -- Could not set encryption key
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int deriveSessionEncryptionKey();
 
@@ -559,11 +559,11 @@ class JLSRTP
          *
          * @li Assumes the key derivation rate is ZERO
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Incorrect salting key length
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Incorrect salting key length
          * @return  -2  FAILURE -- Incorrect encryption key length
          * @return  -3  FAILURE -- Could not set encryption key
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int deriveSessionSaltingKey();
 
@@ -574,11 +574,11 @@ class JLSRTP
          *
          * @li Assumes the key derivation rate is ZERO
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Incorrect salting key length
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Incorrect salting key length
          * @return  -2  FAILURE -- Incorrect encryption key length
          * @return  -3  FAILURE -- Could not set encryption key
-         * @return  -4	FAILURE -- Invalid crypto attribute specified
+         * @return  -4  FAILURE -- Invalid crypto attribute specified
          */
         int deriveSessionAuthenticationKey();
 
@@ -608,8 +608,8 @@ class JLSRTP
          *
          * Selects the session key used for encryption
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Empty session encryption key
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Empty session encryption key
          * @return  -2  FAILURE -- Could not set encryption key
          */
         int selectEncryptionKey();
@@ -619,8 +619,8 @@ class JLSRTP
          *
          * Selects the session key used for decryption
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Empty session encryption key
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Empty session encryption key
          * @return  -2  FAILURE -- Could not set encryption key
          */
         int selectDecryptionKey();
@@ -630,9 +630,9 @@ class JLSRTP
          *
          * Gets the cipher algorithm currently in use
          *
-         * @param[in]       crypto_attrib	Crypto attribute whose cipher algorithm is to be obtained (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]       crypto_attrib       Crypto attribute whose cipher algorithm is to be obtained (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	<cipher_algorithm>	Cipher algorithm currently in use (AES_CM_128 or NULL_CIPHER)
+         * @return      <cipher_algorithm>      Cipher algorithm currently in use (AES_CM_128 or NULL_CIPHER)
          */
         CipherType getCipherAlgorithm(ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -641,12 +641,12 @@ class JLSRTP
          *
          * Selects the cipher algorithm to use
          *
-         * @param[in]	cipherType	Cipher algorithm to use (AES_CM_128 or NULL_CIPHER)
-         * @param[in]   crypto_attrib	Crypto attribute whose cipher algorithm is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   cipherType      Cipher algorithm to use (AES_CM_128 or NULL_CIPHER)
+         * @param[in]   crypto_attrib   Crypto attribute whose cipher algorithm is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Invalid cipher algorithm specified
-         * @return  -2	FAILURE -- Invalid crypto attribute specified
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Invalid cipher algorithm specified
+         * @return  -2  FAILURE -- Invalid crypto attribute specified
          */
         int selectCipherAlgorithm(CipherType cipherType, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -655,9 +655,9 @@ class JLSRTP
          *
          * Gets the hashing algorithm currently in use
          *
-         * @param[in]       crypto_attrib	Crypto attribute whose hash algorithm is to be obtained (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]       crypto_attrib       Crypto attribute whose hash algorithm is to be obtained (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	<hash_algorithm>	Hashing algorithm currently in use (HMAC_SHA1_80 or HMAC_SHA1_32)
+         * @return      <hash_algorithm>        Hashing algorithm currently in use (HMAC_SHA1_80 or HMAC_SHA1_32)
          */
         HashType getHashAlgorithm(ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -666,12 +666,12 @@ class JLSRTP
          *
          * Selects the hashing algorithm to use
          *
-         * @param[in]	hashType	Hashing algorithm to use (HMAC_SHA1_80 or HMAC_SHA1_32)
-         * @param[in]       crypto_attrib	Crypto attribute whose hash algorithm is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   hashType        Hashing algorithm to use (HMAC_SHA1_80 or HMAC_SHA1_32)
+         * @param[in]       crypto_attrib       Crypto attribute whose hash algorithm is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE -- Invalid HMAC algorithm specified
-         * @return  -2	FAILURE -- Invalid crypto attribute specified
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE -- Invalid HMAC algorithm specified
+         * @return  -2  FAILURE -- Invalid crypto attribute specified
          */
         int selectHashAlgorithm(HashType hashType, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -680,10 +680,10 @@ class JLSRTP
          *
          * Gets the authentication tag size
          *
-         * @return  >0	SUCCESS -- Authentication tag size (bytes)
-         * @return  -1	FAILURE -- Empty session authentication key
-         * @return  -2	FAILURE -- Invalid HMAC algorithm specified
-         * @return  -3	FAILURE -- Invalid crypto attribute specified
+         * @return  >0  SUCCESS -- Authentication tag size (bytes)
+         * @return  -1  FAILURE -- Empty session authentication key
+         * @return  -2  FAILURE -- Invalid HMAC algorithm specified
+         * @return  -3  FAILURE -- Invalid crypto attribute specified
          */
         int getAuthenticationTagSize();
 
@@ -692,7 +692,7 @@ class JLSRTP
          *
          * Displays the given authentication tag
          *
-         * @param[in]	authtag		Authentication tag to display
+         * @param[in]   authtag         Authentication tag to display
          */
         void displayAuthenticationTag(std::vector<unsigned char> &authtag);
 
@@ -701,7 +701,7 @@ class JLSRTP
          *
          * Gets the SSRC currently in use
          *
-         * @return	<ssrc>		SSRC ID currently in use
+         * @return      <ssrc>          SSRC ID currently in use
          */
         unsigned int getSSRC();
 
@@ -710,7 +710,7 @@ class JLSRTP
          *
          * Gets the IP address currently in use
          *
-         * @return	<ip_address>	IP address currently in use
+         * @return      <ip_address>    IP address currently in use
          */
         std::string getIPAddress();
 
@@ -719,7 +719,7 @@ class JLSRTP
          *
          * Gets the port currently in use
          *
-         * @return	<port>		Port currently in use
+         * @return      <port>          Port currently in use
          */
         unsigned short getPort();
 
@@ -755,7 +755,7 @@ class JLSRTP
          *
          * Sets the cryptographic context ID (<SSRC, IPAddress, Port>) to use
          *
-         * @param[in]	id	Cryptograhic context ID (<SSRC, IPAddress, Port>) to use
+         * @param[in]   id      Cryptograhic context ID (<SSRC, IPAddress, Port>) to use
          */
         void setID(CryptoContextID id);
 
@@ -764,7 +764,7 @@ class JLSRTP
          *
          * Gets the current SRTP header size
          *
-         * @return	<size>	Current SRTP header size in use
+         * @return      <size>  Current SRTP header size in use
          */
         unsigned int getSrtpHeaderSize();
 
@@ -773,7 +773,7 @@ class JLSRTP
          *
          * Sets the current SRTP header size
          *
-         * @param[in]	size	Current SRTP header size to use
+         * @param[in]   size    Current SRTP header size to use
          */
         void setSrtpHeaderSize(unsigned int size);
 
@@ -782,7 +782,7 @@ class JLSRTP
          *
          * Gets the current SRTP payload size
          *
-         * @return	<size>	Current SRTP payload size in use
+         * @return      <size>  Current SRTP payload size in use
          */
         unsigned int getSrtpPayloadSize();
 
@@ -791,7 +791,7 @@ class JLSRTP
          *
          * Sets the current SRTP payload size
          *
-         * @param[in]	size	Current SRTP payload size to use
+         * @param[in]   size    Current SRTP payload size to use
          */
         void setSrtpPayloadSize(unsigned int size);
 
@@ -800,18 +800,18 @@ class JLSRTP
          *
          * Processes an outgoing RTP packet (encrypt+authenticate) to become an SRTP packet
          *
-         * @param[in]	SEQ_s           Input RTP packet sequence number
-         * @param[in]	rtp_header	Input RTP header
-         * @param[in]	rtp_payload	Input RTP payload
-         * @param[out]	srtp_packet	Output SRTP packet
+         * @param[in]   SEQ_s           Input RTP packet sequence number
+         * @param[in]   rtp_header      Input RTP header
+         * @param[in]   rtp_payload     Input RTP payload
+         * @param[out]  srtp_packet     Output SRTP packet
          *
-         * @return  0	SUCCESS
-         * @return  -1	ENCRYPTION_FAILURE
-         * @return  -2	Error issuing authentication tag
+         * @return  0   SUCCESS
+         * @return  -1  ENCRYPTION_FAILURE
+         * @return  -2  Error issuing authentication tag
          * @return  -3  Error encountered while computing packet IV
-         * @return  -4	Error encountered while setting packet IV
-         * @return  -5	Error updating rollover counter
-         * @return  -6	Error updating SL
+         * @return  -4  Error encountered while setting packet IV
+         * @return  -5  Error updating rollover counter
+         * @return  -6  Error updating SL
          */
         int processOutgoingPacket(unsigned short SEQ_s,
                                   std::vector<unsigned char> &rtp_header,
@@ -823,22 +823,22 @@ class JLSRTP
          *
          * Processes an incoming SRTP packet (authenticate+decrypt) to become an RTP packet
          *
-         * @param[in]	SEQ_r           Input SRTP packet sequence number
-         * @param[in]	srtp_packet	Input SRTP packet
-         * @param[out]	rtp_header	Output RTP header
-         * @param[out]  rtp_payload	Output RTP payload
+         * @param[in]   SEQ_r           Input SRTP packet sequence number
+         * @param[in]   srtp_packet     Input SRTP packet
+         * @param[out]  rtp_header      Output RTP header
+         * @param[out]  rtp_payload     Output RTP payload
          *
-         * @return  0	SUCCESS
-         * @return  -1	AUTHENTICATION_FAILURE
-         * @return  -2	DECRYPTION_FAILURE
-         * @return  -3	Error extracting authentication tag
-         * @return  -4	Error extracting SRTP header
-         * @return  -5	Error extracting SRTP payload
-         * @return  -6	Error issuing authentication tag
-         * @return  -7	Error encountered while computing packet IV
-         * @return  -8	Error encoutnered while setting packet IV
-         * @return  -9	Error updating rollover counter
-         * @return  -10	Error updating SL
+         * @return  0   SUCCESS
+         * @return  -1  AUTHENTICATION_FAILURE
+         * @return  -2  DECRYPTION_FAILURE
+         * @return  -3  Error extracting authentication tag
+         * @return  -4  Error extracting SRTP header
+         * @return  -5  Error extracting SRTP payload
+         * @return  -6  Error issuing authentication tag
+         * @return  -7  Error encountered while computing packet IV
+         * @return  -8  Error encoutnered while setting packet IV
+         * @return  -9  Error updating rollover counter
+         * @return  -10 Error updating SL
          */
         int processIncomingPacket(unsigned short SEQ_r,
                                   std::vector<unsigned char> &srtp_packet,
@@ -850,11 +850,11 @@ class JLSRTP
          *
          * Sets the crypto tag parameter value
          *
-         * @param[in]       tag     		Crypto tag value to use
-         * @param[in]       crypto_attrib	Crypto attribute whose tag is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]       tag                 Crypto tag value to use
+         * @param[in]       crypto_attrib       Crypto attribute whose tag is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	0	SUCCESS
-         * @return	-1	FAILURE
+         * @return      0       SUCCESS
+         * @return      -1      FAILURE
          */
         int setCryptoTag(unsigned int tag, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -863,9 +863,9 @@ class JLSRTP
          *
          * Gets the crypto tag parameter value
          *
-         * @param[in]       crypto_attrib	Crypto attribute whose tag is to be obtained (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]       crypto_attrib       Crypto attribute whose tag is to be obtained (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	<crypto_tag>	Crypto tag value currently in use
+         * @return      <crypto_tag>    Crypto tag value currently in use
          */
         unsigned int getCryptoTag(ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -874,7 +874,7 @@ class JLSRTP
          *
          * Fetches the string description of the crypto suite currently in use (e.g. "AES_CM_128_HMAC_SHA1_80" or "AES_CM_128_HMAC_SHA1_32")
          *
-         * @return	<cryptosuite_string>	String description of the crypto suite currently in use
+         * @return      <cryptosuite_string>    String description of the crypto suite currently in use
          */
         std::string getCryptoSuite();
 
@@ -883,11 +883,11 @@ class JLSRTP
          *
          * Encodes the current unencoded master key/salt of the context for use in a RFC4568-compliant crypto attribute
          *
-         * @param[out]	mks		Encoded master key/salt string (for use in an RFC-4568-compliant crypto attribute)
-         * @param[in]   crypto_attrib	Crypto attribute whose master key/salt is to be encoded (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[out]  mks             Encoded master key/salt string (for use in an RFC-4568-compliant crypto attribute)
+         * @param[in]   crypto_attrib   Crypto attribute whose master key/salt is to be encoded (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	0	SUCCESS
-         * @return	-1	FAILURE
+         * @return      0       SUCCESS
+         * @return      -1      FAILURE
          */
         int encodeMasterKeySalt(std::string &mks, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -896,11 +896,11 @@ class JLSRTP
          *
          * Decodes the given encoded master key/salt string from an RFC4568-compliant crypto attribute for use in the context
          *
-         * @param[in]	mks		Encoded RFC4568-compliant master key/salt value (for use in the context)
-         * @param[in]   crypto_attrib	Crypto attribute whose master key/salt is to be decoded (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   mks             Encoded RFC4568-compliant master key/salt value (for use in the context)
+         * @param[in]   crypto_attrib   Crypto attribute whose master key/salt is to be decoded (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	0	SUCCESS
-         * @return	-1	FAILURE
+         * @return      0       SUCCESS
+         * @return      -1      FAILURE
          */
         int decodeMasterKeySalt(std::string &mks, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -921,7 +921,7 @@ class JLSRTP
          *
          * Generates a master key
          *
-         * @param[in]   crypto_attrib	Crypto attribute whose master key is to be generated (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   crypto_attrib   Crypto attribute whose master key is to be generated (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
          * @return  0   SUCCESS
          * @return  -1  FAILURE
@@ -933,7 +933,7 @@ class JLSRTP
          *
          * Generates a master salt
          *
-         * @param[in]   crypto_attrib	Crypto attribute whose master salt is to be generated (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   crypto_attrib   Crypto attribute whose master salt is to be generated (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
          * @return  0   SUCCESS
          * @return  -1  FAILURE
@@ -945,9 +945,9 @@ class JLSRTP
          *
          * Gets the MASTER KEY
          *
-         * @param[in]	crypto_attrib	Crypto attribute whose master key is to be fetched (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   crypto_attrib   Crypto attribute whose master key is to be fetched (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	<master_key>		Master key
+         * @return      <master_key>            Master key
          */
         std::vector<unsigned char> getMasterKey(ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -956,9 +956,9 @@ class JLSRTP
          *
          * Gets the MASTER SALT
          *
-         * @param[in]	crypto_attrib	Crypto attribute whose master salt is to be fetched (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   crypto_attrib   Crypto attribute whose master salt is to be fetched (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return	<master_salt>		Master salt
+         * @return      <master_salt>           Master salt
          */
         std::vector<unsigned char> getMasterSalt(ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -967,11 +967,11 @@ class JLSRTP
          *
          * Sets the MASTER KEY
          *
-         * @param[in]	key		Master key to use
-         * @param[in]	crypto_attrib	Crypto attribute whose master key is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   key             Master key to use
+         * @param[in]   crypto_attrib   Crypto attribute whose master key is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int setMasterKey(std::vector<unsigned char> &key, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -980,11 +980,11 @@ class JLSRTP
          *
          * Sets the MASTER SALT
          *
-         * @param[in]	salt		Master salt to use
-         * @param[in]	crypto_attrib	Crypto attribute whose master salt is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
+         * @param[in]   salt            Master salt to use
+         * @param[in]   crypto_attrib   Crypto attribute whose master salt is to be set (PRIMARY_CRYPTO, SECONDARY_CRYPTO or ACTIVE_CRYPTO)
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int setMasterSalt(std::vector<unsigned char> &salt, ActiveCrypto crypto_attrib = ACTIVE_CRYPTO);
 
@@ -993,8 +993,8 @@ class JLSRTP
          *
          * Swaps the PRIMARY and SECONDARY crypto attributes
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int swapCrypto();
 
@@ -1003,10 +1003,10 @@ class JLSRTP
          *
          * Selects the crypto attribute to use (PRIMARY or SECONDARY)
          *
-         * @param[in]	activeCrypto	Crypto attribute to use (PRIMARY_CRYPTO or SECONDARY_CRYPTO)
+         * @param[in]   activeCrypto    Crypto attribute to use (PRIMARY_CRYPTO or SECONDARY_CRYPTO)
          *
-         * @return  0	SUCCESS
-         * @return  -1	FAILURE
+         * @return  0   SUCCESS
+         * @return  -1  FAILURE
          */
         int selectActiveCrypto(ActiveCrypto activeCrypto);
 
@@ -1015,9 +1015,9 @@ class JLSRTP
          *
          * Gets the crypto attribute currently in use (PRIMARY or SECONDARY)
          *
-         * @return	PRIMARY_CRYPTO		Primary crypto attribute is currently in use
-         * @return	SECONDARY_CRYPTO	Secondary crypto attribute is currently in use
-         * @return	INVALID_CRYPTO		Internal error occurred
+         * @return      PRIMARY_CRYPTO          Primary crypto attribute is currently in use
+         * @return      SECONDARY_CRYPTO        Secondary crypto attribute is currently in use
+         * @return      INVALID_CRYPTO          Internal error occurred
          */
         ActiveCrypto getActiveCrypto();
 
@@ -1026,9 +1026,9 @@ class JLSRTP
          *
          * Assigns a given JLSRTP object to the implicit one
          *
-         * @param[in]	that		JLSRTP object to assign to the implicit one
+         * @param[in]   that            JLSRTP object to assign to the implicit one
          *
-         * @return	<JLSRTP_reference>	Reference to the implicit JLSRTP object
+         * @return      <JLSRTP_reference>      Reference to the implicit JLSRTP object
          */
         JLSRTP& operator=(const JLSRTP& that);
 
@@ -1037,10 +1037,10 @@ class JLSRTP
          *
          * Compares a given JLSRTP object to the implicit one for equality
          *
-         * @param[in]	that		JLSRTP object to compare to the implicit one for equality
+         * @param[in]   that            JLSRTP object to compare to the implicit one for equality
          *
-         * @return	TRUE	Given JLSRTP object is equal to the implicit one
-         * @return	FALSE	Given JLSRTP object is NOT equal to the implicit one
+         * @return      TRUE    Given JLSRTP object is equal to the implicit one
+         * @return      FALSE   Given JLSRTP object is NOT equal to the implicit one
          */
         bool operator==(const JLSRTP& that);
 
@@ -1049,10 +1049,10 @@ class JLSRTP
          *
          * Compares a given JLSRTP object to the implicit one for inequality
          *
-         * @param[in]	that		JLSRTP object to compare to the implicit one for inequality
+         * @param[in]   that            JLSRTP object to compare to the implicit one for inequality
          *
-         * @return	TRUE	Given JLSRTP object is inequal to the implicit one
-         * @return	FALSE	Given JLSRTP object is NOT inequal to the implicit one
+         * @return      TRUE    Given JLSRTP object is inequal to the implicit one
+         * @return      FALSE   Given JLSRTP object is NOT inequal to the implicit one
          */
         bool operator!=(const JLSRTP& that);
 
@@ -1068,9 +1068,9 @@ class JLSRTP
          *
          * Custom constructor
          *
-         * @param[in]		sssrc		SSRC ID
-         * @param[in]		ipAddress	IP address
-         * @param[in]		port		Port
+         * @param[in]           sssrc           SSRC ID
+         * @param[in]           ipAddress       IP address
+         * @param[in]           port            Port
          */
         JLSRTP(unsigned int ssrc, std::string ipAddress, unsigned short port);
 
@@ -1084,4 +1084,3 @@ class JLSRTP
 };
 
 #endif // __JLSRTP__
-

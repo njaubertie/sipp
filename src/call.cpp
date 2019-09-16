@@ -472,9 +472,9 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
         sdp_body_remember = sdp_body;
 
         if (ro_search) {
-            sdp_body += 2;	/* skip past header - point to blank line before body */
+            sdp_body += 2; /* skip past header - point to blank line before body */
         } else if (alt_search) {
-            sdp_body += 4;  /* skip past header - point to blank line before body */
+            sdp_body += 4; /* skip past header - point to blank line before body */
         }
 
         /* --------------------------------------------------------------
@@ -560,8 +560,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
             if (mline_sol != std::string::npos) {
                 // PRIMARY AUDIO "a:crypto:" crypto prefix found
                 mline_eol = msgstr.find("\n", mline_sol, 1);
-                if (mline_eol != std::string::npos) {	
-                    mline_contents = msgstr.substr(mline_sol, mline_eol);  	
+                if (mline_eol != std::string::npos) {
+                    mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pA.primary_audio_cryptotag,
                                                                                     pA.primary_audio_cryptosuite,
                                                                                     pA.primary_audio_cryptokeyparams,
@@ -585,8 +585,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
                 ((msection_limit == std::string::npos) && (mline_sol != std::string::npos))) {
                 // SECONDARY AUDIO "a:crypto:" crypto prefix found
                 mline_eol = msgstr.find("\n", mline_sol, 1);
-                if (mline_eol != std::string::npos) {	
-                    mline_contents = msgstr.substr(mline_sol, mline_eol);  	
+                if (mline_eol != std::string::npos) {
+                    mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pA.secondary_audio_cryptotag,
                                                                                     pA.secondary_audio_cryptosuite,
                                                                                     pA.secondary_audio_cryptokeyparams,
@@ -686,8 +686,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
             if (mline_sol != std::string::npos) {
                 // PRIMARY VIDEO "a:crypto:" crypto prefix found
                 mline_eol = msgstr.find("\n", mline_sol, 1);
-                if (mline_eol != std::string::npos) {	
-                    mline_contents = msgstr.substr(mline_sol, mline_eol);  	
+                if (mline_eol != std::string::npos) {
+                    mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pV.primary_video_cryptotag,
                                                                                     pV.primary_video_cryptosuite,
                                                                                     pV.primary_video_cryptokeyparams,
@@ -711,8 +711,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
                 ((msection_limit == std::string::npos) && (mline_sol != std::string::npos))) {
                 // SECONDARY VIDEO "a:crypto:" crypto prefix found
                 mline_eol = msgstr.find("\n", mline_sol, 1);
-                if (mline_eol != std::string::npos) {	
-                    mline_contents = msgstr.substr(mline_sol, mline_eol);  	
+                if (mline_eol != std::string::npos) {
+                    mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pV.secondary_video_cryptotag,
                                                                                     pV.secondary_video_cryptosuite,
                                                                                     pV.secondary_video_cryptokeyparams,
@@ -1118,9 +1118,9 @@ bool call::checkAckCSeq(const char* msg)
         ERROR("Invalid SIP message received '%s'", msg);
     }
 
-    if ((default_behaviors & DEFAULT_BEHAVIOR_BADCSEQ) && 
-        !strncmp(request, "ACK", 3) && 
-        (rcseq != last_recv_invite_cseq)) {
+    if ((default_behaviors & DEFAULT_BEHAVIOR_BADCSEQ) &&
+            !strncmp(request, "ACK", 3) &&
+            (rcseq != last_recv_invite_cseq)) {
         return false;
     } else {
         return true;
@@ -6128,7 +6128,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
         else if (currentAction->getActionType() == CAction::E_AT_RTP_ECHO)
         {
             rtp_echo_state = (currentAction->getDoubleValue() != 0);
-        }        
+        }
         else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_PAUSE)
         {
             rtpstream_pause(&rtpstream_callinfo);

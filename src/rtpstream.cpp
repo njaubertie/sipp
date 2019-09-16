@@ -95,7 +95,7 @@ struct cached_pattern_t
 {
     int    id;
     char   *bytes;
-    int	 filesize;
+    int    filesize;
 };
 
 cached_file_t  *cached_files= NULL;
@@ -1225,7 +1225,7 @@ static void* rtpstream_playback_thread(void* params)
             /* should we update current time inbetween tasks? */
             if (taskinfo->nextwake_ms<=timenow_ms)
             {
-                /* task needs to execute now */	
+                /* task needs to execute now */
                 taskinfo->nextwake_ms= rtpstream_playrtptask (taskinfo,timenow_ms,&comparison_acheck,rs_apackets,&comparison_vcheck,rs_vpackets,taskindex);
 
                 if (comparison_acheck == 1)
@@ -1681,7 +1681,7 @@ int rtpstream_cache_file (char *filename,
         /* could use a binary (or avl) tree but number of files should  */
         /* be small and doesn't really justify the effort.              */
         while (count<num_cached_files) {
-            if (!strcmp(cached_files[count].filename,filename))	{
+            if (!strcmp(cached_files[count].filename,filename)) {
                 /* found the file already loaded. just return index */
                 return count;
             }
@@ -3421,4 +3421,3 @@ int rtpstream_shutdown(std::tr1::unordered_map<pthread_t, std::string>& threadID
 
     return total_rtpresults;
 }
-

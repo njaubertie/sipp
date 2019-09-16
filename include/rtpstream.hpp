@@ -163,12 +163,12 @@ struct rtpstream_actinfo_t
 {
     char filename[RTPSTREAM_MAX_FILENAMELEN];   // FILE: "<filename>" -- PATTERN: "pattern"
     int pattern_id;                             // FILE:  -1 -- PATTERN:  <id>
-    int	loop_count;                             // FILE: count -- PATTERN:  -1 (UNUSED)
+    int loop_count;                             // FILE: count -- PATTERN:  -1 (UNUSED)
     int bytes_per_packet;
     int ms_per_packet;
     int ticks_per_packet; /* need rework for 11.025 sample rate */
     int payload_type;
-    char payload_name[RTPSTREAM_MAX_PAYLOADNAME];    // FILE/PATTERN: <payload_name> (e.g. "PCMU/8000", "PCMA/8000", "G729/8000", "H264/90000")
+    char payload_name[RTPSTREAM_MAX_PAYLOADNAME]; // FILE/PATTERN: <payload_name> (e.g. "PCMU/8000", "PCMA/8000", "G729/8000", "H264/90000")
     int audio_active;
     int video_active;
 };
@@ -176,7 +176,7 @@ struct rtpstream_actinfo_t
 struct rtpecho_actinfo_t
 {
     int    payload_type;
-    char   payload_name[RTPECHO_MAX_PAYLOADNAME];    // e.g. "PCMU/8000", "PCMA/8000", "G729/8000", "H264/90000"
+    char   payload_name[RTPECHO_MAX_PAYLOADNAME]; // e.g. "PCMU/8000", "PCMA/8000", "G729/8000", "H264/90000"
     int    bytes_per_packet;
     int    audio_active;
     int    video_active;
