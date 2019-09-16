@@ -666,13 +666,13 @@ void scenario::checkOptionalRecv(char *elem, unsigned int scenario_file_cursor)
     last_recv_optional = false;
 }
 
-scenario::scenario(char * filename, int deflt)
+scenario::scenario(char* filename, int deflt)
 {
-    char * elem;
-    char *method_list = NULL;
+    char* elem;
+    char* method_list = NULL;
     unsigned int scenario_file_cursor = 0;
-    int    L_content_length = 0 ;
-    char * peer;
+    int L_content_length = 0;
+    char* peer;
     const char* cptr;
 
     last_recv_optional = false;
@@ -821,17 +821,17 @@ scenario::scenario(char * filename, int deflt)
 
                 L_content_length = xp_get_content_length(msg);
                 switch (L_content_length) {
-                case  -1 :
+                case  -1:
                     // the msg does not contain content-length field
-                    break ;
-                case  0 :
+                    break;
+                case  0:
                     curmsg -> content_length_flag =
                         message::ContentLengthValueZero;   // Initialize to No present
-                    break ;
-                default :
+                    break;
+                default:
                     curmsg -> content_length_flag =
                         message::ContentLengthValueNoZero;   // Initialize to No present
-                    break ;
+                    break;
                 }
 
                 if ((msg[strlen(msg) - 1] != '\n') && (removed_clrf)) {
@@ -1439,7 +1439,7 @@ void scenario::parseAction(CActions *actions)
 
             tmpAction->setRegExp(currentRegExp);
             if (currentNbVarNames > 1) {
-                sub_currentNbVarId = currentNbVarNames - 1 ;
+                sub_currentNbVarId = currentNbVarNames - 1;
                 tmpAction->setNbSubVarId(sub_currentNbVarId);
 
                 for (int i = 1; i <= sub_currentNbVarId; i++) {

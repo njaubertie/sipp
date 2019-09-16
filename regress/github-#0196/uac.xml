@@ -58,8 +58,6 @@
     </action>
   </nop>
 
-  <pause milliseconds="500"/>
-
   <recv request="BYE"/>
 
   <send>

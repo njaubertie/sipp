@@ -1422,7 +1422,9 @@ bool call::lost(int index)
     static int inited = 0;
     double percent = global_lost;
 
-    if (!lose_packets) return false;
+    if (!lose_packets) {
+        return false;
+    }
 
     if (call_scenario->messages[index]->lost >= 0) {
         percent = call_scenario->messages[index]->lost;
@@ -1440,9 +1442,9 @@ bool call::lost(int index)
     return (((double)rand() / (double)RAND_MAX) < (percent / 100.0));
 }
 
-int call::send_raw(const char * msg, int index, int len)
+int call::send_raw(const char* msg, int index, int len)
 {
-    SIPpSocket *sock;
+    SIPpSocket* sock;
     int rc;
 
     callDebug("Sending %s message for call %s (index %d, hash %lu):\n%s\n\n",
@@ -1456,7 +1458,7 @@ int call::send_raw(const char * msg, int index, int len)
         if (comp_state) {
             comp_free(&comp_state);
         }
-        call_scenario->messages[index] -> nb_lost++;
+        call_scenario->messages[index]->nb_lost++;
         return 0;
     }
 
@@ -1643,7 +1645,7 @@ char * call::send_scene(int index, int *send_status, int *len)
     }
 
     char * dest;
-    dest = createSendingMessage(call_scenario->messages[index] -> send_scheme, index, len);
+    dest = createSendingMessage(call_scenario->messages[index]->send_scheme, index, len);
 
     if (!dest) {
         *send_status = -2;
@@ -1672,7 +1674,7 @@ char * call::send_scene(int index, int *send_status, int *len)
 void call::do_bookkeeping(message *curmsg)
 {
     /* If this message increments a counter, do it now. */
-    if (curmsg -> counter) {
+    if (curmsg->counter) {
         computeStat(CStat::E_ADD_GENERIC_COUNTER, 1, curmsg->counter - 1);
     }
 
@@ -1881,7 +1883,7 @@ bool call::executeMessage(message *curmsg)
         callDebug("Pausing call until %d (is now %ld).\n", paused_until, clock_tick);
         setPaused();
         return true;
-    } else if (curmsg -> M_type == MSG_TYPE_SENDCMD) {
+    } else if (curmsg->M_type == MSG_TYPE_SENDCMD) {
         int send_status;
 
         if (next_retrans) {
@@ -1893,13 +1895,13 @@ bool call::executeMessage(message *curmsg)
         if (send_status != 0) { /* Send error */
             return false; /* call deleted */
         }
-        curmsg -> M_nbCmdSent++;
+        curmsg->M_nbCmdSent++;
         next_retrans = 0;
 
         do_bookkeeping(curmsg);
         executeAction(NULL, curmsg);
         return (next());
-    } else if (curmsg -> M_type == MSG_TYPE_NOP) {
+    } else if (curmsg->M_type == MSG_TYPE_NOP) {
         callDebug("Executing NOP at index %d.\n", curmsg->index);
         do_bookkeeping(curmsg);
         actionResult = executeAction(NULL, curmsg);
@@ -1915,7 +1917,7 @@ bool call::executeMessage(message *curmsg)
         }
     }
 
-    else if (curmsg -> send_scheme) {
+    else if (curmsg->send_scheme) {
         char * msg_snd;
         int msgLen;
         int send_status;
@@ -2022,9 +2024,9 @@ bool call::executeMessage(message *curmsg)
         }
 
         /* Update retransmission information */
-        if (curmsg -> retrans_delay) {
+        if (curmsg->retrans_delay) {
             if ((transport == T_UDP) && (retrans_enabled)) {
-                next_retrans = clock_tick + curmsg -> retrans_delay;
+                next_retrans = clock_tick + curmsg->retrans_delay;
                 nb_retrans = 0;
                 nb_last_delay = curmsg->retrans_delay;
             }
@@ -2035,7 +2037,7 @@ bool call::executeMessage(message *curmsg)
         executeAction(msg_snd, curmsg);
 
         /* Update scenario statistics */
-        curmsg -> nb_sent++;
+        curmsg->nb_sent++;
 
         return next();
     } else if (curmsg->M_type == MSG_TYPE_RECV
@@ -2153,7 +2155,7 @@ bool call::run()
         callDebug("Retransmisison required (%d retransmissions, max %d)\n", nb_retrans, rtAllowed);
 
         if (nb_retrans > rtAllowed) {
-            call_scenario->messages[last_send_index] -> nb_timeout ++;
+            call_scenario->messages[last_send_index]->nb_timeout ++;
             if (call_scenario->messages[last_send_index]->on_timeout >= 0) {  // action on timeout
                 WARNING("Call-Id: %s, timeout on max UDP retrans for message %d, jumping to label %d ",
                         id, msg_index, call_scenario->messages[last_send_index]->on_timeout);
@@ -2197,7 +2199,7 @@ bool call::run()
             if (send_raw(last_send_msg, last_send_index, last_send_len) < -1) {
                 return false;
             }
-            call_scenario->messages[last_send_index] -> nb_sent_retrans++;
+            call_scenario->messages[last_send_index]->nb_sent_retrans++;
             computeStat(CStat::E_RETRANSMISSION);
             next_retrans = clock_tick + nb_last_delay;
         }
@@ -2346,19 +2348,19 @@ bool call::process_unexpected(const char* msg)
     }
     desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "call on unexpected message for Call-Id '%s': ", id);
 
-    if (curmsg -> M_type == MSG_TYPE_RECV) {
-        if (curmsg -> recv_request) {
-            desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while expecting '%s' ", curmsg -> recv_request);
+    if (curmsg->M_type == MSG_TYPE_RECV) {
+        if (curmsg->recv_request) {
+            desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while expecting '%s' ", curmsg->recv_request);
         } else {
-            desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while expecting '%d' ", curmsg -> recv_response);
+            desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while expecting '%d' ", curmsg->recv_response);
         }
-    } else if (curmsg -> M_type == MSG_TYPE_SEND) {
+    } else if (curmsg->M_type == MSG_TYPE_SEND) {
         desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while sending ");
-    } else if (curmsg -> M_type == MSG_TYPE_PAUSE) {
+    } else if (curmsg->M_type == MSG_TYPE_PAUSE) {
         desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while pausing ");
-    } else if (curmsg -> M_type == MSG_TYPE_SENDCMD) {
+    } else if (curmsg->M_type == MSG_TYPE_SENDCMD) {
         desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while sending command ");
-    } else if (curmsg -> M_type == MSG_TYPE_RECVCMD) {
+    } else if (curmsg->M_type == MSG_TYPE_RECVCMD) {
         desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while expecting command ");
     } else {
         desc += snprintf(desc, MAX_HEADER_LEN - (desc - buffer), "while in message type %d ", curmsg->M_type);
@@ -2511,9 +2513,9 @@ int call::sendCmdMessage(message *curmsg)
     char * peer_dest;
     SIPpSocket **peer_socket;
 
-    if (curmsg -> M_sendCmdData) {
-        // WARNING("---PREPARING_TWIN_CMD---%s---", scenario[index] -> M_sendCmdData);
-        dest = createSendingMessage(curmsg -> M_sendCmdData, -1);
+    if (curmsg->M_sendCmdData) {
+        // WARNING("---PREPARING_TWIN_CMD---%s---", scenario[index]->M_sendCmdData);
+        dest = createSendingMessage(curmsg->M_sendCmdData, -1);
         strcat(dest, delimitor);
         //WARNING("---SEND_TWIN_CMD---%s---", dest);
 
@@ -4196,9 +4198,9 @@ bool call::process_twinSippCom(char * msg)
         for (search_index = msg_index;
                 search_index < (int)call_scenario->messages.size();
                 search_index++) {
-            if (call_scenario->messages[search_index] -> M_type != MSG_TYPE_RECVCMD) {
-                if ((call_scenario->messages[search_index] -> optional) ||
-                        (call_scenario->messages[search_index] -> M_type == MSG_TYPE_NOP)) {
+            if (call_scenario->messages[search_index]->M_type != MSG_TYPE_RECVCMD) {
+                if ((call_scenario->messages[search_index]->optional) ||
+                        (call_scenario->messages[search_index]->M_type == MSG_TYPE_NOP)) {
                     continue;
                 }
                 /* The received message is different from the expected one */
@@ -4326,7 +4328,7 @@ bool call::check_peer_src(char * msg, int search_index)
     }
     L_backup = *L_ptr2;
     *L_ptr2 = 0;
-    if (strcmp(L_ptr1, call_scenario->messages[search_index] -> peer_src) == 0) {
+    if (strcmp(L_ptr1, call_scenario->messages[search_index]->peer_src) == 0) {
         *L_ptr2 = L_backup;
         return (true);
     }
@@ -4582,16 +4584,16 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                 if (comp_state) {
                     comp_free(&comp_state);
                 }
-                call_scenario->messages[recv_retrans_recv_index] -> nb_lost++;
+                call_scenario->messages[recv_retrans_recv_index]->nb_lost++;
                 return true;
             }
 
-            call_scenario->messages[recv_retrans_recv_index] -> nb_recv_retrans++;
+            call_scenario->messages[recv_retrans_recv_index]->nb_recv_retrans++;
 
             send_scene(recv_retrans_send_index, &status, NULL);
 
             if (status >= 0) {
-                call_scenario->messages[recv_retrans_send_index] -> nb_sent_retrans++;
+                call_scenario->messages[recv_retrans_send_index]->nb_sent_retrans++;
                 computeStat(CStat::E_RETRANSMISSION);
             } else if (status < 0) {
                 return false;
@@ -5298,7 +5300,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                             } else if (int ackIndex = transactions[checkTxn - 1].ackIndex) {
                                 /* This is the message before an ACK, so verify that this is an invite transaction. */
                                 assert(call_scenario->transactions[checkTxn - 1].isInvite);
-                                sendBuffer(createSendingMessage(call_scenario->messages[ackIndex] -> send_scheme, ackIndex));
+                                sendBuffer(createSendingMessage(call_scenario->messages[ackIndex]->send_scheme, ackIndex));
                                 return true;
                             } else {
                                 assert(!call_scenario->transactions[checkTxn - 1].isInvite);
@@ -5327,7 +5329,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                                 (0 == strncmp(responsecseqmethod, "INVITE", strlen(responsecseqmethod))) &&
                                 (call_scenario->messages[search_index + 1]->M_type == MSG_TYPE_SEND) &&
                                 (call_scenario->messages[search_index + 1]->send_scheme->isAck())) {
-                            sendBuffer(createSendingMessage(call_scenario->messages[search_index + 1] -> send_scheme, (search_index + 1)));
+                            sendBuffer(createSendingMessage(call_scenario->messages[search_index + 1]->send_scheme, (search_index + 1)));
                             return true;
                         }
                     }
@@ -5389,7 +5391,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
         if (comp_state) {
             comp_free(&comp_state);
         }
-        call_scenario->messages[search_index] -> nb_lost++;
+        call_scenario->messages[search_index]->nb_lost++;
         return true;
     }
 
@@ -5403,7 +5405,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
     do_bookkeeping(call_scenario->messages[search_index]);
 
     /* Increment the recv counter */
-    call_scenario->messages[search_index] -> nb_recv++;
+    call_scenario->messages[search_index]->nb_recv++;
 
     // Action treatment
     if (found) {
@@ -5486,7 +5488,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
     }
 
     /* store the authentication info */
-    if ((call_scenario->messages[search_index] -> bShouldAuthenticate) &&
+    if ((call_scenario->messages[search_index]->bShouldAuthenticate) &&
             (reply_code == 401 || reply_code == 407)) {
 
         /* is a challenge */
@@ -5560,10 +5562,10 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
          * potential messages have a timeout we set it as our timeout. We
          * start from the next message and go until any non-receives. */
         for (search_index++; search_index < (int)call_scenario->messages.size(); search_index++) {
-            if (call_scenario->messages[search_index] -> M_type != MSG_TYPE_RECV) {
+            if (call_scenario->messages[search_index]->M_type != MSG_TYPE_RECV) {
                 break;
             }
-            candidate = call_scenario->messages[search_index] -> timeout;
+            candidate = call_scenario->messages[search_index]->timeout;
             if (candidate == 0) {
                 if (defl_recv_timeout == 0) {
                     continue;
@@ -6623,7 +6625,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
         strcpy(last_recv_msg, P_recv);
 
         // The BYE is unexpected, count it
-        call_scenario->messages[msg_index] -> nb_unexp++;
+        call_scenario->messages[msg_index]->nb_unexp++;
         if (default_behaviors & DEFAULT_BEHAVIOR_ABORTUNEXP) {
             WARNING("Aborting call on an unexpected BYE for call: %s", (id == NULL) ? "none" : id);
             if (default_behaviors & DEFAULT_BEHAVIOR_BYE) {
@@ -6661,7 +6663,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
         strcpy(last_recv_msg, P_recv);
 
         // The CANCEL is unexpected, count it
-        call_scenario->messages[msg_index] -> nb_unexp++;
+        call_scenario->messages[msg_index]->nb_unexp++;
         if (default_behaviors & DEFAULT_BEHAVIOR_ABORTUNEXP) {
             WARNING("Aborting call on an unexpected CANCEL for call: %s", (id == NULL) ? "none" : id);
             if (default_behaviors & DEFAULT_BEHAVIOR_BYE) {

@@ -198,7 +198,7 @@ CStat::~CStat()
 
 
     if (M_dumpRespTime != NULL)
-        delete [] M_dumpRespTime ;
+        delete [] M_dumpRespTime;
 
     free(M_rtdInfo);
     for (int_str_map::iterator i = M_revRtdMap.begin(); i != M_revRtdMap.end(); ++i) {
@@ -393,10 +393,10 @@ void CStat::initRtt(const char* P_name, const char* P_extension,
     int sizeOf, sizeOfExtension;
 
     if (P_name != NULL) {
-        sizeOf = strlen(P_name) ;
+        sizeOf = strlen(P_name);
         if (sizeOf > 0) {
             //  4 for '_rtt' and 6 for pid
-            sizeOf += 10 ;
+            sizeOf += 10;
             sizeOfExtension = strlen(P_extension);
             if (M_fileNameRtt != NULL)
                 delete [] M_fileNameRtt;
@@ -414,16 +414,16 @@ void CStat::initRtt(const char* P_name, const char* P_extension,
     }
 
     // initiate the table dump response time
-    M_report_freq_dumpRtt = P_report_freq_dumpRtt ;
+    M_report_freq_dumpRtt = P_report_freq_dumpRtt;
 
-    M_dumpRespTime = new T_value_rtt [P_report_freq_dumpRtt] ;
+    M_dumpRespTime = new T_value_rtt [P_report_freq_dumpRtt];
 
     if (M_dumpRespTime == NULL) {
         cerr << "Memory allocation failure" << endl;
         exit(EXIT_FATAL_ERROR);
     }
 
-    for (unsigned L_i = 0 ; L_i < P_report_freq_dumpRtt; L_i ++) {
+    for (unsigned L_i = 0; L_i < P_report_freq_dumpRtt; L_i ++) {
         M_dumpRespTime[L_i].date = 0.0;
         M_dumpRespTime[L_i].rtd_no = 0;
         M_dumpRespTime[L_i].rtt = 0.0;
@@ -798,10 +798,10 @@ void CStat::computeRtt(unsigned long long P_start_time, unsigned long long P_sto
     M_dumpRespTime[M_counterDumpRespTime].rtd_no = which;
     M_dumpRespTime[M_counterDumpRespTime].rtt =
         ((double)(P_stop_time - P_start_time)) / (double)1000;
-    M_counterDumpRespTime++ ;
+    M_counterDumpRespTime++;
 
     if (M_counterDumpRespTime > (M_report_freq_dumpRtt - 1)) {
-        dumpDataRtt() ;
+        dumpDataRtt();
     }
 }
 
@@ -1089,21 +1089,21 @@ void CStat::resetRepartition(T_dynamicalRepartition* P_tabReport,
 CStat::CStat()
 {
     size_t L_size = 0;
-    L_size += strlen(DEFAULT_FILE_NAME) ;
-    L_size += strlen(DEFAULT_EXTENSION) ;
-    L_size += 1 ;
+    L_size += strlen(DEFAULT_FILE_NAME);
+    L_size += strlen(DEFAULT_EXTENSION);
+    L_size += 1;
     M_fileName = new char[L_size];
     strcpy(M_fileName, DEFAULT_FILE_NAME);
     strcat(M_fileName, DEFAULT_EXTENSION);
     M_ResponseTimeRepartition = NULL;
-    M_CallLengthRepartition   = NULL;
+    M_CallLengthRepartition = NULL;
     M_SizeOfResponseTimeRepartition = 0;
-    M_SizeOfCallLengthRepartition   = 0;
+    M_SizeOfCallLengthRepartition = 0;
     M_fileNameRtt = NULL;
     M_genericCounters = NULL;
-    M_time_ref = 0.0                   ;
-    M_dumpRespTime = NULL              ;
-    M_counterDumpRespTime = 0          ;
+    M_time_ref = 0.0;
+    M_dumpRespTime = NULL;
+    M_counterDumpRespTime = 0;
     M_dumpRespTime = NULL;
     M_fileNameRtt  = NULL;
     M_rtdInfo = NULL;
@@ -1191,7 +1191,7 @@ void CStat::displayRepartition(FILE *f,
 
 void CStat::displayData(FILE *f)
 {
-    long   localElapsedTime, globalElapsedTime ;
+    long   localElapsedTime, globalElapsedTime;
     struct timeval currentTime;
     float  averageCallRate;
     float  realInstantCallRate;
@@ -1308,7 +1308,7 @@ void CStat::displayData(FILE *f)
 
 void CStat::displayStat(FILE *f)
 {
-    long   localElapsedTime, globalElapsedTime ;
+    long   localElapsedTime, globalElapsedTime;
     struct timeval currentTime;
     float  averageCallRate;
     float  realInstantCallRate;
@@ -1422,7 +1422,7 @@ void CStat::displayRtdRepartition(FILE *f, int which)
 
 void CStat::dumpData()
 {
-    long   localElapsedTime, globalElapsedTime ;
+    long   localElapsedTime, globalElapsedTime;
     struct timeval currentTime;
     float  averageCallRate;
     float  realInstantCallRate;
@@ -1715,9 +1715,9 @@ void CStat::dumpDataRtt()
         M_headerAlreadyDisplayedRtt = true;
     }
 
-    for (unsigned int L_i = 0; L_i < M_counterDumpRespTime ; L_i ++) {
-        (*M_outputStreamRtt) <<  M_dumpRespTime[L_i].date   << stat_delimiter ;
-        (*M_outputStreamRtt) <<  M_dumpRespTime[L_i].rtt    << stat_delimiter ;
+    for (unsigned int L_i = 0; L_i < M_counterDumpRespTime; L_i ++) {
+        (*M_outputStreamRtt) <<  M_dumpRespTime[L_i].date   << stat_delimiter;
+        (*M_outputStreamRtt) <<  M_dumpRespTime[L_i].rtt    << stat_delimiter;
         (*M_outputStreamRtt) <<  M_revRtdMap[M_dumpRespTime[L_i].rtd_no] << endl;
         (*M_outputStreamRtt).flush();
         M_dumpRespTime[L_i].date = 0.0;

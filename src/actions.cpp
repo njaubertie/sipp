@@ -45,7 +45,7 @@ static const char* strIntCmd(CAction::T_IntCmdType type)
     return "invalid";
 }
 
-const char * CAction::comparatorToString(T_Comparator comp)
+const char* CAction::comparatorToString(T_Comparator comp)
 {
     switch (comp) {
     case E_C_EQ:
@@ -65,7 +65,7 @@ const char * CAction::comparatorToString(T_Comparator comp)
     }
 }
 
-bool CAction::compare(VariableTable *variableTable)
+bool CAction::compare(VariableTable* variableTable)
 {
     double lhs = variableTable->getVar(M_varInId)->getDouble();
     double rhs = M_varIn2Id ? variableTable->getVar(M_varIn2Id)->getDouble() : M_doubleValue;
@@ -249,79 +249,79 @@ void CAction::afficheInfo()
 }
 
 
-CAction::T_ActionType   CAction::getActionType()
+CAction::T_ActionType CAction::getActionType()
 {
-    return (M_action);
+    return M_action;
 }
 CAction::T_LookingPlace CAction::getLookingPlace()
 {
-    return (M_lookingPlace);
+    return M_lookingPlace;
 }
-CAction::T_IntCmdType   CAction::getIntCmd()
+CAction::T_IntCmdType CAction::getIntCmd()
 {
-    return (M_IntCmd);
+    return M_IntCmd;
 }
-CAction::T_Comparator   CAction::getComparator()
+CAction::T_Comparator CAction::getComparator()
 {
-    return (M_comp);
+    return M_comp;
 }
 
-bool           CAction::getCheckIt()
+bool CAction::getCheckIt()
 {
-    return (M_checkIt);
+    return M_checkIt;
 }
-bool           CAction::getCheckItInverse()
+bool CAction::getCheckItInverse()
 {
-    return (M_checkItInverse);
+    return M_checkItInverse;
 }
-bool           CAction::getCaseIndep()
+bool CAction::getCaseIndep()
 {
-    return (M_caseIndep);
+    return M_caseIndep;
 }
-bool           CAction::getHeadersOnly()
+bool CAction::getHeadersOnly()
 {
-    return (M_headersOnly);
+    return M_headersOnly;
 }
-int            CAction::getOccurrence()
+int CAction::getOccurrence()
 {
-    return (M_occurrence);
+    return M_occurrence;
 }
-int            CAction::getVarId()
+int CAction::getVarId()
 {
-    return (M_varId);
+    return M_varId;
 }
-int            CAction::getVarInId()
+int CAction::getVarInId()
 {
-    return (M_varInId);
+    return M_varInId;
 }
-int            CAction::getVarIn2Id()
+int CAction::getVarIn2Id()
 {
-    return (M_varIn2Id);
+    return M_varIn2Id;
 }
-char*          CAction::getLookingChar()
+char* CAction::getLookingChar()
 {
-    return (M_lookingChar);
+    return M_lookingChar;
 }
-SendingMessage *CAction::getMessage(int n)
+SendingMessage* CAction::getMessage(int n)
 {
-    return (M_message[n]);
+    return M_message[n];
 }
-CSample*       CAction::getDistribution()
+CSample* CAction::getDistribution()
 {
-    return (M_distribution);
+    return M_distribution;
 }
-double         CAction::getDoubleValue()
+double CAction::getDoubleValue()
 {
-    return (M_doubleValue);
+    return M_doubleValue;
 }
-char*          CAction::getStringValue()
+char* CAction::getStringValue()
 {
-    return (M_stringValue);
+    return M_stringValue;
 }
 #ifdef PCAPPLAY
-pcap_pkts  *   CAction::getPcapPkts()
+pcap_pkts* CAction::getPcapPkts()
 {
-    return (M_pcapArgs);
+    return M_pcapArgs;
 }
 #endif
 #ifdef RTP_STREAM
@@ -336,73 +336,73 @@ rtpstream_actinfo_t* CAction::getRTPStreamActInfo()
 }
 #endif
 
-void CAction::setActionType(CAction::T_ActionType   P_value)
+void CAction::setActionType(CAction::T_ActionType P_value)
 {
-    M_action       = P_value;
+    M_action = P_value;
 }
 void CAction::setLookingPlace(CAction::T_LookingPlace P_value)
 {
     M_lookingPlace = P_value;
 }
-void CAction::setCheckIt(bool           P_value)
+void CAction::setCheckIt(bool P_value)
 {
-    M_checkIt      = P_value;
+    M_checkIt = P_value;
 }
-void CAction::setCheckItInverse(bool           P_value)
+void CAction::setCheckItInverse(bool P_value)
 {
-    M_checkItInverse      = P_value;
+    M_checkItInverse = P_value;
 }
-void CAction::setVarId(int            P_value)
+void CAction::setVarId(int P_value)
 {
-    M_varId        = P_value;
+    M_varId = P_value;
 }
-void CAction::setVarInId(int            P_value)
+void CAction::setVarInId(int P_value)
 {
-    M_varInId        = P_value;
+    M_varInId = P_value;
 }
-void CAction::setVarIn2Id(int            P_value)
+void CAction::setVarIn2Id(int P_value)
 {
-    M_varIn2Id        = P_value;
+    M_varIn2Id = P_value;
 }
-void CAction::setCaseIndep(bool           P_value)
+void CAction::setCaseIndep(bool P_value)
 {
-    M_caseIndep    = P_value;
+    M_caseIndep = P_value;
 }
-void CAction::setOccurrence(int            P_value)
+void CAction::setOccurrence(int P_value)
 {
-    M_occurrence    = P_value;
+    M_occurrence = P_value;
 }
-void CAction::setHeadersOnly(bool           P_value)
+void CAction::setHeadersOnly(bool P_value)
 {
-    M_headersOnly  = P_value;
+    M_headersOnly = P_value;
 }
 void CAction::setIntCmd(T_IntCmdType P_type)
 {
-    M_IntCmd       = P_type;
+    M_IntCmd = P_type;
 }
 void CAction::setComparator(T_Comparator P_value)
 {
-    M_comp         = P_value;
+    M_comp = P_value;
 }
 
 /* sample specific function. */
-void CAction::setDistribution(CSample *P_value)
+void CAction::setDistribution(CSample* P_value)
 {
-    M_distribution       = P_value;
+    M_distribution = P_value;
 }
 /* assign from value specific function. */
 void CAction::setDoubleValue(double P_value)
 {
-    M_doubleValue       = P_value;
+    M_doubleValue = P_value;
 }
 
 /* strcmp specific function. */
-void CAction::setStringValue(char *P_value)
+void CAction::setStringValue(char* P_value)
 {
-    M_stringValue       = P_value;
+    M_stringValue = P_value;
 }
 
-void CAction::setSubVarId(int    P_value)
+void CAction::setSubVarId(int P_value)
 {
     if (M_nbSubVarId < M_maxNbSubVarId) {
         M_subVarId[M_nbSubVarId] = P_value;
@@ -420,15 +420,15 @@ int*  CAction::getSubVarId()
     return (M_subVarId);
 }
 
-void CAction::setNbSubVarId(int            P_value)
+void CAction::setNbSubVarId(int P_value)
 {
-    M_maxNbSubVarId        = P_value;
+    M_maxNbSubVarId = P_value;
     if (M_subVarId != NULL) {
         delete [] M_subVarId;
-        M_subVarId      = NULL;
+        M_subVarId = NULL;
     }
-    M_subVarId = new int[M_maxNbSubVarId] ;
-    M_nbSubVarId = 0 ;
+    M_subVarId = new int[M_maxNbSubVarId];
+    M_nbSubVarId = 0;
 }
 int  CAction::getNbSubVarId()
 {
@@ -464,7 +464,7 @@ void CAction::setMessage(const char* P_value, int n)
     }
 }
 
-void CAction::setRegExp(const char *P_value)
+void CAction::setRegExp(const char* P_value)
 {
     int errorCode;
 
@@ -480,7 +480,7 @@ void CAction::setRegExp(const char *P_value)
     }
 }
 
-char *CAction::getRegularExpression()
+char* CAction::getRegularExpression()
 {
     if (!M_regExpSet) {
         ERROR("Trying to get a regular expression for an action that does not have one!");
@@ -488,12 +488,12 @@ char *CAction::getRegularExpression()
     return M_regularExpression;
 }
 
-int CAction::executeRegExp(const char* P_string, VariableTable *P_callVarTable)
+int CAction::executeRegExp(const char* P_string, VariableTable* P_callVarTable)
 {
     regmatch_t pmatch[10];
     int error;
     int nbOfMatch = 0;
-    char* result = NULL ;
+    char* result = NULL;
 
     if (!M_regExpSet) {
         ERROR("Trying to perform regular expression match on action that does not have one!");
@@ -517,7 +517,7 @@ int CAction::executeRegExp(const char* P_string, VariableTable *P_callVarTable)
             }
 
             if (i == getNbSubVarId())
-                break ;
+                break;
 
             L_callVar = P_callVarTable->getVar(getSubVarId(i));
         }
@@ -539,13 +539,13 @@ void CAction::setSubString(char** P_target, const char* P_source, int P_start, i
 
         (*P_target)[sizeOf] = '\0';
     } else {
-        *P_target = NULL ;
+        *P_target = NULL;
     }
 }
 
 
 #ifdef PCAPPLAY
-void CAction::setPcapArgs(pcap_pkts  *  P_value)
+void CAction::setPcapArgs(pcap_pkts* P_value)
 {
     if (M_pcapArgs != NULL) {
         free(M_pcapArgs);
@@ -699,14 +699,14 @@ void CAction::setRTPEchoActInfo(const char* P_value)
     }
 }
 
-void CAction::setRTPEchoActInfo(rtpecho_actinfo_t *P_value)
+void CAction::setRTPEchoActInfo(rtpecho_actinfo_t* P_value)
 {
-    /* At this stage the entire rtpecho action info structure can simply be */
-    /* copied. No members need to be individually duplicated/processed.       */
+    // At this stage the entire rtpecho action info structure can simply be
+    // copied. No members need to be individually duplicated/processed.
     memcpy(&M_rtpecho_actinfo, P_value, sizeof(M_rtpecho_actinfo));
 }
 
-void CAction::setRTPStreamActInfo(const char *P_value)
+void CAction::setRTPStreamActInfo(const char* P_value)
 {
     char* param_str;
     char* next_comma;
@@ -912,7 +912,7 @@ void CAction::setRTPStreamActInfo(const char *P_value)
     }
 }
 
-void CAction::setRTPStreamActInfo(rtpstream_actinfo_t *P_value)
+void CAction::setRTPStreamActInfo(rtpstream_actinfo_t* P_value)
 {
     /* At this stage the entire rtpstream action info structure can simply be */
     /* copied. No members need to be individually duplicated/processed.       */
@@ -920,7 +920,7 @@ void CAction::setRTPStreamActInfo(rtpstream_actinfo_t *P_value)
 }
 #endif
 
-void CAction::setScenario(scenario *     P_scenario)
+void CAction::setScenario(scenario* P_scenario)
 {
     M_scenario = P_scenario;
 }
@@ -964,7 +964,7 @@ void CAction::setAction(CAction P_action)
 #endif
 }
 
-CAction::CAction(scenario *scenario)
+CAction::CAction(scenario* scenario)
 {
     M_action       = E_AT_NO_ACTION;
     M_varId        = 0;
@@ -1060,12 +1060,12 @@ void CActions::reset()
 
 int CActions::getActionSize()
 {
-    return (M_nbAction);
+    return M_nbAction;
 }
 
-void CActions::setAction(CAction *P_action)
+void CActions::setAction(CAction* P_action)
 {
-    CAction **newActions = new CAction*[M_nbAction + 1];
+    CAction** newActions = new CAction*[M_nbAction + 1];
     if (!newActions) {
         ERROR("Could not allocate new action list.");
     }
@@ -1083,9 +1083,10 @@ void CActions::setAction(CAction *P_action)
 CAction* CActions::getAction(int i)
 {
     if (i < M_nbAction) {
-        return (M_actionList[i]);
-    } else
-        return (NULL);
+        return M_actionList[i];
+    } else {
+        return NULL;
+    }
 }
 
 

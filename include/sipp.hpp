@@ -138,8 +138,6 @@
 #define MAX_PEER_SIZE              4096  /* 3pcc extended mode: max size of peer names */
 #define MAX_LOCAL_TWIN_SOCKETS     10    /*3pcc extended mode:max number of peers from which
 cmd messages are received */
-#define DEFAULT_PREFERRED_AUDIO_CRYPTOSUITE ((char*)"AES_CM_128_HMAC_SHA1_80")
-#define DEFAULT_PREFERRED_VIDEO_CRYPTOSUITE ((char*)"AES_CM_128_HMAC_SHA1_80")
 
 /******************** Default parameters ***********************/
 
@@ -167,7 +165,9 @@ cmd messages are received */
 #define DEFAULT_BEHAVIOR_PINGREPLY   4
 #define DEFAULT_BEHAVIOR_BADCSEQ     8
 
-#define DEFAULT_BEHAVIOR_ALL         (DEFAULT_BEHAVIOR_BYE | DEFAULT_BEHAVIOR_ABORTUNEXP | DEFAULT_BEHAVIOR_PINGREPLY | DEFAULT_BEHAVIOR_BADCSEQ)
+#define DEFAULT_BEHAVIOR_ALL         (\
+    DEFAULT_BEHAVIOR_BYE | DEFAULT_BEHAVIOR_ABORTUNEXP | \
+    DEFAULT_BEHAVIOR_PINGREPLY | DEFAULT_BEHAVIOR_BADCSEQ)
 
 #ifdef RTP_STREAM
 #define DEFAULT_MIN_RTP_PORT         8192

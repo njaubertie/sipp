@@ -46,6 +46,7 @@ if HAVE_RTP
 DEFS += -DRTP_STREAM
 rtp_SOURCES = \
 	src/rtpstream.cpp \
+	src/jlsrtp.cpp \
 	include/rtpstream.hpp
 endif
 
@@ -122,8 +123,7 @@ common_SOURCES = \
 	$(common_incl) \
 	$(ssl_SOURCES) \
 	$(pcap_SOURCES) \
-	$(rtp_SOURCES) \
-	src/jlsrtp.cpp
+	$(rtp_SOURCES)
 
 sipp_SOURCES = \
 	$(common_SOURCES) \
