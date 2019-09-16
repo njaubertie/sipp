@@ -1263,8 +1263,8 @@ static void setup_media_sockets()
     // [JLTAG]
     //
     // RTPCHECK functionality needs port binding to happen only when rtp echo is in use
-    // However since the refactoring in commit "99e847e2a129b5e4c4ccfdd502f79a029929ceb9" 
-    // was done media_ip needs to be set unconditionally so I have moved the media_ip 
+    // However since the refactoring in commit "99e847e2a129b5e4c4ccfdd502f79a029929ceb9"
+    // was done media_ip needs to be set unconditionally so I have moved the media_ip
     // strcpy() to happen outside of the if-block...
     //
     /* Defaults for media sockets */
@@ -1300,7 +1300,7 @@ static void setup_media_sockets()
 
         for (try_counter = 1; try_counter <= max_tries; try_counter++) {
             last_attempt = (try_counter == max_tries);
- 
+
             if (bind_rtp_sockets(&media_sockaddr, media_port, last_attempt) == 0) {
                 break;
             }

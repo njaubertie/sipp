@@ -17,6 +17,8 @@
  */
 
 #include "jlsrtp.hpp"
+
+#ifdef RTP_STREAM
 #include <openssl/modes.h>
 #include <iostream>
 #include <string.h>
@@ -3321,3 +3323,5 @@ JLSRTP::~JLSRTP()
 {
     RAND_cleanup();
 }
+
+#endif // RTP_STREAM

@@ -19,6 +19,8 @@
 #ifndef __JLSRTP__
 #define __JLSRTP__
 
+#ifdef RTP_STREAM
+
 #include <openssl/aes.h>
 #include <openssl/rand.h>
 #include <openssl/hmac.h>
@@ -1082,5 +1084,7 @@ class JLSRTP
         ~JLSRTP();
 
 };
+
+#endif // RTP_STREAM
 
 #endif // __JLSRTP__

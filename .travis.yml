@@ -35,22 +35,6 @@ matrix:
     - os: linux
       compiler: gcc
       env: CONFOPTS="--disable-epoll"
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages:
-            - g++-4.6
-            - libpcap-dev
-            - libsctp-dev
-            - libncurses5-dev
-            - libssl-dev
-            - libgsl0-dev
-            - valgrind
-      env:
-        - CC=gcc-4.6
-        - CXX=g++-4.6
-        - CONFOPTS="--with-gsl --with-openssl --with-pcap --with-rtpstream --with-sctp"
     - os: osx
       compiler: clang
       env: CONFOPTS="--with-gsl --with-openssl --with-pcap --with-rtpstream"

@@ -214,6 +214,10 @@ void call::get_remote_media_addr(std::string const &msg)
 }
 #endif
 
+#ifdef RTP_STREAM
+/******* Extract RTP remote media infomartion from SDP  *******/
+/***** Similar to the routines used by the PCAP play code *****/
+
 int call::check_audio_ciphersuite_match(SrtpAudioInfoParams &pA)
 {
     int audio_cs_len = 0;
@@ -279,10 +283,6 @@ int call::check_video_ciphersuite_match(SrtpVideoInfoParams &pV)
 
     return video_ciphersuite_match;
 }
-
-#ifdef RTP_STREAM
-/******* Extract RTP remote media infomartion from SDP  *******/
-/***** Similar to the routines used by the PCAP play code *****/
 
 #define SDP_AUDIOPORT_PREFIX "\nm=audio"
 #define SDP_IMAGEPORT_PREFIX "\nm=image"
@@ -841,6 +841,7 @@ call *call::add_call(int userId, bool ipv6, struct sockaddr_storage *dest)
 
 void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_storage *dest, const char * p_id, int userId, bool ipv6, bool isAutomatic, bool isInitCall)
 {
+#ifdef RTP_STREAM
     _srtpctxdebugfile = NULL;
 
     if (srtpcheck_debug)
@@ -863,6 +864,7 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
 
     _sessionStateCurrent = eNoSession;
     _sessionStateOld = eNoSession;
+#endif // RTP_STREAM
 
     this->call_scenario = call_scenario;
     zombie = false;
@@ -1216,7 +1218,7 @@ call::~call()
         tdm_map[tdm_map_number] = false;
     }
 
-# ifdef PCAPPLAY
+#ifdef PCAPPLAY
     if (media_thread != 0) {
         pthread_cancel(media_thread);
         pthread_join(media_thread, NULL);
@@ -1228,11 +1230,13 @@ call::~call()
     free(rtd_done);
     free(debugBuffer);
 
+#ifdef RTP_STREAM
     if (srtpcheck_debug)
     {
         fclose(_srtpctxdebugfile);
         _srtpctxdebugfile = NULL;
     }
+#endif
 }
 
 void call::setRtpEchoErrors(int value)
@@ -5589,7 +5593,6 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
 {
     CActions*  actions;
     CAction*   currentAction;
-    int rc = 0;
 
     actions = curmsg->M_actions;
     // looking for action to do on this message
@@ -6348,7 +6351,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
         else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_STOPAUDIO)
         {
             logSrtpInfo("call::executeAction() [STOPAUDIO]:  rtpstream_rtpecho_stopaudio\n");
-            rc = rtpstream_rtpecho_stopaudio(&rtpstream_callinfo);
+            int rc = rtpstream_rtpecho_stopaudio(&rtpstream_callinfo);
             if (rc < 0)
             {
                 logSrtpInfo("call::executeAction() [STOPAUDIO]:  rtpstream_rtpecho_stopaudio() rc==%d\n", rc);
@@ -6460,7 +6463,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
         else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_RTPECHO_STOPVIDEO)
         {
             logSrtpInfo("call::executeAction() [STOPVIDEO]:  rtpstream_rtpecho_stopvideo\n");
-            rc = rtpstream_rtpecho_stopvideo(&rtpstream_callinfo);
+            int rc = rtpstream_rtpecho_stopvideo(&rtpstream_callinfo);
             if (rc < 0)
             {
                 logSrtpInfo("call::executeAction() [STOPVIDEO]:  rtpstream_rtpecho_stopvideo() rc==%d\n", rc);
@@ -6775,6 +6778,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
     return false;
 }
 
+#ifdef RTP_STREAM
 int call::logSrtpInfo(const char *fmt, ...)
 {
     va_list args;
@@ -6804,6 +6808,7 @@ SessionState call::getSessionStateOld()
 {
     return _sessionStateOld;
 }
+#endif // RTP_STREAM
 
 #ifdef PCAPPLAY
 void *send_wrapper(void *arg)

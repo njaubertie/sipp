@@ -357,6 +357,7 @@ protected:
     char *debugBuffer;
     int debugLength;
 
+#ifdef RTP_STREAM
     FILE* _srtpctxdebugfile;
     int logSrtpInfo(const char *fmt, ...);
 
@@ -365,6 +366,7 @@ protected:
     void setSessionState(SessionState state);
     SessionState getSessionStateCurrent();
     SessionState getSessionStateOld();
+#endif
 };
 
 
