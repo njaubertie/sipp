@@ -584,9 +584,9 @@ void CAction::setRTPEchoActInfo(const char* P_value)
     char* next_comma;
     char actionstring[RTPECHO_MAX_FILENAMELEN];
 
-    if (strlen(P_value)>=512)
+    if (strlen(P_value) >= 512)
     {
-        ERROR("RTPEcho keyword %s is too long -- maximum supported length %zu\n", P_value, 512);
+        ERROR("RTPEcho keyword %s is too long -- maximum supported length %d\n", P_value, 512);
     }
 
     memset(actionstring, 0, sizeof(actionstring));

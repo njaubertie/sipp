@@ -1107,7 +1107,7 @@ bool call::checkAckCSeq(const char* msg)
         (msg[5] == '.') &&
         (msg[6] == '0')) {
         request[0]=0;
-    } else if (ptr = strchr(msg, ' ')) {
+    } else if ((ptr = strchr(msg, ' '))) {
         if ((ptr - msg) < 64) {
             memcpy(request, msg, ptr - msg);
             request[ptr - msg] = 0;
@@ -2707,7 +2707,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
         }
         case E_Message_Auto_Media_Port:
         {
-            int port = port = media_port + (4 * (number - 1)) % 10000 + comp->offset;
+            int port = media_port + (4 * (number - 1)) % 10000 + comp->offset;
 #ifdef PCAPPLAY
             char *begin = dest;
             while (begin > msg_buffer) {
@@ -4012,7 +4012,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
         }
     }
     /* Need the body for length and auth-int calculation */
-    char *body;
+    char *body = NULL;
     const char *auth_body = NULL;
     if (length_marker || auth_marker) {
         body = strstr(msg_buffer, "\r\n\r\n");
@@ -4624,8 +4624,6 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
         int video_port = 0;
         std::string host;
 
-        int audio_offer_ciphersuite_swap = 0;
-        int video_offer_ciphersuite_swap = 0;
         int audio_answer_ciphersuite_match = -1;
         int video_answer_ciphersuite_match = -1;
 
