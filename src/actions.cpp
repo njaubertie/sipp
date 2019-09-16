@@ -47,7 +47,7 @@ static const char* strIntCmd(CAction::T_IntCmdType type)
 
 const char * CAction::comparatorToString(T_Comparator comp)
 {
-    switch(comp) {
+    switch (comp) {
     case E_C_EQ:
         return "==";
     case E_C_NE:
@@ -70,7 +70,7 @@ bool CAction::compare(VariableTable *variableTable)
     double lhs = variableTable->getVar(M_varInId)->getDouble();
     double rhs = M_varIn2Id ? variableTable->getVar(M_varIn2Id)->getDouble() : M_doubleValue;
 
-    switch(M_comp) {
+    switch (M_comp) {
     case E_C_EQ:
         return lhs == rhs;
     case E_C_NE:
@@ -92,7 +92,7 @@ bool CAction::compare(VariableTable *variableTable)
 void CAction::afficheInfo()
 {
     if (M_action == E_AT_ASSIGN_FROM_REGEXP) {
-        if(M_lookingPlace == E_LP_MSG) {
+        if (M_lookingPlace == E_LP_MSG) {
             printf("Type[%d] - regexp[%s] where[%s] - checkIt[%d] - checkItInverse[%d] - $%s",
                    M_action,
                    M_regularExpression,
@@ -159,14 +159,14 @@ void CAction::afficheInfo()
     else if (M_action == E_AT_RTP_STREAM_PLAY)
     {
         printf("Type[%d] - rtp_stream playfile file %s pattern_id %d loop=%d payload %d bytes per packet=%d ms per packet=%d ticks per packet=%d",
-                M_action,
-                M_rtpstream_actinfo.filename,
-                M_rtpstream_actinfo.pattern_id,
-                M_rtpstream_actinfo.loop_count,
-                M_rtpstream_actinfo.payload_type,
-                M_rtpstream_actinfo.bytes_per_packet,
-                M_rtpstream_actinfo.ms_per_packet,
-                M_rtpstream_actinfo.ticks_per_packet);
+               M_action,
+               M_rtpstream_actinfo.filename,
+               M_rtpstream_actinfo.pattern_id,
+               M_rtpstream_actinfo.loop_count,
+               M_rtpstream_actinfo.payload_type,
+               M_rtpstream_actinfo.bytes_per_packet,
+               M_rtpstream_actinfo.ms_per_packet,
+               M_rtpstream_actinfo.ticks_per_packet);
     }
     else if (M_action == E_AT_RTP_STREAM_PAUSE)
     {
@@ -179,14 +179,14 @@ void CAction::afficheInfo()
     else if (M_action == E_AT_RTP_STREAM_PLAYAPATTERN)
     {
         printf("Type[%d] - rtp_stream playapattern file %s pattern_id %d loop=%d payload %d bytes per packet=%d ms per packet=%d ticks per packet=%d",
-                M_action,
-                M_rtpstream_actinfo.filename,
-                M_rtpstream_actinfo.pattern_id,
-                M_rtpstream_actinfo.loop_count,
-                M_rtpstream_actinfo.payload_type,
-                M_rtpstream_actinfo.bytes_per_packet,
-                M_rtpstream_actinfo.ms_per_packet,
-                M_rtpstream_actinfo.ticks_per_packet);
+               M_action,
+               M_rtpstream_actinfo.filename,
+               M_rtpstream_actinfo.pattern_id,
+               M_rtpstream_actinfo.loop_count,
+               M_rtpstream_actinfo.payload_type,
+               M_rtpstream_actinfo.bytes_per_packet,
+               M_rtpstream_actinfo.ms_per_packet,
+               M_rtpstream_actinfo.ticks_per_packet);
     }
     else if (M_action == E_AT_RTP_STREAM_PAUSEAPATTERN)
     {
@@ -200,14 +200,14 @@ void CAction::afficheInfo()
     else if (M_action == E_AT_RTP_STREAM_PLAYVPATTERN)
     {
         printf("Type[%d] - rtp_stream playvpattern file %s pattern_id %d loop=%d payload %d bytes per packet=%d ms per packet=%d ticks per packet=%d",
-                M_action,
-                M_rtpstream_actinfo.filename,
-                M_rtpstream_actinfo.pattern_id,
-                M_rtpstream_actinfo.loop_count,
-                M_rtpstream_actinfo.payload_type,
-                M_rtpstream_actinfo.bytes_per_packet,
-                M_rtpstream_actinfo.ms_per_packet,
-                M_rtpstream_actinfo.ticks_per_packet);
+               M_action,
+               M_rtpstream_actinfo.filename,
+               M_rtpstream_actinfo.pattern_id,
+               M_rtpstream_actinfo.loop_count,
+               M_rtpstream_actinfo.payload_type,
+               M_rtpstream_actinfo.bytes_per_packet,
+               M_rtpstream_actinfo.ms_per_packet,
+               M_rtpstream_actinfo.ticks_per_packet);
     }
     else if (M_action == E_AT_RTP_STREAM_PAUSEVPATTERN)
     {
@@ -251,77 +251,77 @@ void CAction::afficheInfo()
 
 CAction::T_ActionType   CAction::getActionType()
 {
-    return(M_action);
+    return (M_action);
 }
 CAction::T_LookingPlace CAction::getLookingPlace()
 {
-    return(M_lookingPlace);
+    return (M_lookingPlace);
 }
-CAction::T_IntCmdType   CAction::getIntCmd ()
+CAction::T_IntCmdType   CAction::getIntCmd()
 {
-    return(M_IntCmd);
+    return (M_IntCmd);
 }
-CAction::T_Comparator   CAction::getComparator ()
+CAction::T_Comparator   CAction::getComparator()
 {
-    return(M_comp);
+    return (M_comp);
 }
 
 bool           CAction::getCheckIt()
 {
-    return(M_checkIt);
+    return (M_checkIt);
 }
 bool           CAction::getCheckItInverse()
 {
-    return(M_checkItInverse);
+    return (M_checkItInverse);
 }
 bool           CAction::getCaseIndep()
 {
-    return(M_caseIndep);
+    return (M_caseIndep);
 }
 bool           CAction::getHeadersOnly()
 {
-    return(M_headersOnly);
+    return (M_headersOnly);
 }
 int            CAction::getOccurrence()
 {
-    return(M_occurrence);
+    return (M_occurrence);
 }
 int            CAction::getVarId()
 {
-    return(M_varId);
+    return (M_varId);
 }
 int            CAction::getVarInId()
 {
-    return(M_varInId);
+    return (M_varInId);
 }
 int            CAction::getVarIn2Id()
 {
-    return(M_varIn2Id);
+    return (M_varIn2Id);
 }
 char*          CAction::getLookingChar()
 {
-    return(M_lookingChar);
+    return (M_lookingChar);
 }
 SendingMessage *CAction::getMessage(int n)
 {
-    return(M_message[n]);
+    return (M_message[n]);
 }
 CSample*       CAction::getDistribution()
 {
-    return(M_distribution);
+    return (M_distribution);
 }
 double         CAction::getDoubleValue()
 {
-    return(M_doubleValue);
+    return (M_doubleValue);
 }
 char*          CAction::getStringValue()
 {
-    return(M_stringValue);
+    return (M_stringValue);
 }
 #ifdef PCAPPLAY
 pcap_pkts  *   CAction::getPcapPkts()
 {
-    return(M_pcapArgs);
+    return (M_pcapArgs);
 }
 #endif
 #ifdef RTP_STREAM
@@ -336,75 +336,75 @@ rtpstream_actinfo_t* CAction::getRTPStreamActInfo()
 }
 #endif
 
-void CAction::setActionType   (CAction::T_ActionType   P_value)
+void CAction::setActionType(CAction::T_ActionType   P_value)
 {
     M_action       = P_value;
 }
-void CAction::setLookingPlace (CAction::T_LookingPlace P_value)
+void CAction::setLookingPlace(CAction::T_LookingPlace P_value)
 {
     M_lookingPlace = P_value;
 }
-void CAction::setCheckIt      (bool           P_value)
+void CAction::setCheckIt(bool           P_value)
 {
     M_checkIt      = P_value;
 }
-void CAction::setCheckItInverse      (bool           P_value)
+void CAction::setCheckItInverse(bool           P_value)
 {
     M_checkItInverse      = P_value;
 }
-void CAction::setVarId        (int            P_value)
+void CAction::setVarId(int            P_value)
 {
     M_varId        = P_value;
 }
-void CAction::setVarInId      (int            P_value)
+void CAction::setVarInId(int            P_value)
 {
     M_varInId        = P_value;
 }
-void CAction::setVarIn2Id      (int            P_value)
+void CAction::setVarIn2Id(int            P_value)
 {
     M_varIn2Id        = P_value;
 }
-void CAction::setCaseIndep    (bool           P_value)
+void CAction::setCaseIndep(bool           P_value)
 {
     M_caseIndep    = P_value;
 }
-void CAction::setOccurrence   (int            P_value)
+void CAction::setOccurrence(int            P_value)
 {
     M_occurrence    = P_value;
 }
-void CAction::setHeadersOnly  (bool           P_value)
+void CAction::setHeadersOnly(bool           P_value)
 {
     M_headersOnly  = P_value;
 }
-void CAction::setIntCmd       (T_IntCmdType P_type)
+void CAction::setIntCmd(T_IntCmdType P_type)
 {
     M_IntCmd       = P_type;
 }
-void CAction::setComparator   (T_Comparator P_value)
+void CAction::setComparator(T_Comparator P_value)
 {
     M_comp         = P_value;
 }
 
 /* sample specific function. */
-void CAction::setDistribution (CSample *P_value)
+void CAction::setDistribution(CSample *P_value)
 {
     M_distribution       = P_value;
 }
 /* assign from value specific function. */
-void CAction::setDoubleValue (double P_value)
+void CAction::setDoubleValue(double P_value)
 {
     M_doubleValue       = P_value;
 }
 
 /* strcmp specific function. */
-void CAction::setStringValue (char *P_value)
+void CAction::setStringValue(char *P_value)
 {
     M_stringValue       = P_value;
 }
 
-void CAction::setSubVarId (int    P_value)
+void CAction::setSubVarId(int    P_value)
 {
-    if ( M_nbSubVarId < M_maxNbSubVarId ) {
+    if (M_nbSubVarId < M_maxNbSubVarId) {
         M_subVarId[M_nbSubVarId] = P_value;
         M_nbSubVarId++;
     }
@@ -412,53 +412,53 @@ void CAction::setSubVarId (int    P_value)
 
 int  CAction::getSubVarId(int P_index)
 {
-    return(M_subVarId[P_index]);
+    return (M_subVarId[P_index]);
 }
 
 int*  CAction::getSubVarId()
 {
-    return(M_subVarId);
+    return (M_subVarId);
 }
 
-void CAction::setNbSubVarId (int            P_value)
+void CAction::setNbSubVarId(int            P_value)
 {
     M_maxNbSubVarId        = P_value;
-    if(M_subVarId != NULL) {
+    if (M_subVarId != NULL) {
         delete [] M_subVarId;
         M_subVarId      = NULL;
     }
     M_subVarId = new int[M_maxNbSubVarId] ;
     M_nbSubVarId = 0 ;
 }
-int  CAction::getNbSubVarId ()
+int  CAction::getNbSubVarId()
 {
-    return(M_nbSubVarId);
+    return (M_nbSubVarId);
 }
 
 
 void CAction::setLookingChar(const char* P_value)
 {
-    if(M_lookingChar != NULL) {
+    if (M_lookingChar != NULL) {
         delete [] M_lookingChar;
         M_lookingChar = NULL;
     }
 
-    if(P_value != NULL) {
-        M_lookingChar = new char[strlen(P_value)+1];
+    if (P_value != NULL) {
+        M_lookingChar = new char[strlen(P_value) + 1];
         strcpy(M_lookingChar, P_value);
     }
 }
 
 void CAction::setMessage(const char* P_value, int n)
 {
-    if(M_message[n] != NULL) {
+    if (M_message[n] != NULL) {
         delete M_message[n];
         M_message[n] = NULL;
     }
     free(M_message_str[n]);
     M_message_str[n] = NULL;
 
-    if(P_value != NULL) {
+    if (P_value != NULL) {
         M_message_str[n] = strdup(P_value);
         M_message[n] = new SendingMessage(M_scenario, P_value, true /* skip sanity */);
     }
@@ -473,7 +473,7 @@ void CAction::setRegExp(const char *P_value)
     M_regExpSet = true;
 
     errorCode = regcomp(&M_internalRegExp, P_value, REGCOMP_PARAMS);
-    if(errorCode != 0) {
+    if (errorCode != 0) {
         char buffer[MAX_HEADER_LEN];
         regerror(errorCode, &M_internalRegExp, buffer, sizeof(buffer));
         ERROR("recomp error : regular expression '%s' - error '%s'", M_regularExpression, buffer);
@@ -503,14 +503,14 @@ int CAction::executeRegExp(const char* P_string, VariableTable *P_callVarTable)
         ERROR("You can only have nine sub expressions!");
     }
 
-    memset((void*)pmatch, 0, sizeof(regmatch_t)*10);
+    memset((void*)pmatch, 0, sizeof(regmatch_t) * 10);
 
     error = regexec(&M_internalRegExp, P_string, 10, pmatch, REGEXEC_PARAMS);
-    if ( error == 0) {
+    if (error == 0) {
         CCallVariable* L_callVar = P_callVarTable->getVar(getVarId());
 
-        for(int i = 0; i <= getNbSubVarId(); i++) {
-            if(pmatch[i].rm_eo != -1) {
+        for (int i = 0; i <= getNbSubVarId(); i++) {
+            if (pmatch[i].rm_eo != -1) {
                 setSubString(&result, P_string, pmatch[i].rm_so, pmatch[i].rm_eo);
                 L_callVar->setMatchingValue(result);
                 nbOfMatch++;
@@ -522,14 +522,14 @@ int CAction::executeRegExp(const char* P_string, VariableTable *P_callVarTable)
             L_callVar = P_callVarTable->getVar(getSubVarId(i));
         }
     }
-    return(nbOfMatch);
+    return (nbOfMatch);
 }
 
 void CAction::setSubString(char** P_target, const char* P_source, int P_start, int P_stop)
 {
     int sizeOf;
 
-    if(P_source != NULL) {
+    if (P_source != NULL) {
         sizeOf = P_stop - P_start;
         (*P_target) = new char[sizeOf + 1];
 
@@ -545,14 +545,14 @@ void CAction::setSubString(char** P_target, const char* P_source, int P_start, i
 
 
 #ifdef PCAPPLAY
-void CAction::setPcapArgs (pcap_pkts  *  P_value)
+void CAction::setPcapArgs(pcap_pkts  *  P_value)
 {
-    if(M_pcapArgs != NULL) {
+    if (M_pcapArgs != NULL) {
         free(M_pcapArgs);
         M_pcapArgs = NULL;
     }
 
-    if(P_value != NULL) {
+    if (P_value != NULL) {
         M_pcapArgs = (pcap_pkts *)malloc(sizeof(*M_pcapArgs));
         memcpy(M_pcapArgs, P_value, sizeof(*M_pcapArgs));
     }
@@ -560,12 +560,12 @@ void CAction::setPcapArgs (pcap_pkts  *  P_value)
 
 void CAction::setPcapArgs(const char* P_value)
 {
-    if(M_pcapArgs != NULL) {
+    if (M_pcapArgs != NULL) {
         free(M_pcapArgs);
         M_pcapArgs = NULL;
     }
 
-    if(P_value != NULL) {
+    if (P_value != NULL) {
         M_pcapArgs = (pcap_pkts *) malloc(sizeof(*M_pcapArgs));
         if (parse_play_args(P_value, M_pcapArgs) == -1) {
             ERROR("Play pcap error");
@@ -598,104 +598,104 @@ void CAction::setRTPEchoActInfo(const char* P_value)
     M_rtpecho_actinfo.audio_active = 0;
     M_rtpecho_actinfo.video_active = 0;
 
-    strcpy (actionstring,P_value);
-    param_str= strchr(actionstring,',');
-    next_comma= NULL;
+    strcpy(actionstring, P_value);
+    param_str = strchr(actionstring, ',');
+    next_comma = NULL;
 
     // Comma found for payload_type parameter
     if (param_str)
     {
-        *(param_str++)= 0; // skip comma
+        *(param_str++) = 0; // skip comma
 
         /* we have a payload type parameter */
-        next_comma= strchr (param_str,',');
+        next_comma = strchr(param_str, ',');
         if (next_comma)
         {
-            *(next_comma++)= 0;
+            *(next_comma++) = 0;
         }
-        M_rtpecho_actinfo.payload_type= atoi(param_str);
-        param_str= next_comma;
+        M_rtpecho_actinfo.payload_type = atoi(param_str);
+        param_str = next_comma;
     }
 
     // Comma found for payload_name parameter
     if (param_str)
     {
         /* we have a payload_name parameter */
-        next_comma= strchr (param_str,',');
+        next_comma = strchr(param_str, ',');
         if (next_comma)
         {
-            *(next_comma++)= 0;
+            *(next_comma++) = 0;
         }
         strcpy(M_rtpecho_actinfo.payload_name, param_str);
-        param_str= next_comma;
+        param_str = next_comma;
     }
 
     /* Setup based on what we know of payload types */
     switch (M_rtpecho_actinfo.payload_type)
     {
 
-      case 0:
-          if (!strcmp(M_rtpecho_actinfo.payload_name, "PCMU/8000"))
-          {
-              M_rtpecho_actinfo.bytes_per_packet= 160;
-              M_rtpecho_actinfo.audio_active = 1;
-          }
-          break;
+    case 0:
+        if (!strcmp(M_rtpecho_actinfo.payload_name, "PCMU/8000"))
+        {
+            M_rtpecho_actinfo.bytes_per_packet = 160;
+            M_rtpecho_actinfo.audio_active = 1;
+        }
+        break;
 
-      case 8:
-          if (!strcmp(M_rtpecho_actinfo.payload_name, "PCMA/8000"))
-          {
-              M_rtpecho_actinfo.bytes_per_packet= 160;
-              M_rtpecho_actinfo.audio_active = 1;
-          }
-          break;
+    case 8:
+        if (!strcmp(M_rtpecho_actinfo.payload_name, "PCMA/8000"))
+        {
+            M_rtpecho_actinfo.bytes_per_packet = 160;
+            M_rtpecho_actinfo.audio_active = 1;
+        }
+        break;
 
-      case 9:
-          if (!strcmp(M_rtpecho_actinfo.payload_name, "G722/8000"))
-          {
-              M_rtpecho_actinfo.bytes_per_packet= 160;
-              M_rtpecho_actinfo.audio_active = 1;
-          }
-          break;
+    case 9:
+        if (!strcmp(M_rtpecho_actinfo.payload_name, "G722/8000"))
+        {
+            M_rtpecho_actinfo.bytes_per_packet = 160;
+            M_rtpecho_actinfo.audio_active = 1;
+        }
+        break;
 
-      case 18:
-          if (!strcmp(M_rtpecho_actinfo.payload_name, "G729/8000"))
-          {
-              M_rtpecho_actinfo.bytes_per_packet= 20;
-              M_rtpecho_actinfo.audio_active = 1;
-          }
-          break;
+    case 18:
+        if (!strcmp(M_rtpecho_actinfo.payload_name, "G729/8000"))
+        {
+            M_rtpecho_actinfo.bytes_per_packet = 20;
+            M_rtpecho_actinfo.audio_active = 1;
+        }
+        break;
 
-      default:
-          if ((M_rtpecho_actinfo.payload_type >= 0) &&
-              (M_rtpecho_actinfo.payload_type <= 95))
-          {
-              M_rtpecho_actinfo.bytes_per_packet= -1;
-              M_rtpecho_actinfo.audio_active = 0;
-              M_rtpecho_actinfo.video_active = 0;
-              ERROR("Unknown static rtp payload type %d - cannot set playback parameters\n",M_rtpecho_actinfo.payload_type);
-          }
-          else if ((M_rtpecho_actinfo.payload_type >= 96) &&
-                   (M_rtpecho_actinfo.payload_type <= 127))
-          {
-              if (!strcmp(M_rtpecho_actinfo.payload_name, "H264/90000"))
-              {
-                  M_rtpecho_actinfo.bytes_per_packet = 1280;  // ARBITRARY H264 PACKET SIZE
-                  M_rtpecho_actinfo.video_active = 1;
-              }
-              else
-              {
-                  M_rtpecho_actinfo.bytes_per_packet= -1;
-                  M_rtpecho_actinfo.audio_active = 0;
-                  M_rtpecho_actinfo.video_active = 0;
-                  ERROR("Unknown dynamic rtp payload type %d - cannot set playback parameters\n",M_rtpecho_actinfo.payload_type);
-              }
-          }
-          else
-          {
-              ERROR("Invalid rtp payload type %d - cannot set playback parameters\n",M_rtpecho_actinfo.payload_type);
-          }
-          break;
+    default:
+        if ((M_rtpecho_actinfo.payload_type >= 0) &&
+                (M_rtpecho_actinfo.payload_type <= 95))
+        {
+            M_rtpecho_actinfo.bytes_per_packet = -1;
+            M_rtpecho_actinfo.audio_active = 0;
+            M_rtpecho_actinfo.video_active = 0;
+            ERROR("Unknown static rtp payload type %d - cannot set playback parameters\n", M_rtpecho_actinfo.payload_type);
+        }
+        else if ((M_rtpecho_actinfo.payload_type >= 96) &&
+                 (M_rtpecho_actinfo.payload_type <= 127))
+        {
+            if (!strcmp(M_rtpecho_actinfo.payload_name, "H264/90000"))
+            {
+                M_rtpecho_actinfo.bytes_per_packet = 1280;  // ARBITRARY H264 PACKET SIZE
+                M_rtpecho_actinfo.video_active = 1;
+            }
+            else
+            {
+                M_rtpecho_actinfo.bytes_per_packet = -1;
+                M_rtpecho_actinfo.audio_active = 0;
+                M_rtpecho_actinfo.video_active = 0;
+                ERROR("Unknown dynamic rtp payload type %d - cannot set playback parameters\n", M_rtpecho_actinfo.payload_type);
+            }
+        }
+        else
+        {
+            ERROR("Invalid rtp payload type %d - cannot set playback parameters\n", M_rtpecho_actinfo.payload_type);
+        }
+        break;
     }
 }
 
@@ -703,7 +703,7 @@ void CAction::setRTPEchoActInfo(rtpecho_actinfo_t *P_value)
 {
     /* At this stage the entire rtpecho action info structure can simply be */
     /* copied. No members need to be individually duplicated/processed.       */
-    memcpy (&M_rtpecho_actinfo, P_value, sizeof(M_rtpecho_actinfo));
+    memcpy(&M_rtpecho_actinfo, P_value, sizeof(M_rtpecho_actinfo));
 }
 
 void CAction::setRTPStreamActInfo(const char *P_value)
@@ -713,9 +713,9 @@ void CAction::setRTPStreamActInfo(const char *P_value)
     int pattern_mode = 0;
     int stream_type = 0; /* 0: AUDIO / 1: VIDEO */
 
-    if (strlen(P_value)>=sizeof (M_rtpstream_actinfo.filename))
+    if (strlen(P_value) >= sizeof(M_rtpstream_actinfo.filename))
     {
-        ERROR("Filename/Pattern keyword %s is too long -- maximum supported length %zu", P_value, sizeof (M_rtpstream_actinfo.filename)-1);
+        ERROR("Filename/Pattern keyword %s is too long -- maximum supported length %zu", P_value, sizeof(M_rtpstream_actinfo.filename) - 1);
     }
 
     // Initialize M_rtpstream_actinfo struct members
@@ -731,14 +731,14 @@ void CAction::setRTPStreamActInfo(const char *P_value)
     M_rtpstream_actinfo.video_active = 0;
 
     if ((!strncmp(P_value, "apattern", 8)) ||
-        (!strncmp(P_value, "vpattern", 8)))
+            (!strncmp(P_value, "vpattern", 8)))
     {
-      pattern_mode = 1;
+        pattern_mode = 1;
     }
 
-    strcpy (M_rtpstream_actinfo.filename,P_value);
-    param_str= strchr(M_rtpstream_actinfo.filename,',');
-    next_comma= NULL;
+    strcpy(M_rtpstream_actinfo.filename, P_value);
+    param_str = strchr(M_rtpstream_actinfo.filename, ',');
+    next_comma = NULL;
 
     // Set default values of pattern_id/loop_count depending on whether we are in PATTERN or FILE mode
     if (pattern_mode)
@@ -749,148 +749,148 @@ void CAction::setRTPStreamActInfo(const char *P_value)
     else
     {
         M_rtpstream_actinfo.pattern_id = -1;
-        M_rtpstream_actinfo.loop_count= 1;
+        M_rtpstream_actinfo.loop_count = 1;
     }
 
     // Comma found for loop_count (FILE MODE) or pattern_id (PATTERN MODE)
     if (param_str)
     {
         /* we have a loop count parameter (FILE MODE) or pattern id parameter (PATTERN MODE) */
-        *(param_str++)= 0;
-        next_comma= strchr (param_str,',');
+        *(param_str++) = 0;
+        next_comma = strchr(param_str, ',');
         if (next_comma)
         {
-            *(next_comma++)= 0;
+            *(next_comma++) = 0;
         }
 
         if (pattern_mode)
         {
-            M_rtpstream_actinfo.pattern_id= atoi(param_str);
+            M_rtpstream_actinfo.pattern_id = atoi(param_str);
         }
         else
         {
-            M_rtpstream_actinfo.loop_count= atoi(param_str);
+            M_rtpstream_actinfo.loop_count = atoi(param_str);
         }
 
-        param_str= next_comma;
+        param_str = next_comma;
     }
 
     // Set default RTP payload type value
-    M_rtpstream_actinfo.payload_type= rtp_default_payload;
+    M_rtpstream_actinfo.payload_type = rtp_default_payload;
 
     // Comma found for payload_type parameter
     if (param_str)
     {
         /* we have a payload type parameter */
-        next_comma= strchr (param_str,',');
+        next_comma = strchr(param_str, ',');
         if (next_comma)
         {
-            *(next_comma++)= 0;
+            *(next_comma++) = 0;
         }
-        M_rtpstream_actinfo.payload_type= atoi(param_str);
-        param_str= next_comma;
+        M_rtpstream_actinfo.payload_type = atoi(param_str);
+        param_str = next_comma;
     }
 
     // Comma found for payload_name parameter
     if (param_str)
     {
         /* we have a payload_name parameter */
-        next_comma= strchr (param_str,',');
+        next_comma = strchr(param_str, ',');
         if (next_comma)
         {
-            *(next_comma++)= 0;
+            *(next_comma++) = 0;
         }
         strcpy(M_rtpstream_actinfo.payload_name, param_str);
-        param_str= next_comma;
+        param_str = next_comma;
     }
 
     /* Setup based on what we know of payload types */
     switch (M_rtpstream_actinfo.payload_type)
     {
 
-      case 0:
-          if (!strcmp(M_rtpstream_actinfo.payload_name, "PCMU/8000"))
-          {
-              M_rtpstream_actinfo.ms_per_packet= 20;
-              M_rtpstream_actinfo.bytes_per_packet= 160;
-              M_rtpstream_actinfo.ticks_per_packet= 160;
-              M_rtpstream_actinfo.audio_active = 1;
-              stream_type = 0;
-          }
-          break;
+    case 0:
+        if (!strcmp(M_rtpstream_actinfo.payload_name, "PCMU/8000"))
+        {
+            M_rtpstream_actinfo.ms_per_packet = 20;
+            M_rtpstream_actinfo.bytes_per_packet = 160;
+            M_rtpstream_actinfo.ticks_per_packet = 160;
+            M_rtpstream_actinfo.audio_active = 1;
+            stream_type = 0;
+        }
+        break;
 
-      case 8:
-          if (!strcmp(M_rtpstream_actinfo.payload_name, "PCMA/8000"))
-          {
-              M_rtpstream_actinfo.ms_per_packet= 20;
-              M_rtpstream_actinfo.bytes_per_packet= 160;
-              M_rtpstream_actinfo.ticks_per_packet= 160;
-              M_rtpstream_actinfo.audio_active = 1;
-              stream_type = 0;
-          }
-          break;
-      case 9:
-          if (!strcmp(M_rtpstream_actinfo.payload_name, "G722/8000"))
-          {
-              M_rtpstream_actinfo.ms_per_packet= 20;
-              M_rtpstream_actinfo.bytes_per_packet= 160;
-              M_rtpstream_actinfo.ticks_per_packet= 160;
-              M_rtpstream_actinfo.audio_active = 1;
-              stream_type = 0;
-          }
-          break;
-      case 18:
-          if (!strcmp(M_rtpstream_actinfo.payload_name, "G729/8000"))
-          {
-              M_rtpstream_actinfo.ms_per_packet= 20;
-              M_rtpstream_actinfo.bytes_per_packet= 20;
-              M_rtpstream_actinfo.ticks_per_packet= 160;
-              M_rtpstream_actinfo.audio_active = 1;
-              stream_type = 0;
-          }
-          break;
-      case 98:
-          M_rtpstream_actinfo.ms_per_packet = 30;
-          M_rtpstream_actinfo.bytes_per_packet = 50;
-          M_rtpstream_actinfo.ticks_per_packet = 240;
-          break;
-      default:
-          if ((M_rtpstream_actinfo.payload_type >= 0) &&
-              (M_rtpstream_actinfo.payload_type <= 95))
-          {
-              M_rtpstream_actinfo.ms_per_packet= -1;
-              M_rtpstream_actinfo.bytes_per_packet= -1;
-              M_rtpstream_actinfo.ticks_per_packet= -1;
-              M_rtpstream_actinfo.audio_active = 0;
-              M_rtpstream_actinfo.video_active = 0;
-              ERROR("Unknown static rtp payload type %d - cannot set playback parameters",M_rtpstream_actinfo.payload_type);
-          }
-          else if ((M_rtpstream_actinfo.payload_type >= 96) &&
-                   (M_rtpstream_actinfo.payload_type <= 127))
-          {
-              if (!strcmp(M_rtpstream_actinfo.payload_name, "H264/90000"))
-              {
-                  M_rtpstream_actinfo.ms_per_packet = 160;   // ARBITRARY H264 PACKET TIME
-                  M_rtpstream_actinfo.bytes_per_packet = 1280;  // ARBITRARY H264 PACKET SIZE
-                  M_rtpstream_actinfo.ticks_per_packet = 1280;  // ARBITRARY H264 PACKET TICKS
-                  M_rtpstream_actinfo.video_active = 1;
-                  stream_type = 1;
-              }
-              else
-              {
-                  M_rtpstream_actinfo.ms_per_packet= -1;
-                  M_rtpstream_actinfo.bytes_per_packet= -1;
-                  M_rtpstream_actinfo.ticks_per_packet= -1;
-                  M_rtpstream_actinfo.audio_active = 0;
-                  M_rtpstream_actinfo.video_active = 0;
-                  ERROR("Unknown dynamic rtp payload type %d - cannot set playback parameters\n",M_rtpstream_actinfo.payload_type);
-              }
-          }
-          else
-          {
-              ERROR("Invalid rtp payload type %d - cannot set playback parameters\n",M_rtpstream_actinfo.payload_type);
-          }
-          break;
+    case 8:
+        if (!strcmp(M_rtpstream_actinfo.payload_name, "PCMA/8000"))
+        {
+            M_rtpstream_actinfo.ms_per_packet = 20;
+            M_rtpstream_actinfo.bytes_per_packet = 160;
+            M_rtpstream_actinfo.ticks_per_packet = 160;
+            M_rtpstream_actinfo.audio_active = 1;
+            stream_type = 0;
+        }
+        break;
+    case 9:
+        if (!strcmp(M_rtpstream_actinfo.payload_name, "G722/8000"))
+        {
+            M_rtpstream_actinfo.ms_per_packet = 20;
+            M_rtpstream_actinfo.bytes_per_packet = 160;
+            M_rtpstream_actinfo.ticks_per_packet = 160;
+            M_rtpstream_actinfo.audio_active = 1;
+            stream_type = 0;
+        }
+        break;
+    case 18:
+        if (!strcmp(M_rtpstream_actinfo.payload_name, "G729/8000"))
+        {
+            M_rtpstream_actinfo.ms_per_packet = 20;
+            M_rtpstream_actinfo.bytes_per_packet = 20;
+            M_rtpstream_actinfo.ticks_per_packet = 160;
+            M_rtpstream_actinfo.audio_active = 1;
+            stream_type = 0;
+        }
+        break;
+    case 98:
+        M_rtpstream_actinfo.ms_per_packet = 30;
+        M_rtpstream_actinfo.bytes_per_packet = 50;
+        M_rtpstream_actinfo.ticks_per_packet = 240;
+        break;
+    default:
+        if ((M_rtpstream_actinfo.payload_type >= 0) &&
+                (M_rtpstream_actinfo.payload_type <= 95))
+        {
+            M_rtpstream_actinfo.ms_per_packet = -1;
+            M_rtpstream_actinfo.bytes_per_packet = -1;
+            M_rtpstream_actinfo.ticks_per_packet = -1;
+            M_rtpstream_actinfo.audio_active = 0;
+            M_rtpstream_actinfo.video_active = 0;
+            ERROR("Unknown static rtp payload type %d - cannot set playback parameters", M_rtpstream_actinfo.payload_type);
+        }
+        else if ((M_rtpstream_actinfo.payload_type >= 96) &&
+                 (M_rtpstream_actinfo.payload_type <= 127))
+        {
+            if (!strcmp(M_rtpstream_actinfo.payload_name, "H264/90000"))
+            {
+                M_rtpstream_actinfo.ms_per_packet = 160;   // ARBITRARY H264 PACKET TIME
+                M_rtpstream_actinfo.bytes_per_packet = 1280;  // ARBITRARY H264 PACKET SIZE
+                M_rtpstream_actinfo.ticks_per_packet = 1280;  // ARBITRARY H264 PACKET TICKS
+                M_rtpstream_actinfo.video_active = 1;
+                stream_type = 1;
+            }
+            else
+            {
+                M_rtpstream_actinfo.ms_per_packet = -1;
+                M_rtpstream_actinfo.bytes_per_packet = -1;
+                M_rtpstream_actinfo.ticks_per_packet = -1;
+                M_rtpstream_actinfo.audio_active = 0;
+                M_rtpstream_actinfo.video_active = 0;
+                ERROR("Unknown dynamic rtp payload type %d - cannot set playback parameters\n", M_rtpstream_actinfo.payload_type);
+            }
+        }
+        else
+        {
+            ERROR("Invalid rtp payload type %d - cannot set playback parameters\n", M_rtpstream_actinfo.payload_type);
+        }
+        break;
     }
 
     if (M_rtpstream_actinfo.ms_per_packet <= 0 ||
@@ -898,8 +898,8 @@ void CAction::setRTPStreamActInfo(const char *P_value)
             M_rtpstream_actinfo.ticks_per_packet <= 0)
     {
         ERROR("Unknown static rtp payload type %d with payload_name \"%s\" "
-                "(missing PCMU/8000 or similar in rtp_echo?)",
-                M_rtpstream_actinfo.payload_type, M_rtpstream_actinfo.payload_name);
+              "(missing PCMU/8000 or similar in rtp_echo?)",
+              M_rtpstream_actinfo.payload_type, M_rtpstream_actinfo.payload_name);
     }
 
     if (rtpstream_cache_file(M_rtpstream_actinfo.filename,
@@ -908,7 +908,7 @@ void CAction::setRTPStreamActInfo(const char *P_value)
                              M_rtpstream_actinfo.bytes_per_packet,
                              stream_type) < 0)
     {
-        ERROR("Cannot read/cache rtpstream file %s",M_rtpstream_actinfo.filename);
+        ERROR("Cannot read/cache rtpstream file %s", M_rtpstream_actinfo.filename);
     }
 }
 
@@ -931,32 +931,32 @@ void CAction::setAction(CAction P_action)
         assert(P_action.getDistribution() != NULL);
     }
     int L_i;
-    setActionType   ( P_action.getActionType()   );
-    setLookingPlace ( P_action.getLookingPlace() );
-    setVarId        ( P_action.getVarId()        );
-    setVarInId      ( P_action.getVarInId()      );
-    setDoubleValue  ( P_action.getDoubleValue()  );
-    setDistribution ( P_action.getDistribution() );
-    setScenario     ( P_action.M_scenario        );
+    setActionType(P_action.getActionType());
+    setLookingPlace(P_action.getLookingPlace());
+    setVarId(P_action.getVarId());
+    setVarInId(P_action.getVarInId());
+    setDoubleValue(P_action.getDoubleValue());
+    setDistribution(P_action.getDistribution());
+    setScenario(P_action.M_scenario);
 
-    setNbSubVarId   ( P_action.getNbSubVarId()   );
-    for (L_i = 0; L_i < P_action.getNbSubVarId() ; L_i++ ) {
-        setSubVarId (P_action.getSubVarId(L_i));
+    setNbSubVarId(P_action.getNbSubVarId());
+    for (L_i = 0; L_i < P_action.getNbSubVarId() ; L_i++) {
+        setSubVarId(P_action.getSubVarId(L_i));
     }
 
-    setLookingChar  ( P_action.getLookingChar()  );
-    setCheckIt      ( P_action.getCheckIt()      );
-    setCheckItInverse      ( P_action.getCheckItInverse()      );
-    setCaseIndep    ( P_action.getCaseIndep()    );
-    setOccurrence   ( P_action.getOccurrence()   );
-    setHeadersOnly  ( P_action.getHeadersOnly()  );
+    setLookingChar(P_action.getLookingChar());
+    setCheckIt(P_action.getCheckIt());
+    setCheckItInverse(P_action.getCheckItInverse());
+    setCaseIndep(P_action.getCaseIndep());
+    setOccurrence(P_action.getOccurrence());
+    setHeadersOnly(P_action.getHeadersOnly());
     for (L_i = 0; L_i < MAX_ACTION_MESSAGE; L_i++) {
         setMessage(P_action.M_message_str[L_i], L_i);
     }
-    setRegExp       ( P_action.M_regularExpression);
-    setIntCmd       ( P_action.M_IntCmd          );
+    setRegExp(P_action.M_regularExpression);
+    setIntCmd(P_action.M_IntCmd);
 #ifdef PCAPPLAY
-    setPcapArgs     ( P_action.M_pcapArgs        );
+    setPcapArgs(P_action.M_pcapArgs);
 #endif
 #ifdef RTP_STREAM
     setRTPEchoActInfo(&(P_action.M_rtpecho_actinfo));
@@ -1006,19 +1006,19 @@ CAction::CAction(scenario *scenario)
 
 CAction::~CAction()
 {
-    if(M_lookingChar != NULL) {
+    if (M_lookingChar != NULL) {
         delete [] M_lookingChar;
         M_lookingChar = NULL;
     }
     for (int i = 0; i < MAX_ACTION_MESSAGE; i++) {
-        if(M_message[i] != NULL) {
+        if (M_message[i] != NULL) {
             delete M_message[i];
             M_message[i] = NULL;
         }
         free(M_message_str[i]);
         M_message_str[i] = NULL;
     }
-    if(M_subVarId != NULL) {
+    if (M_subVarId != NULL) {
         delete [] M_subVarId;
         M_subVarId      = NULL;
     }
@@ -1043,7 +1043,7 @@ CAction::~CAction()
 void CActions::afficheInfo()
 {
     printf("Action Size = [%d]\n", M_nbAction);
-    for(int i=0; i<M_nbAction; i++) {
+    for (int i = 0; i < M_nbAction; i++) {
         printf("actionlist[%d] : \n", i);
         M_actionList[i]->afficheInfo();
     }
@@ -1060,7 +1060,7 @@ void CActions::reset()
 
 int CActions::getActionSize()
 {
-    return(M_nbAction);
+    return (M_nbAction);
 }
 
 void CActions::setAction(CAction *P_action)
@@ -1082,10 +1082,10 @@ void CActions::setAction(CAction *P_action)
 
 CAction* CActions::getAction(int i)
 {
-    if(i < M_nbAction) {
-        return(M_actionList[i]);
+    if (i < M_nbAction) {
+        return (M_actionList[i]);
     } else
-        return(NULL);
+        return (NULL);
 }
 
 

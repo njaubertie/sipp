@@ -141,7 +141,7 @@ struct sipp_option options_table[] = {
     },
 
     {"", "IP, port and protocol options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
-        {
+    {
         "t", "Set the transport mode:\n"
         "- u1: UDP with one socket (default),\n"
         "- un: UDP with one socket per call,\n"
@@ -202,24 +202,25 @@ struct sipp_option options_table[] = {
 #endif
 
 
-   {"", "SIPp overall behavior options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
-   {"v", "Display version and copyright information.", SIPP_OPTION_VERSION, NULL, 0},
-   {"bg", "Launch SIPp in background mode.", SIPP_OPTION_SETFLAG, &backgroundMode, 1},
-   {"nostdin", "Disable stdin.\n", SIPP_OPTION_SETFLAG, &nostdin, 1},
-   {"plugin", "Load a plugin.", SIPP_OPTION_PLUGIN, NULL, 1},
-   {"sleep", "How long to sleep for at startup. Default unit is seconds.", SIPP_OPTION_TIME_SEC, &sleeptime, 1},
-   {"skip_rlimit", "Do not perform rlimit tuning of file descriptor limits.  Default: false.", SIPP_OPTION_SETFLAG, &skip_rlimit, 1},
-   {"buff_size", "Set the send and receive buffer size.", SIPP_OPTION_INT, &buff_size, 1},
-   {"sendbuffer_warn", "Produce warnings instead of errors on SendBuffer failures.", SIPP_OPTION_BOOL, &sendbuffer_warn, 1},
-   {"lost", "Set the number of packets to lose by default (scenario specifications override this value).", SIPP_OPTION_FLOAT, &global_lost, 1},
-   {"key", "keyword value\nSet the generic parameter named \"keyword\" to \"value\".", SIPP_OPTION_KEY, NULL, 1},
-   {"set", "variable value\nSet the global variable parameter named \"variable\" to \"value\".", SIPP_OPTION_VAR, NULL, 3},
-   {"tdmmap", "Generate and handle a table of TDM circuits.\n"
-    "A circuit must be available for the call to be placed.\n"
-    "Format: -tdmmap {0-3}{99}{5-8}{1-31}", SIPP_OPTION_TDMMAP, NULL, 1},
-   {"dynamicStart", "variable value\nSet the start offset of dynamic_id variable",  SIPP_OPTION_INT, &startDynamicId, 1},
-   {"dynamicMax",   "variable value\nSet the maximum of dynamic_id variable     ",   SIPP_OPTION_INT, &maxDynamicId,   1},
-   {"dynamicStep",  "variable value\nSet the increment of dynamic_id variable",      SIPP_OPTION_INT, &stepDynamicId,  1},
+    {"", "SIPp overall behavior options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
+    {"v", "Display version and copyright information.", SIPP_OPTION_VERSION, NULL, 0},
+    {"bg", "Launch SIPp in background mode.", SIPP_OPTION_SETFLAG, &backgroundMode, 1},
+    {"nostdin", "Disable stdin.\n", SIPP_OPTION_SETFLAG, &nostdin, 1},
+    {"plugin", "Load a plugin.", SIPP_OPTION_PLUGIN, NULL, 1},
+    {"sleep", "How long to sleep for at startup. Default unit is seconds.", SIPP_OPTION_TIME_SEC, &sleeptime, 1},
+    {"skip_rlimit", "Do not perform rlimit tuning of file descriptor limits.  Default: false.", SIPP_OPTION_SETFLAG, &skip_rlimit, 1},
+    {"buff_size", "Set the send and receive buffer size.", SIPP_OPTION_INT, &buff_size, 1},
+    {"sendbuffer_warn", "Produce warnings instead of errors on SendBuffer failures.", SIPP_OPTION_BOOL, &sendbuffer_warn, 1},
+    {"lost", "Set the number of packets to lose by default (scenario specifications override this value).", SIPP_OPTION_FLOAT, &global_lost, 1},
+    {"key", "keyword value\nSet the generic parameter named \"keyword\" to \"value\".", SIPP_OPTION_KEY, NULL, 1},
+    {"set", "variable value\nSet the global variable parameter named \"variable\" to \"value\".", SIPP_OPTION_VAR, NULL, 3},
+    {   "tdmmap", "Generate and handle a table of TDM circuits.\n"
+        "A circuit must be available for the call to be placed.\n"
+        "Format: -tdmmap {0-3}{99}{5-8}{1-31}", SIPP_OPTION_TDMMAP, NULL, 1
+    },
+    {"dynamicStart", "variable value\nSet the start offset of dynamic_id variable",  SIPP_OPTION_INT, &startDynamicId, 1},
+    {"dynamicMax",   "variable value\nSet the maximum of dynamic_id variable     ",   SIPP_OPTION_INT, &maxDynamicId,   1},
+    {"dynamicStep",  "variable value\nSet the increment of dynamic_id variable",      SIPP_OPTION_INT, &stepDynamicId,  1},
 
 
     {"", "Call behavior options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
@@ -228,48 +229,54 @@ struct sipp_option options_table[] = {
     {"cid_str", "Call ID string (default %u-%p@%s).  %u=call_number, %s=ip_address, %p=process_number, %%=% (in any order).", SIPP_OPTION_STRING, &call_id_string, 1},
     {"d", "Controls the length of calls. More precisely, this controls the duration of 'pause' instructions in the scenario, if they do not have a 'milliseconds' section. Default value is 0 and default unit is milliseconds.", SIPP_OPTION_TIME_MS, &duration, 1},
     {"deadcall_wait", "How long the Call-ID and final status of calls should be kept to improve message and error logs (default unit is ms).", SIPP_OPTION_TIME_MS, &deadcall_wait, 1},
-    {"auth_uri", "Force the value of the URI for authentication.\n"
-     "By default, the URI is composed of remote_ip:remote_port.", SIPP_OPTION_STRING, &auth_uri, 1},
+    {   "auth_uri", "Force the value of the URI for authentication.\n"
+        "By default, the URI is composed of remote_ip:remote_port.", SIPP_OPTION_STRING, &auth_uri, 1
+    },
     {"au", "Set authorization username for authentication challenges. Default is taken from -s argument", SIPP_OPTION_STRING, &auth_username, 1},
     {"ap", "Set the password for authentication challenges. Default is 'password'", SIPP_OPTION_STRING, &auth_password, 1},
     {"s", "Set the username part of the request URI. Default is 'service'.", SIPP_OPTION_STRING, &service, 1},
-    {"default_behaviors", "Set the default behaviors that SIPp will use.  Possible values are:\n"
-     "- all\tUse all default behaviors\n"
-     "- none\tUse no default behaviors\n"
-     "- bye\tSend byes for aborted calls\n"
-     "- abortunexp\tAbort calls on unexpected messages\n"
-     "- pingreply\tReply to ping requests\n"
-     "- cseq\tCheck CSeq of ACKs\n"
-     "If a behavior is prefaced with a -, then it is turned off.  Example: all,-bye\n",
-     SIPP_OPTION_DEFAULTS, &default_behaviors, 1},
-    {"nd", "No Default. Disable all default behavior of SIPp which are the following:\n"
-     "- On UDP retransmission timeout, abort the call by sending a BYE or a CANCEL\n"
-     "- On receive timeout with no ontimeout attribute, abort the call by sending a BYE or a CANCEL\n"
-     "- On unexpected BYE send a 200 OK and close the call\n"
-     "- On unexpected CANCEL send a 200 OK and close the call\n"
-     "- On unexpected PING send a 200 OK and continue the call\n"
-     "- On unexpected ACK CSeq do nothing\n"
-     "- On any other unexpected message, abort the call by sending a BYE or a CANCEL\n",
-     SIPP_OPTION_UNSETFLAG, &default_behaviors, 1},
+    {   "default_behaviors", "Set the default behaviors that SIPp will use.  Possible values are:\n"
+        "- all\tUse all default behaviors\n"
+        "- none\tUse no default behaviors\n"
+        "- bye\tSend byes for aborted calls\n"
+        "- abortunexp\tAbort calls on unexpected messages\n"
+        "- pingreply\tReply to ping requests\n"
+        "- cseq\tCheck CSeq of ACKs\n"
+        "If a behavior is prefaced with a -, then it is turned off.  Example: all,-bye\n",
+        SIPP_OPTION_DEFAULTS, &default_behaviors, 1
+    },
+    {   "nd", "No Default. Disable all default behavior of SIPp which are the following:\n"
+        "- On UDP retransmission timeout, abort the call by sending a BYE or a CANCEL\n"
+        "- On receive timeout with no ontimeout attribute, abort the call by sending a BYE or a CANCEL\n"
+        "- On unexpected BYE send a 200 OK and close the call\n"
+        "- On unexpected CANCEL send a 200 OK and close the call\n"
+        "- On unexpected PING send a 200 OK and continue the call\n"
+        "- On unexpected ACK CSeq do nothing\n"
+        "- On any other unexpected message, abort the call by sending a BYE or a CANCEL\n",
+        SIPP_OPTION_UNSETFLAG, &default_behaviors, 1
+    },
     {"pause_msg_ign", "Ignore the messages received during a pause defined in the scenario ", SIPP_OPTION_SETFLAG, &pause_msg_ign, 1},
     {"callid_slash_ign", "Don't treat a triple-slash in Call-IDs as indicating an extra SIPp prefix.", SIPP_OPTION_SETFLAG, &callidSlash, 1},
 
 
     {"", "Injection file options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
-    {"inf", "Inject values from an external CSV file during calls into the scenarios.\n"
-     "First line of this file say whether the data is to be read in sequence (SEQUENTIAL), random (RANDOM), or user (USER) order.\n"
-     "Each line corresponds to one call and has one or more ';' delimited data fields. Those fields can be referred as [field0], [field1], ... in the xml scenario file.  Several CSV files can be used simultaneously (syntax: -inf f1.csv -inf f2.csv ...)", SIPP_OPTION_INPUT_FILE, NULL, 1},
+    {   "inf", "Inject values from an external CSV file during calls into the scenarios.\n"
+        "First line of this file say whether the data is to be read in sequence (SEQUENTIAL), random (RANDOM), or user (USER) order.\n"
+        "Each line corresponds to one call and has one or more ';' delimited data fields. Those fields can be referred as [field0], [field1], ... in the xml scenario file.  Several CSV files can be used simultaneously (syntax: -inf f1.csv -inf f2.csv ...)", SIPP_OPTION_INPUT_FILE, NULL, 1
+    },
     {"infindex", "file field\nCreate an index of file using field.  For example -inf ../path/to/users.csv -infindex users.csv 0 creates an index on the first key.", SIPP_OPTION_INDEX_FILE, NULL, 1 },
-    {"ip_field", "Set which field from the injection file contains the IP address from which the client will send its messages.\n"
-     "If this option is omitted and the '-t ui' option is present, then field 0 is assumed.\n"
-     "Use this option together with '-t ui'", SIPP_OPTION_INT, &peripfield, 1},
+    {   "ip_field", "Set which field from the injection file contains the IP address from which the client will send its messages.\n"
+        "If this option is omitted and the '-t ui' option is present, then field 0 is assumed.\n"
+        "Use this option together with '-t ui'", SIPP_OPTION_INT, &peripfield, 1
+    },
 
 
     {"", "RTP behaviour options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
     {"mi", "Set the local media IP address (default: local primary host IP address)", SIPP_OPTION_IP, media_ip, 1},
-    {"rtp_echo", "Enable RTP echo. RTP/UDP packets received on port defined by -mp are echoed to their sender.\n"
-     "RTP/UDP packets coming on this port + 2 are also echoed to their sender (used for sound and video echo).",
-     SIPP_OPTION_SETFLAG, &rtp_echo_enabled, 1},
+    {   "rtp_echo", "Enable RTP echo. RTP/UDP packets received on port defined by -mp are echoed to their sender.\n"
+        "RTP/UDP packets coming on this port + 2 are also echoed to their sender (used for sound and video echo).",
+        SIPP_OPTION_SETFLAG, &rtp_echo_enabled, 1
+    },
     {"mb", "Set the RTP echo buffer size (default: 2048).", SIPP_OPTION_INT, &media_bufsize, 1},
     {"mp", "Set the local RTP echo port number. Default is 6000.", SIPP_OPTION_INT, &user_media_port, 1},
 #ifdef RTP_STREAM
@@ -284,28 +291,33 @@ struct sipp_option options_table[] = {
 #endif
 
     {"", "Call rate options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
-    {"r", "Set the call rate (in calls per seconds).  This value can be"
-     "changed during test by pressing '+', '_', '*' or '/'. Default is 10.\n"
-     "pressing '+' key to increase call rate by 1 * rate_scale,\n"
-     "pressing '-' key to decrease call rate by 1 * rate_scale,\n"
-     "pressing '*' key to increase call rate by 10 * rate_scale,\n"
-     "pressing '/' key to decrease call rate by 10 * rate_scale.\n",
-     SIPP_OPTION_FLOAT, &rate, 1},
-    {"rp", "Specify the rate period for the call rate.  Default is 1 second and default unit is milliseconds.  This allows you to have n calls every m milliseconds (by using -r n -rp m).\n"
-     "Example: -r 7 -rp 2000 ==> 7 calls every 2 seconds.\n         -r 10 -rp 5s => 10 calls every 5 seconds.", SIPP_OPTION_TIME_MS, &rate_period_ms, 1},
+    {   "r", "Set the call rate (in calls per seconds).  This value can be"
+        "changed during test by pressing '+', '_', '*' or '/'. Default is 10.\n"
+        "pressing '+' key to increase call rate by 1 * rate_scale,\n"
+        "pressing '-' key to decrease call rate by 1 * rate_scale,\n"
+        "pressing '*' key to increase call rate by 10 * rate_scale,\n"
+        "pressing '/' key to decrease call rate by 10 * rate_scale.\n",
+        SIPP_OPTION_FLOAT, &rate, 1
+    },
+    {   "rp", "Specify the rate period for the call rate.  Default is 1 second and default unit is milliseconds.  This allows you to have n calls every m milliseconds (by using -r n -rp m).\n"
+        "Example: -r 7 -rp 2000 ==> 7 calls every 2 seconds.\n         -r 10 -rp 5s => 10 calls every 5 seconds.", SIPP_OPTION_TIME_MS, &rate_period_ms, 1
+    },
     {"rate_scale", "Control the units for the '+', '-', '*', and '/' keys.", SIPP_OPTION_FLOAT, &rate_scale, 1},
 
-    {"rate_increase", "Specify the rate increase every -rate_interval units (default is seconds).  This allows you to increase the load for each independent logging period.\n"
-     "Example: -rate_increase 10 -rate_interval 10s\n"
-     "  ==> increase calls by 10 every 10 seconds.", SIPP_OPTION_INT, &rate_increase, 1},
-    {"rate_max", "If -rate_increase is set, then quit after the rate reaches this value.\n"
-     "Example: -rate_increase 10 -rate_max 100\n"
-     "  ==> increase calls by 10 until 100 cps is hit.", SIPP_OPTION_INT, &rate_max, 1},
+    {   "rate_increase", "Specify the rate increase every -rate_interval units (default is seconds).  This allows you to increase the load for each independent logging period.\n"
+        "Example: -rate_increase 10 -rate_interval 10s\n"
+        "  ==> increase calls by 10 every 10 seconds.", SIPP_OPTION_INT, &rate_increase, 1
+    },
+    {   "rate_max", "If -rate_increase is set, then quit after the rate reaches this value.\n"
+        "Example: -rate_increase 10 -rate_max 100\n"
+        "  ==> increase calls by 10 until 100 cps is hit.", SIPP_OPTION_INT, &rate_max, 1
+    },
     {"rate_interval", "Set the interval by which the call rate is increased. Defaults to the value of -fd.", SIPP_OPTION_TIME_SEC, &rate_increase_freq, 1},
     {"no_rate_quit", "If -rate_increase is set, do not quit after the rate reaches -rate_max.", SIPP_OPTION_UNSETFLAG, &rate_quit, 1},
 
-    {"l", "Set the maximum number of simultaneous calls. Once this limit is reached, traffic is decreased until the number of open calls goes down. Default:\n"
-     "  (3 * call_duration (s) * rate).", SIPP_OPTION_LIMIT, NULL, 1},
+    {   "l", "Set the maximum number of simultaneous calls. Once this limit is reached, traffic is decreased until the number of open calls goes down. Default:\n"
+        "  (3 * call_duration (s) * rate).", SIPP_OPTION_LIMIT, NULL, 1
+    },
     {"m", "Stop the test and exit when 'calls' calls are processed", SIPP_OPTION_LONG, &stop_after, 1},
     {"users", "Instead of starting calls at a fixed rate, begin 'users' calls at startup, and keep the number of calls constant.", SIPP_OPTION_USERS, NULL, 1},
 
@@ -324,19 +336,21 @@ struct sipp_option options_table[] = {
 
 
     {"", "Third-party call control options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
-    {"3pcc", "Launch the tool in 3pcc mode (\"Third Party call control\"). The passed IP address depends on the 3PCC role.\n"
-     "- When the first twin command is 'sendCmd' then this is the address of the remote twin socket.  SIPp will try to connect to this address:port to send the twin command (This instance must be started after all other 3PCC scenarios).\n"
-     "    Example: 3PCC-C-A scenario.\n"
-     "- When the first twin command is 'recvCmd' then this is the address of the local twin socket. SIPp will open this address:port to listen for twin command.\n"
-     "    Example: 3PCC-C-B scenario.", SIPP_OPTION_3PCC, NULL, 1},
-    {"master","3pcc extended mode: indicates the master number", SIPP_OPTION_3PCC_EXTENDED, &master_name, 1},
+    {   "3pcc", "Launch the tool in 3pcc mode (\"Third Party call control\"). The passed IP address depends on the 3PCC role.\n"
+        "- When the first twin command is 'sendCmd' then this is the address of the remote twin socket.  SIPp will try to connect to this address:port to send the twin command (This instance must be started after all other 3PCC scenarios).\n"
+        "    Example: 3PCC-C-A scenario.\n"
+        "- When the first twin command is 'recvCmd' then this is the address of the local twin socket. SIPp will open this address:port to listen for twin command.\n"
+        "    Example: 3PCC-C-B scenario.", SIPP_OPTION_3PCC, NULL, 1
+    },
+    {"master", "3pcc extended mode: indicates the master number", SIPP_OPTION_3PCC_EXTENDED, &master_name, 1},
     {"slave", "3pcc extended mode: indicates the slave number", SIPP_OPTION_3PCC_EXTENDED, &slave_number, 1},
     {"slave_cfg", "3pcc extended mode: indicates the file where the master and slave addresses are stored", SIPP_OPTION_SLAVE_CFG, NULL, 1},
 
     {"", "Performance and watchdog options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
-    {"timer_resol", "Set the timer resolution. Default unit is milliseconds.  This option has an impact on timers precision."
-     "Small values allow more precise scheduling but impacts CPU usage."
-     "If the compression is on, the value is set to 50ms. The default value is 10ms.", SIPP_OPTION_TIME_MS, &timer_resolution, 1},
+    {   "timer_resol", "Set the timer resolution. Default unit is milliseconds.  This option has an impact on timers precision."
+        "Small values allow more precise scheduling but impacts CPU usage."
+        "If the compression is on, the value is set to 50ms. The default value is 10ms.", SIPP_OPTION_TIME_MS, &timer_resolution, 1
+    },
     {"max_recv_loops", "Set the maximum number of messages received read per cycle. Increase this value for high traffic level.  The default value is 1000.", SIPP_OPTION_INT, &max_recv_loops, 1},
     {"max_sched_loops", "Set the maximum number of calls run per event loop. Increase this value for high traffic level.  The default value is 1000.", SIPP_OPTION_INT, &max_sched_loops, 1},
 
@@ -383,8 +397,9 @@ struct sipp_option options_table[] = {
     {"screen_overwrite", "Overwrite the screen file (default true).", SIPP_OPTION_LFOVERWRITE, &screen_lfi, 1},
 
     {"trace_rtt", "Allow tracing of all response times in <scenario file name>_<pid>_rtt.csv.", SIPP_OPTION_SETFLAG, &dumpInRtt, 1},
-    {"rtt_freq", "freq is mandatory. Dump response times every freq calls in the log file defined by -trace_rtt. Default value is 200.",
-     SIPP_OPTION_LONG, &report_freq_dumpRtt, 1},
+    {   "rtt_freq", "freq is mandatory. Dump response times every freq calls in the log file defined by -trace_rtt. Default value is 200.",
+        SIPP_OPTION_LONG, &report_freq_dumpRtt, 1
+    },
 
 
     {"trace_logs", "Allow tracing of <log> actions in <scenario file name>_<pid>_logs.log.", SIPP_OPTION_SETFLAG, &useLogf, 1},
@@ -399,7 +414,7 @@ struct sipp_option options_table[] = {
 
 static struct sipp_option *find_option(const char* option) {
     int i;
-    int max = sizeof(options_table)/sizeof(options_table[0]);
+    int max = sizeof(options_table) / sizeof(options_table[0]);
 
     /* Allow options to start with '-' or '--' */
     if (option[0] != '-') {
@@ -434,7 +449,7 @@ extern SIPpSocket  *sockets[SIPP_MAXFDS];
 static void sipp_sigusr1(int /* not used */)
 {
     /* Smooth exit: do not place any new calls and exit */
-    quitting+=10;
+    quitting += 10;
 }
 
 static void sipp_sigusr2(int /* not used */)
@@ -1101,7 +1116,8 @@ void sipp_exit(int rc, int rtp_errors, int echo_errors)
     /* Close open files. */
     struct logfile_info** logfile_ptr;
     struct logfile_info* logfiles[] = {
-        &screen_lfi, &calldebug_lfi, &message_lfi, &shortmessage_lfi, &log_lfi, &error_lfi, NULL};
+        &screen_lfi, &calldebug_lfi, &message_lfi, &shortmessage_lfi, &log_lfi, &error_lfi, NULL
+    };
     for (logfile_ptr = logfiles; *logfile_ptr; ++logfile_ptr) {
         if ((*logfile_ptr)->fptr) {
             fclose((*logfile_ptr)->fptr);
@@ -1133,10 +1149,10 @@ void sipp_exit(int rc, int rtp_errors, int echo_errors)
         }
         else
         {
-           if (counter_value_failed == 0) {
+            if (counter_value_failed == 0) {
                 if ((timeout_exit) && (counter_value_success < 1)) {
 
-                    exit (EXIT_TEST_RES_INTERNAL);
+                    exit(EXIT_TEST_RES_INTERNAL);
                 } else {
                     exit(EXIT_TEST_OK);
                 }
@@ -1338,7 +1354,7 @@ int main(int argc, char *argv[])
         /* Ignore the SIGPIPE signal */
         struct sigaction action_pipe;
         memset(&action_pipe, 0, sizeof(action_pipe));
-        action_pipe.sa_handler=SIG_IGN;
+        action_pipe.sa_handler = SIG_IGN;
         sigaction(SIGPIPE, &action_pipe, NULL);
 
         /* The Window Size change Signal is also useless, and causes failures. */
@@ -1379,7 +1395,7 @@ int main(int argc, char *argv[])
 #define CHECK_PASS() if (option->pass != pass) { break; }
 
     for (int pass = 0; pass <= 3; pass++) {
-        for(argi = 1; argi < argc; argi++) {
+        for (argi = 1; argi < argc; argi++) {
             struct sipp_option *option = find_option(argv[argi]);
             if (!option) {
                 if (argv[argi][0] != '-') {
@@ -1391,7 +1407,7 @@ int main(int argc, char *argv[])
                       "Use 'sipp -h' for details", argv[argi]);
             }
 
-            switch(option->type) {
+            switch (option->type) {
             case SIPP_OPTION_HELP:
                 if (argi + 1 < argc && !strcmp(argv[argi + 1], "stat")) {
                     help_stats();
@@ -1415,7 +1431,7 @@ int main(int argc, char *argv[])
 #ifdef RTP_STREAM
                        "-RTPSTREAM-RTPCHECK"
 #endif // RTP_STREAM
-                       );
+                      );
 
                 printf
                 (" This program is free software; you can redistribute it and/or\n"
@@ -1438,32 +1454,32 @@ int main(int argc, char *argv[])
             case SIPP_OPTION_INT:
                 REQUIRE_ARG();
                 CHECK_PASS();
-                *((int*)option->data) = get_long(argv[argi], argv[argi-1]);
+                *((int*)option->data) = get_long(argv[argi], argv[argi - 1]);
                 break;
             case SIPP_OPTION_LONG:
                 REQUIRE_ARG();
                 CHECK_PASS();
-                *((long*)option->data) = get_long(argv[argi], argv[argi-1]);
+                *((long*)option->data) = get_long(argv[argi], argv[argi - 1]);
                 break;
             case SIPP_OPTION_LONG_LONG:
                 REQUIRE_ARG();
                 CHECK_PASS();
-                *((unsigned long long*)option->data) = get_long_long(argv[argi], argv[argi-1]);
+                *((unsigned long long*)option->data) = get_long_long(argv[argi], argv[argi - 1]);
                 break;
             case SIPP_OPTION_TIME_SEC:
                 REQUIRE_ARG();
                 CHECK_PASS();
-                *((long*)option->data) = get_time(argv[argi], argv[argi-1], 1000);
+                *((long*)option->data) = get_time(argv[argi], argv[argi - 1], 1000);
                 break;
             case SIPP_OPTION_TIME_MS:
                 REQUIRE_ARG();
                 CHECK_PASS();
-                *((int*)option->data) = get_time(argv[argi], argv[argi-1], 1);
+                *((int*)option->data) = get_time(argv[argi], argv[argi - 1], 1);
                 break;
             case SIPP_OPTION_TIME_MS_LONG:
                 REQUIRE_ARG();
                 CHECK_PASS();
-                *((long*)option->data) = get_time(argv[argi], argv[argi-1], 1);
+                *((long*)option->data) = get_time(argv[argi], argv[argi - 1], 1);
                 break;
             case SIPP_OPTION_BOOL:
                 REQUIRE_ARG();
@@ -1544,7 +1560,7 @@ int main(int argc, char *argv[])
                           "Use 'sipp -h' for details",  argv[argi]);
                 }
 
-                switch(argv[argi][0]) {
+                switch (argv[argi][0]) {
                 case 'u':
                     transport = T_UDP;
                     break;
@@ -1576,7 +1592,7 @@ int main(int argc, char *argv[])
                     transport = T_UDP;
                     compression = 1;
                 }
-                switch(argv[argi][1]) {
+                switch (argv[argi][1]) {
                 case '1':
                     multisocket = 0;
                     peripsocket = 0;
@@ -1646,8 +1662,8 @@ int main(int argc, char *argv[])
                 REQUIRE_ARG();
                 CHECK_PASS();
 
-                if (generic_count + 1 >= sizeof(generic)/sizeof(generic[0])) {
-                    ERROR("Too many generic parameters %d",generic_count + 1);
+                if (generic_count + 1 >= sizeof(generic) / sizeof(generic[0])) {
+                    ERROR("Too many generic parameters %d", generic_count + 1);
                 }
                 generic[generic_count++] = &argv[argi - 1];
                 generic[generic_count] = NULL;
@@ -1724,7 +1740,7 @@ int main(int argc, char *argv[])
                 }
                 extendedTwinSippMode = true;
                 slave_cfg_file = new char [strlen(argv[argi]) + 1];
-                sprintf(slave_cfg_file,"%s", argv[argi]);
+                sprintf(slave_cfg_file, "%s", argv[argi]);
                 parse_slave_cfg();
                 break;
             case SIPP_OPTION_3PCC_EXTENDED:
@@ -1832,7 +1848,7 @@ int main(int argc, char *argv[])
                         } else {
                             ERROR("Unknown default behavior: '%s'", token);
                         }
-                        switch(mode) {
+                        switch (mode) {
                         case 0:
                             *ptr = mask;
                             break;
@@ -1998,7 +2014,7 @@ int main(int argc, char *argv[])
         struct rlimit rlimit;
         unsigned max_sockets_needed = multisocket ? max_multi_socket : 1;
 
-        if (getrlimit (RLIMIT_NOFILE, &rlimit) < 0) {
+        if (getrlimit(RLIMIT_NOFILE, &rlimit) < 0) {
             ERROR_NO("getrlimit error");
         }
 
@@ -2142,7 +2158,7 @@ int main(int argc, char *argv[])
 
     if (rtp_echo_enabled && media_socket_audio > 0) {
         if (pthread_create(&pthread2_id, NULL,
-                (void *(*)(void *))rtp_echo_thread, &media_socket_audio) == -1) {
+                           (void *(*)(void *))rtp_echo_thread, &media_socket_audio) == -1) {
             ERROR_NO("Unable to create RTP echo thread");
         }
     }
@@ -2150,7 +2166,7 @@ int main(int argc, char *argv[])
     /* Creating second RTP echo thread for video. */
     if (rtp_echo_enabled && media_socket_video > 0) {
         if (pthread_create(&pthread3_id, NULL,
-                (void *(*)(void *)) rtp_echo_thread, &media_socket_video) == -1) {
+                           (void *(*)(void *)) rtp_echo_thread, &media_socket_video) == -1) {
             ERROR_NO("Unable to create video RTP echo thread");
         }
     }

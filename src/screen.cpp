@@ -115,10 +115,10 @@ static void _screen_error(int fatal, bool use_errno, int error, const char *fmt,
 
     CStat::globalStat(fatal ? CStat::E_FATAL_ERRORS : CStat::E_WARNING);
 
-    GET_TIME (&currentTime);
+    GET_TIME(&currentTime);
 
-    c+= sprintf(c, "%s: ", CStat::formatTime(&currentTime));
-    c+= vsprintf(c, fmt, ap);
+    c += sprintf(c, "%s: ", CStat::formatTime(&currentTime));
+    c += vsprintf(c, fmt, ap);
     if (use_errno) {
         c += sprintf(c, ", errno = %d (%s)", error, strerror(error));
     }

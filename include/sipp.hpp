@@ -469,7 +469,7 @@ MAYBE_EXTERN short         use_remote_sending_addr      DEFVAL(0);
 MAYBE_EXTERN struct sockaddr_storage remote_sending_sockaddr;
 
 enum E_Alter_YesNo {
-    E_ALTER_YES=0,
+    E_ALTER_YES = 0,
     E_ALTER_NO
 };
 

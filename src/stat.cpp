@@ -181,23 +181,23 @@ CStat::~CStat()
     if (M_CallLengthRepartition != NULL)
         delete [] M_CallLengthRepartition;
 
-    if(M_outputStream != NULL) {
+    if (M_outputStream != NULL) {
         M_outputStream->close();
         delete M_outputStream;
     }
 
-    if(M_fileName != NULL)
+    if (M_fileName != NULL)
         delete [] M_fileName;
 
-    if(M_outputStreamRtt != NULL) {
+    if (M_outputStreamRtt != NULL) {
         M_outputStreamRtt->close();
         delete M_outputStreamRtt;
     }
-    if(M_fileNameRtt != NULL)
+    if (M_fileNameRtt != NULL)
         delete [] M_fileNameRtt;
 
 
-    if(M_dumpRespTime != NULL)
+    if (M_dumpRespTime != NULL)
         delete [] M_dumpRespTime ;
 
     free(M_rtdInfo);
@@ -217,13 +217,13 @@ CStat::~CStat()
 }
 
 
-int CStat::init ()
+int CStat::init()
 {
     // reset of all counter
     RESET_COUNTERS(M_counters);
-    GET_TIME (&M_startTime);
-    memcpy   (&M_pdStartTime, &M_startTime, sizeof (struct timeval));
-    memcpy   (&M_plStartTime, &M_startTime, sizeof (struct timeval));
+    GET_TIME(&M_startTime);
+    memcpy(&M_pdStartTime, &M_startTime, sizeof(struct timeval));
+    memcpy(&M_plStartTime, &M_startTime, sizeof(struct timeval));
     M_outputStream = NULL;
     M_headerAlreadyDisplayed = false;
 
@@ -232,7 +232,7 @@ int CStat::init ()
 
     std::vector<int> error_codes(0);
 
-    return(1);
+    return (1);
 }
 
 
@@ -246,14 +246,14 @@ int CStat::isWellFormed(char * P_listeStr,
     (*nombre) = 0;
     sizeOf = strlen(P_listeStr);
     // getting the number
-    if(sizeOf > 0) {
+    if (sizeOf > 0) {
         // is the string well formed ? [0-9] [,]
         isANumber = false;
-        for(int i=0; i<=sizeOf; i++) {
-            switch(ptr[i]) {
+        for (int i = 0; i <= sizeOf; i++) {
+            switch (ptr[i]) {
             case ',':
-                if(isANumber == false) {
-                    return(0);
+                if (isANumber == false) {
+                    return (0);
                 } else {
                     (*nombre)++;
                 }
@@ -275,18 +275,18 @@ int CStat::isWellFormed(char * P_listeStr,
             case ' ' :
                 break;
             case '\0':
-                if(isANumber == false) {
-                    return(0);
+                if (isANumber == false) {
+                    return (0);
                 } else {
                     (*nombre)++;
                 }
                 break;
             default:
-                return(0);
+                return (0);
             }
         } // enf for
     }
-    return(1);
+    return (1);
 }
 
 
@@ -294,31 +294,31 @@ int CStat::createIntegerTable(char * P_listeStr,
                               unsigned int ** listeInteger,
                               int * sizeOfList)
 {
-    int nb=0;
+    int nb = 0;
     char * ptr = P_listeStr;
     char * ptr_prev = P_listeStr;
     unsigned int current_int;
 
-    if(isWellFormed(P_listeStr, sizeOfList) == 1) {
+    if (isWellFormed(P_listeStr, sizeOfList) == 1) {
         (*listeInteger) = new unsigned int[(*sizeOfList)];
-        while((*ptr) != ('\0')) {
-            if((*ptr) == ',') {
+        while ((*ptr) != ('\0')) {
+            if ((*ptr) == ',') {
                 sscanf(ptr_prev, "%u", &current_int);
-                if (nb<(*sizeOfList))
+                if (nb < (*sizeOfList))
                     (*listeInteger)[nb] = current_int;
                 nb++;
-                ptr_prev = ptr+1;
+                ptr_prev = ptr + 1;
             }
             ptr++;
         }
         // on lit le dernier
         sscanf(ptr_prev, "%u", &current_int);
-        if (nb<(*sizeOfList))
+        if (nb < (*sizeOfList))
             (*listeInteger)[nb] = current_int;
         nb++;
-        return(1);
+        return (1);
     }
-    return(0);
+    return (0);
 }
 
 
@@ -326,27 +326,27 @@ void CStat::setFileName(const char* P_name, const char* P_extension)
 {
     int sizeOf, sizeOfExtension;
 
-    if(P_name != NULL) {
+    if (P_name != NULL) {
         // +6 for PID
         sizeOf = strlen(P_name) + 6;
-        if(sizeOf > 0) {
-            if(P_extension != NULL) {
+        if (sizeOf > 0) {
+            if (P_extension != NULL) {
                 sizeOfExtension = strlen(P_extension);
-                if(sizeOfExtension > 0) {
-                    if(M_fileName != NULL)
+                if (sizeOfExtension > 0) {
+                    if (M_fileName != NULL)
                         delete [] M_fileName;
                     M_fileName = new char[MAX_PATH];
                     sprintf(M_fileName, "%s_%ld_", P_name, (long) getpid());
                     strcat(M_fileName, P_extension);
                 } else {
-                    if(M_fileName != NULL)
+                    if (M_fileName != NULL)
                         delete [] M_fileName;
                     M_fileName = new char[MAX_PATH];
                     sprintf(M_fileName, "%s_%ld_", P_name, (long) getpid());
                     strcat(M_fileName, DEFAULT_EXTENSION);
                 }
             } else {
-                if(M_fileName != NULL)
+                if (M_fileName != NULL)
                     delete [] M_fileName;
                 M_fileName = new char[MAX_PATH];
                 sprintf(M_fileName, "%s_%ld_", P_name, (long) getpid());
@@ -368,12 +368,12 @@ void CStat::setFileName(const char* P_name)
 {
     int sizeOf;
 
-    if(P_name != NULL) {
+    if (P_name != NULL) {
         sizeOf = strlen(P_name);
-        if(sizeOf > 0) {
-            if(M_fileName != NULL)
+        if (sizeOf > 0) {
+            if (M_fileName != NULL)
                 delete [] M_fileName;
-            M_fileName = new char[sizeOf+1];
+            M_fileName = new char[sizeOf + 1];
             strcpy(M_fileName, P_name);
         } else {
             cerr << "new file name length is null - "
@@ -392,17 +392,17 @@ void CStat::initRtt(const char* P_name, const char* P_extension,
 {
     int sizeOf, sizeOfExtension;
 
-    if(P_name != NULL) {
+    if (P_name != NULL) {
         sizeOf = strlen(P_name) ;
-        if(sizeOf > 0) {
+        if (sizeOf > 0) {
             //  4 for '_rtt' and 6 for pid
             sizeOf += 10 ;
             sizeOfExtension = strlen(P_extension);
-            if(M_fileNameRtt != NULL)
+            if (M_fileNameRtt != NULL)
                 delete [] M_fileNameRtt;
             sizeOf += sizeOfExtension;
-            M_fileNameRtt = new char[sizeOf+1];
-            sprintf (M_fileNameRtt, "%s_%ld_rtt%s", P_name, (long) getpid(),P_extension);
+            M_fileNameRtt = new char[sizeOf + 1];
+            sprintf(M_fileNameRtt, "%s_%ld_rtt%s", P_name, (long) getpid(), P_extension);
         } else {
             cerr << "new file name length is null - "
                  << "keeping the default filename : "
@@ -418,7 +418,7 @@ void CStat::initRtt(const char* P_name, const char* P_extension,
 
     M_dumpRespTime = new T_value_rtt [P_report_freq_dumpRtt] ;
 
-    if ( M_dumpRespTime == NULL ) {
+    if (M_dumpRespTime == NULL) {
         cerr << "Memory allocation failure" << endl;
         exit(EXIT_FATAL_ERROR);
     }
@@ -435,7 +435,7 @@ void CStat::setRepartitionCallLength(char * P_listeStr)
     unsigned int * listeInteger;
     int sizeOfListe;
 
-    if(createIntegerTable(P_listeStr, &listeInteger, &sizeOfListe) == 1) {
+    if (createIntegerTable(P_listeStr, &listeInteger, &sizeOfListe) == 1) {
         initRepartition(listeInteger,
                         sizeOfListe,
                         &M_CallLengthRepartition,
@@ -447,14 +447,14 @@ void CStat::setRepartitionCallLength(char * P_listeStr)
     listeInteger = NULL;
 }
 
-void CStat::setRepartitionResponseTime (char * P_listeStr)
+void CStat::setRepartitionResponseTime(char * P_listeStr)
 {
     unsigned int * listeInteger;
     int sizeOfListe;
     int i;
 
     for (i = 0; i < nRtds(); i++) {
-        if(createIntegerTable(P_listeStr, &listeInteger, &sizeOfListe) == 1) {
+        if (createIntegerTable(P_listeStr, &listeInteger, &sizeOfListe) == 1) {
             initRepartition(listeInteger,
                             sizeOfListe,
                             &M_ResponseTimeRepartition[i],
@@ -498,7 +498,7 @@ void CStat::initRepartition(unsigned int* repartition,
     int i;
     unsigned int swap;
 
-    if((nombre <= 0) || (repartition == NULL) ) {
+    if ((nombre <= 0) || (repartition == NULL)) {
         (*tabNb)          = 0;
         (*tabRepartition) = NULL;
         return;
@@ -508,29 +508,29 @@ void CStat::initRepartition(unsigned int* repartition,
     (*tabRepartition) = new T_dynamicalRepartition[(*tabNb)];
 
     // copying the repartition table in the local table
-    for(i=0; i<nombre; i++) {
+    for (i = 0; i < nombre; i++) {
         (*tabRepartition)[i].borderMax      = repartition[i];
         (*tabRepartition)[i].nbInThisBorder = 0;
     }
 
     // sorting the repartition table
     sortDone = false;
-    while(!sortDone) {
+    while (!sortDone) {
         sortDone = true;
-        for(i=0; i<(nombre-1); i++) {
-            if((*tabRepartition)[i].borderMax > (*tabRepartition)[i+1].borderMax) {
+        for (i = 0; i < (nombre - 1); i++) {
+            if ((*tabRepartition)[i].borderMax > (*tabRepartition)[i + 1].borderMax) {
                 // swapping this two value and setting sortDone to false
                 swap = (*tabRepartition)[i].borderMax;
                 (*tabRepartition)[i].borderMax =
-                    (*tabRepartition)[i+1].borderMax;
-                (*tabRepartition)[i+1].borderMax = swap;
+                    (*tabRepartition)[i + 1].borderMax;
+                (*tabRepartition)[i + 1].borderMax = swap;
                 sortDone = false;
             }
         }
     }
     // setting the range for max <= value < infinity
     (*tabRepartition)[nombre].borderMax =
-        (*tabRepartition)[nombre-1].borderMax;
+        (*tabRepartition)[nombre - 1].borderMax;
     (*tabRepartition)[nombre].nbInThisBorder = 0;
 }
 
@@ -544,7 +544,7 @@ int CStat::getRtpEchoErrors()
     return M_rtpEchoErrors;
 }
 
-int CStat::computeStat (E_Action P_action)
+int CStat::computeStat(E_Action P_action)
 {
     switch (P_action) {
     case E_CREATE_OUTGOING_CALL :
@@ -709,21 +709,21 @@ int CStat::computeStat (E_Action P_action)
 
     case E_RESET_C_COUNTERS :
         RESET_C_COUNTERS;
-        GET_TIME (&M_startTime);
+        GET_TIME(&M_startTime);
         break;
 
     case E_RESET_PD_COUNTERS :
         //DEBUG (C_Debug::E_LEVEL_4, "ENTER CASE", "%s",
         //       "CStat::computeStat : RESET_PD_COUNTERS");
         RESET_PD_COUNTERS;
-        GET_TIME (&M_pdStartTime);
+        GET_TIME(&M_pdStartTime);
         break;
 
     case E_RESET_PL_COUNTERS :
         //DEBUG (C_Debug::E_LEVEL_4, "ENTER CASE", "%s",
         //       "C_Stat::computeStat : RESET_PL_COUNTERS");
         RESET_PL_COUNTERS;
-        GET_TIME (&M_plStartTime);
+        GET_TIME(&M_plStartTime);
         if (periodic_rtd) {
             resetRepartition(M_CallLengthRepartition, M_SizeOfCallLengthRepartition);
             for (int i = 0; i < nRtds(); i++) {
@@ -739,7 +739,7 @@ int CStat::computeStat (E_Action P_action)
     return (0);
 }
 
-int CStat::globalStat (E_Action P_action)
+int CStat::globalStat(E_Action P_action)
 {
     switch (P_action) {
     case E_OUT_OF_CALL_MSGS :
@@ -792,7 +792,7 @@ int CStat::globalStat (E_Action P_action)
 }
 
 
-void CStat::computeRtt (unsigned long long P_start_time, unsigned long long P_stop_time, int which)
+void CStat::computeRtt(unsigned long long P_start_time, unsigned long long P_stop_time, int which)
 {
     M_dumpRespTime[M_counterDumpRespTime].date = (double)P_stop_time / (double)1000;
     M_dumpRespTime[M_counterDumpRespTime].rtd_no = which;
@@ -801,11 +801,11 @@ void CStat::computeRtt (unsigned long long P_start_time, unsigned long long P_st
     M_counterDumpRespTime++ ;
 
     if (M_counterDumpRespTime > (M_report_freq_dumpRtt - 1)) {
-        dumpDataRtt () ;
+        dumpDataRtt() ;
     }
 }
 
-unsigned long long CStat::GetStat (E_CounterName P_counter)
+unsigned long long CStat::GetStat(E_CounterName P_counter)
 {
     if (P_counter < E_NB_COUNTER) {
         return M_counters [P_counter];
@@ -833,7 +833,7 @@ double CStat::computeStdev(E_CounterName P_SumCounter,
     double numerator = ((double)(M_counters[P_NbOfCallUsed]) * (double)(M_counters[P_Squares])) - ((double)(M_counters[P_SumCounter] * M_counters[P_SumCounter]));
     double denominator = (double)(M_counters[P_NbOfCallUsed]) * (((double)(M_counters[P_NbOfCallUsed])) - 1.0);
 
-    return sqrt(numerator/denominator);
+    return sqrt(numerator / denominator);
 }
 
 double CStat::computeMean(E_CounterName P_SumCounter,
@@ -866,7 +866,7 @@ double CStat::computeRtdStdev(int which, int type)
     double numerator = ((double)count * (double)sumsq) - (double)(sum * sum);
     double denominator = (double)(count) * ((double)(count) - 1.0);
 
-    return sqrt(numerator/denominator);
+    return sqrt(numerator / denominator);
 }
 
 void CStat::updateAverageCounter(E_CounterName P_SumCounter,
@@ -885,8 +885,8 @@ void CStat::updateAverageCounter(E_CounterName P_SumCounter,
     }
 }
 
-int CStat::computeStat (E_Action P_action,
-                        unsigned long P_value)
+int CStat::computeStat(E_Action P_action,
+                       unsigned long P_value)
 {
     return computeStat(P_action, P_value, 0);
 }
@@ -998,9 +998,9 @@ void CStat::validateRtds()
     }
 }
 
-int CStat::computeStat (E_Action P_action,
-                        unsigned long P_value,
-                        int which)
+int CStat::computeStat(E_Action P_action,
+                       unsigned long P_value,
+                       int which)
 {
     switch (P_action) {
     case E_ADD_CALL_DURATION :
@@ -1057,7 +1057,7 @@ void CStat::updateRepartition(T_dynamicalRepartition* P_tabReport,
                               int P_sizeOfTab,
                               unsigned long P_value)
 {
-    if(P_tabReport == NULL) {
+    if (P_tabReport == NULL) {
         return;
     }
 
@@ -1069,14 +1069,14 @@ void CStat::updateRepartition(T_dynamicalRepartition* P_tabReport,
     }
 
     /* If this is not true, we never should have gotten here. */
-    assert(P_value >= P_tabReport[P_sizeOfTab-1].borderMax);
-    P_tabReport[P_sizeOfTab-1].nbInThisBorder ++;
+    assert(P_value >= P_tabReport[P_sizeOfTab - 1].borderMax);
+    P_tabReport[P_sizeOfTab - 1].nbInThisBorder ++;
 }
 
 void CStat::resetRepartition(T_dynamicalRepartition* P_tabReport,
                              int P_sizeOfTab)
 {
-    if(P_tabReport == NULL) {
+    if (P_tabReport == NULL) {
         return;
     }
 
@@ -1086,7 +1086,7 @@ void CStat::resetRepartition(T_dynamicalRepartition* P_tabReport,
 }
 
 
-CStat::CStat ()
+CStat::CStat()
 {
     size_t L_size = 0;
     L_size += strlen(DEFAULT_FILE_NAME) ;
@@ -1120,15 +1120,15 @@ char* CStat::sRepartitionHeader(T_dynamicalRepartition * tabRepartition,
     char buffer[MAX_CHAR_BUFFER_SIZE];
     int dlen = strlen(stat_delimiter);
 
-    if(tabRepartition != NULL) {
+    if (tabRepartition != NULL) {
         repartitionHeader = (char *)realloc(repartitionHeader, strlen(P_repartitionName) + dlen + 1);
         sprintf(repartitionHeader, "%s%s", P_repartitionName, stat_delimiter);
-        for(int i=0; i<(sizeOfTab-1); i++) {
+        for (int i = 0; i < (sizeOfTab - 1); i++) {
             sprintf(buffer, "%s_<%d%s", P_repartitionName, tabRepartition[i].borderMax, stat_delimiter);
             repartitionHeader = (char *)realloc(repartitionHeader, strlen(repartitionHeader) + strlen(buffer) + 1);
             strcat(repartitionHeader, buffer);
         }
-        sprintf(buffer, "%s_>=%d%s", P_repartitionName, tabRepartition[sizeOfTab-1].borderMax, stat_delimiter);
+        sprintf(buffer, "%s_>=%d%s", P_repartitionName, tabRepartition[sizeOfTab - 1].borderMax, stat_delimiter);
         repartitionHeader = (char *)realloc(repartitionHeader, strlen(repartitionHeader) + strlen(buffer) + 1);
         strcat(repartitionHeader, buffer);
     } else {
@@ -1136,7 +1136,7 @@ char* CStat::sRepartitionHeader(T_dynamicalRepartition * tabRepartition,
         strcpy(repartitionHeader, "");
     }
 
-    return(repartitionHeader);
+    return (repartitionHeader);
 }
 
 char* CStat::sRepartitionInfo(T_dynamicalRepartition * tabRepartition,
@@ -1146,16 +1146,16 @@ char* CStat::sRepartitionInfo(T_dynamicalRepartition * tabRepartition,
     char buffer[MAX_CHAR_BUFFER_SIZE];
     int dlen = strlen(stat_delimiter);
 
-    if(tabRepartition != NULL) {
+    if (tabRepartition != NULL) {
         // if a repartition is present, this field match the repartition name
         repartitionInfo = (char *)realloc(repartitionInfo, dlen + 1);
         sprintf(repartitionInfo, "%s", stat_delimiter);
-        for(int i=0; i<(sizeOfTab-1); i++) {
+        for (int i = 0; i < (sizeOfTab - 1); i++) {
             sprintf(buffer, "%lu%s", tabRepartition[i].nbInThisBorder, stat_delimiter);
             repartitionInfo = (char *)realloc(repartitionInfo, strlen(repartitionInfo) + strlen(buffer) + 1);
             strcat(repartitionInfo, buffer);
         }
-        sprintf(buffer, "%lu%s", tabRepartition[sizeOfTab-1].nbInThisBorder, stat_delimiter);
+        sprintf(buffer, "%lu%s", tabRepartition[sizeOfTab - 1].nbInThisBorder, stat_delimiter);
         repartitionInfo = (char *)realloc(repartitionInfo, strlen(repartitionInfo) + strlen(buffer) + 1);
         strcat(repartitionInfo, buffer);
     } else {
@@ -1163,7 +1163,7 @@ char* CStat::sRepartitionInfo(T_dynamicalRepartition * tabRepartition,
         repartitionInfo[0] = '\0';
     }
 
-    return(repartitionInfo);
+    return (repartitionInfo);
 }
 
 
@@ -1171,25 +1171,25 @@ void CStat::displayRepartition(FILE *f,
                                T_dynamicalRepartition * tabRepartition,
                                int sizeOfTab)
 {
-    if(tabRepartition != NULL) {
-        for(int i=0; i<(sizeOfTab-1); i++) {
-            if(i==0) {
+    if (tabRepartition != NULL) {
+        for (int i = 0; i < (sizeOfTab - 1); i++) {
+            if (i == 0) {
                 DISPLAY_REPART(0, tabRepartition[i].borderMax,
                                tabRepartition[i].nbInThisBorder);
             } else {
-                DISPLAY_REPART(tabRepartition[i-1].borderMax,
+                DISPLAY_REPART(tabRepartition[i - 1].borderMax,
                                tabRepartition[i].borderMax,
                                tabRepartition[i].nbInThisBorder);
             }
         }
-        DISPLAY_LAST_REPART (tabRepartition[sizeOfTab-1].borderMax,
-                             tabRepartition[sizeOfTab-1].nbInThisBorder);
+        DISPLAY_LAST_REPART(tabRepartition[sizeOfTab - 1].borderMax,
+                            tabRepartition[sizeOfTab - 1].nbInThisBorder);
     } else {
-        DISPLAY_INFO ("  <No repartion defined>");
+        DISPLAY_INFO("  <No repartion defined>");
     }
 }
 
-void CStat::displayData (FILE *f)
+void CStat::displayData(FILE *f)
 {
     long   localElapsedTime, globalElapsedTime ;
     struct timeval currentTime;
@@ -1197,56 +1197,56 @@ void CStat::displayData (FILE *f)
     float  realInstantCallRate;
     unsigned long numberOfCall;
 
-    GET_TIME (&currentTime);
+    GET_TIME(&currentTime);
     // computing the real call rate
-    globalElapsedTime   = computeDiffTimeInMs (&currentTime, &M_startTime);
-    localElapsedTime    = computeDiffTimeInMs (&currentTime, &M_pdStartTime);
+    globalElapsedTime   = computeDiffTimeInMs(&currentTime, &M_startTime);
+    localElapsedTime    = computeDiffTimeInMs(&currentTime, &M_pdStartTime);
 
     // the call rate is for all the call : incoming and outgoing
     numberOfCall        = M_counters[CPT_C_IncomingCallCreated] +
                           M_counters[CPT_C_OutgoingCallCreated];
     averageCallRate     = (globalElapsedTime > 0 ?
-                           1000*(float)numberOfCall/(float)globalElapsedTime
+                           1000 * (float)numberOfCall / (float)globalElapsedTime
                            : 0.0);
     numberOfCall        = (M_counters[CPT_PD_IncomingCallCreated] +
                            M_counters[CPT_PD_OutgoingCallCreated]);
     realInstantCallRate = (localElapsedTime  > 0 ?
-                           1000*(float)numberOfCall / (float)localElapsedTime :
+                           1000 * (float)numberOfCall / (float)localElapsedTime :
                            0.0);
 
     // display info
-    DISPLAY_DLINE ();
+    DISPLAY_DLINE();
     // build and display header info
-    DISPLAY_TXT ("Start Time  ", formatTime(&M_startTime));
-    DISPLAY_TXT ("Last Reset Time", formatTime(&M_pdStartTime));
-    DISPLAY_TXT ("Current Time", formatTime(&currentTime));
+    DISPLAY_TXT("Start Time  ", formatTime(&M_startTime));
+    DISPLAY_TXT("Last Reset Time", formatTime(&M_pdStartTime));
+    DISPLAY_TXT("Current Time", formatTime(&currentTime));
 
     // printing the header in the middle
     DISPLAY_CROSS_LINE();
     DISPLAY_HEADER();
     DISPLAY_CROSS_LINE();
 
-    DISPLAY_TXT_COL ("Elapsed Time",
-                     msToHHMMSSus(localElapsedTime),
-                     msToHHMMSSus(globalElapsedTime));
+    DISPLAY_TXT_COL("Elapsed Time",
+                    msToHHMMSSus(localElapsedTime),
+                    msToHHMMSSus(globalElapsedTime));
 
-    DISPLAY_VAL_RATEF_COL ("Call Rate",
-                           realInstantCallRate,
-                           averageCallRate);
-    DISPLAY_CROSS_LINE ();
+    DISPLAY_VAL_RATEF_COL("Call Rate",
+                          realInstantCallRate,
+                          averageCallRate);
+    DISPLAY_CROSS_LINE();
 
-    DISPLAY_2VAL  ("Incoming call created",
-                   M_counters[CPT_PD_IncomingCallCreated],
-                   M_counters[CPT_C_IncomingCallCreated]);
-    DISPLAY_2VAL  ("OutGoing call created",
-                   M_counters[CPT_PD_OutgoingCallCreated],
-                   M_counters[CPT_C_OutgoingCallCreated]);
-    DISPLAY_CUMUL ("Total Call created", M_counters[CPT_C_IncomingCallCreated] +
-                   M_counters[CPT_C_OutgoingCallCreated]);
-    DISPLAY_PERIO ("Current Call",       M_counters[CPT_C_CurrentCall]);
+    DISPLAY_2VAL("Incoming call created",
+                 M_counters[CPT_PD_IncomingCallCreated],
+                 M_counters[CPT_C_IncomingCallCreated]);
+    DISPLAY_2VAL("OutGoing call created",
+                 M_counters[CPT_PD_OutgoingCallCreated],
+                 M_counters[CPT_C_OutgoingCallCreated]);
+    DISPLAY_CUMUL("Total Call created", M_counters[CPT_C_IncomingCallCreated] +
+                  M_counters[CPT_C_OutgoingCallCreated]);
+    DISPLAY_PERIO("Current Call",       M_counters[CPT_C_CurrentCall]);
 
     if (M_genericMap.size()) {
-        DISPLAY_CROSS_LINE ();
+        DISPLAY_CROSS_LINE();
     }
     for (unsigned int i = 1; i < M_genericMap.size() + 1; i++) {
         char *s = (char *)malloc(20 + strlen(M_genericDisplay[i]));
@@ -1256,19 +1256,19 @@ void CStat::displayData (FILE *f)
         free(s);
     }
 
-    DISPLAY_CROSS_LINE ();
-    DISPLAY_2VAL  ("Successful call",
-                   M_counters[CPT_PD_SuccessfulCall],
-                   M_counters[CPT_C_SuccessfulCall]);
-    DISPLAY_2VAL  ("Failed call",
-                   M_counters[CPT_PD_FailedCall],
-                   M_counters[CPT_C_FailedCall]);
+    DISPLAY_CROSS_LINE();
+    DISPLAY_2VAL("Successful call",
+                 M_counters[CPT_PD_SuccessfulCall],
+                 M_counters[CPT_C_SuccessfulCall]);
+    DISPLAY_2VAL("Failed call",
+                 M_counters[CPT_PD_FailedCall],
+                 M_counters[CPT_C_FailedCall]);
     // DISPLAY_2VAL  ("Unexpected msg",
     //                 M_counters[CPT_PD_UnexpectedMessage],
     //                 M_counters[CPT_C_UnexpectedMessage]);
 
 
-    DISPLAY_CROSS_LINE ();
+    DISPLAY_CROSS_LINE();
     for (int i = 1; i <= nRtds(); i++) {
         char s[80];
 
@@ -1276,16 +1276,16 @@ void CStat::displayData (FILE *f)
         assert(rtd_stopped[M_revRtdMap[i]] == true);
 
         sprintf(s, "Response Time %s", M_revRtdMap[i]);
-        DISPLAY_TXT_COL (s,
-                         msToHHMMSSus( (unsigned long)computeRtdMean(i, GENERIC_PD)),
-                         msToHHMMSSus( (unsigned long)computeRtdMean(i, GENERIC_C)));
+        DISPLAY_TXT_COL(s,
+                        msToHHMMSSus((unsigned long)computeRtdMean(i, GENERIC_PD)),
+                        msToHHMMSSus((unsigned long)computeRtdMean(i, GENERIC_C)));
     }
     /* I Broke this!
       DISPLAY_TXT_COL ("Call Length",
                        msToHHMMSSus( (unsigned long)computeMean(CPT_PD_AverageCallLength_Sum, CPT_PD_NbOfCallUsedForAverageCallLength)),
                        msToHHMMSSus( (unsigned long)computeMean(CPT_C_AverageCallLength_Sum, CPT_C_NbOfCallUsedForAverageCallLength) ));
     */
-    DISPLAY_CROSS_LINE ();
+    DISPLAY_CROSS_LINE();
 
     for (int i = 1; i <= nRtds(); i++) {
         displayRtdRepartition(f, i);
@@ -1301,12 +1301,12 @@ void CStat::displayData (FILE *f)
     //                 M_counters[CPT_C_NbOfCallUsedForAverageCallLength]);
     //  DISPLAY_VAL ("NbCall Average CL(P)",
     //                 M_counters[CPT_PD_NbOfCallUsedForAverageCallLength]);
-    DISPLAY_DLINE ();
+    DISPLAY_DLINE();
     fflush(f);
 } /* end of displayData () */
 
 
-void CStat::displayStat (FILE *f)
+void CStat::displayStat(FILE *f)
 {
     long   localElapsedTime, globalElapsedTime ;
     struct timeval currentTime;
@@ -1314,52 +1314,52 @@ void CStat::displayStat (FILE *f)
     float  realInstantCallRate;
     unsigned long numberOfCall;
 
-    GET_TIME (&currentTime);
+    GET_TIME(&currentTime);
     // computing the real call rate
-    globalElapsedTime   = computeDiffTimeInMs (&currentTime, &M_startTime);
-    localElapsedTime    = computeDiffTimeInMs (&currentTime, &M_pdStartTime);
+    globalElapsedTime   = computeDiffTimeInMs(&currentTime, &M_startTime);
+    localElapsedTime    = computeDiffTimeInMs(&currentTime, &M_pdStartTime);
     // the call rate is for all the call : incoming and outgoing
     numberOfCall        = (M_counters[CPT_C_IncomingCallCreated] +
                            M_counters[CPT_C_OutgoingCallCreated]);
     averageCallRate     = (globalElapsedTime > 0 ?
-                           1000*(float)numberOfCall/(float)globalElapsedTime :
+                           1000 * (float)numberOfCall / (float)globalElapsedTime :
                            0.0);
     numberOfCall        = (M_counters[CPT_PD_IncomingCallCreated] +
                            M_counters[CPT_PD_OutgoingCallCreated]);
     realInstantCallRate = (localElapsedTime  > 0 ?
-                           1000*(float)numberOfCall / (float)localElapsedTime :
+                           1000 * (float)numberOfCall / (float)localElapsedTime :
                            0.0);
 
     // build and display header info
-    DISPLAY_TXT ("Start Time  ", formatTime(&M_startTime));
-    DISPLAY_TXT ("Last Reset Time", formatTime(&M_pdStartTime));
-    DISPLAY_TXT ("Current Time", formatTime(&currentTime));
+    DISPLAY_TXT("Start Time  ", formatTime(&M_startTime));
+    DISPLAY_TXT("Last Reset Time", formatTime(&M_pdStartTime));
+    DISPLAY_TXT("Current Time", formatTime(&currentTime));
 
     // printing the header in the middle
     DISPLAY_CROSS_LINE();
     DISPLAY_HEADER();
     DISPLAY_CROSS_LINE();
 
-    DISPLAY_TXT_COL ("Elapsed Time",
-                     msToHHMMSSus(localElapsedTime),
-                     msToHHMMSSus(globalElapsedTime));
+    DISPLAY_TXT_COL("Elapsed Time",
+                    msToHHMMSSus(localElapsedTime),
+                    msToHHMMSSus(globalElapsedTime));
 
-    DISPLAY_VAL_RATEF_COL ("Call Rate",  realInstantCallRate, averageCallRate);
-    DISPLAY_CROSS_LINE ();
+    DISPLAY_VAL_RATEF_COL("Call Rate",  realInstantCallRate, averageCallRate);
+    DISPLAY_CROSS_LINE();
 
-    DISPLAY_2VAL  ("Incoming call created",
-                   M_counters[CPT_PD_IncomingCallCreated],
-                   M_counters[CPT_C_IncomingCallCreated]);
-    DISPLAY_2VAL  ("OutGoing call created",
-                   M_counters[CPT_PD_OutgoingCallCreated],
-                   M_counters[CPT_C_OutgoingCallCreated]);
-    DISPLAY_CUMUL ("Total Call created", M_counters[CPT_C_IncomingCallCreated] +
-                   M_counters[CPT_C_OutgoingCallCreated]);
-    DISPLAY_PERIO ("Current Call",
-                   M_counters[CPT_C_CurrentCall]);
+    DISPLAY_2VAL("Incoming call created",
+                 M_counters[CPT_PD_IncomingCallCreated],
+                 M_counters[CPT_C_IncomingCallCreated]);
+    DISPLAY_2VAL("OutGoing call created",
+                 M_counters[CPT_PD_OutgoingCallCreated],
+                 M_counters[CPT_C_OutgoingCallCreated]);
+    DISPLAY_CUMUL("Total Call created", M_counters[CPT_C_IncomingCallCreated] +
+                  M_counters[CPT_C_OutgoingCallCreated]);
+    DISPLAY_PERIO("Current Call",
+                  M_counters[CPT_C_CurrentCall]);
 
     if (M_genericMap.size()) {
-        DISPLAY_CROSS_LINE ();
+        DISPLAY_CROSS_LINE();
     }
     for (unsigned int i = 1; i < M_genericMap.size() + 1; i++) {
         char *s = (char *)malloc(20 + strlen(M_genericDisplay[i]));
@@ -1369,33 +1369,33 @@ void CStat::displayStat (FILE *f)
         free(s);
     }
 
-    DISPLAY_CROSS_LINE ();
-    DISPLAY_2VAL  ("Successful call",
-                   M_counters[CPT_PD_SuccessfulCall],
-                   M_counters[CPT_C_SuccessfulCall]);
-    DISPLAY_2VAL  ("Failed call",
-                   M_counters[CPT_PD_FailedCall],
-                   M_counters[CPT_C_FailedCall]);
+    DISPLAY_CROSS_LINE();
+    DISPLAY_2VAL("Successful call",
+                 M_counters[CPT_PD_SuccessfulCall],
+                 M_counters[CPT_C_SuccessfulCall]);
+    DISPLAY_2VAL("Failed call",
+                 M_counters[CPT_PD_FailedCall],
+                 M_counters[CPT_C_FailedCall]);
     //DISPLAY_2VAL  ("Unexpected msg",
     //               M_counters[CPT_PD_UnexpectedMessage],
     //               M_counters[CPT_C_UnexpectedMessage]);
 
-    DISPLAY_CROSS_LINE ();
+    DISPLAY_CROSS_LINE();
     for (int i = 1; i <= nRtds(); i++) {
         char s[80];
 
         sprintf(s, "Response Time %s", M_revRtdMap[i]);
-        DISPLAY_TXT_COL (s,
-                         msToHHMMSSus( (unsigned long)computeRtdMean(i, GENERIC_PD)),
-                         msToHHMMSSus( (unsigned long)computeRtdMean(i, GENERIC_C)));
+        DISPLAY_TXT_COL(s,
+                        msToHHMMSSus((unsigned long)computeRtdMean(i, GENERIC_PD)),
+                        msToHHMMSSus((unsigned long)computeRtdMean(i, GENERIC_C)));
     }
-    DISPLAY_TXT_COL ("Call Length",
-                     msToHHMMSSus( (unsigned long)computeMean(CPT_PD_AverageCallLength_Sum, CPT_PD_NbOfCallUsedForAverageCallLength ) ),
-                     msToHHMMSSus( (unsigned long)computeMean(CPT_C_AverageCallLength_Sum, CPT_C_NbOfCallUsedForAverageCallLength) ));
+    DISPLAY_TXT_COL("Call Length",
+                    msToHHMMSSus((unsigned long)computeMean(CPT_PD_AverageCallLength_Sum, CPT_PD_NbOfCallUsedForAverageCallLength)),
+                    msToHHMMSSus((unsigned long)computeMean(CPT_C_AverageCallLength_Sum, CPT_C_NbOfCallUsedForAverageCallLength)));
     fflush(f);
 }
 
-void CStat::displayRepartition (FILE *f)
+void CStat::displayRepartition(FILE *f)
 {
     displayRtdRepartition(f, 1);
     DISPLAY_INFO("Average Call Length Repartition");
@@ -1404,10 +1404,10 @@ void CStat::displayRepartition (FILE *f)
                        M_SizeOfCallLengthRepartition);
 }
 
-void CStat::displayRtdRepartition (FILE *f, int which)
+void CStat::displayRtdRepartition(FILE *f, int which)
 {
     if (which > nRtds()) {
-        DISPLAY_INFO ("  <No repartion defined>");
+        DISPLAY_INFO("  <No repartion defined>");
         return;
     }
 
@@ -1420,7 +1420,7 @@ void CStat::displayRtdRepartition (FILE *f, int which)
 }
 
 
-void CStat::dumpData ()
+void CStat::dumpData()
 {
     long   localElapsedTime, globalElapsedTime ;
     struct timeval currentTime;
@@ -1429,34 +1429,34 @@ void CStat::dumpData ()
     unsigned long numberOfCall;
 
     // computing the real call rate
-    GET_TIME (&currentTime);
-    globalElapsedTime   = computeDiffTimeInMs (&currentTime, &M_startTime);
-    localElapsedTime    = computeDiffTimeInMs (&currentTime, &M_plStartTime);
+    GET_TIME(&currentTime);
+    globalElapsedTime   = computeDiffTimeInMs(&currentTime, &M_startTime);
+    localElapsedTime    = computeDiffTimeInMs(&currentTime, &M_plStartTime);
 
     // the call rate is for all the call : incoming and outgoing
     numberOfCall        = (M_counters[CPT_C_IncomingCallCreated] +
                            M_counters[CPT_C_OutgoingCallCreated]);
     averageCallRate     = (globalElapsedTime > 0 ?
-                           1000*(float)numberOfCall/(float)globalElapsedTime :
+                           1000 * (float)numberOfCall / (float)globalElapsedTime :
                            0.0);
     numberOfCall        = (M_counters[CPT_PL_IncomingCallCreated] +
                            M_counters[CPT_PL_OutgoingCallCreated]);
     realInstantCallRate = (localElapsedTime  > 0 ?
-                           1000*(float)numberOfCall / (float)localElapsedTime :
+                           1000 * (float)numberOfCall / (float)localElapsedTime :
                            0.0);
 
-    if(M_outputStream == NULL) {
+    if (M_outputStream == NULL) {
         // if the file is still not opened, we opened it now
         M_outputStream = new ofstream(M_fileName);
         M_headerAlreadyDisplayed = false;
 
-        if(M_outputStream == NULL) {
+        if (M_outputStream == NULL) {
             cerr << "Unable to open stat file '" << M_fileName << "' !" << endl;
             exit(EXIT_FATAL_ERROR);
         }
 
 #ifndef __osf__
-        if(!M_outputStream->is_open()) {
+        if (!M_outputStream->is_open()) {
             cerr << "Unable to open stat file '" << M_fileName << "' !" << endl;
             exit(EXIT_FATAL_ERROR);
         }
@@ -1464,7 +1464,7 @@ void CStat::dumpData ()
 
     }
 
-    if(M_headerAlreadyDisplayed == false) {
+    if (M_headerAlreadyDisplayed == false) {
         // header - it's dump in file only one time at the beginning of the file
         (*M_outputStream) << "StartTime" << stat_delimiter
                           << "LastResetTime" << stat_delimiter
@@ -1590,8 +1590,8 @@ void CStat::dumpData ()
                       << M_counters[CPT_C_IncomingCallCreated]  << stat_delimiter
                       << M_counters[CPT_PL_OutgoingCallCreated] << stat_delimiter
                       << M_counters[CPT_C_OutgoingCallCreated]  << stat_delimiter
-                      << (M_counters[CPT_C_IncomingCallCreated]+
-                          M_counters[CPT_C_OutgoingCallCreated])<< stat_delimiter
+                      << (M_counters[CPT_C_IncomingCallCreated] +
+                          M_counters[CPT_C_OutgoingCallCreated]) << stat_delimiter
                       << M_counters[CPT_C_CurrentCall]          << stat_delimiter
                       << M_counters[CPT_PL_SuccessfulCall]      << stat_delimiter
                       << M_counters[CPT_C_SuccessfulCall]       << stat_delimiter
@@ -1650,23 +1650,23 @@ void CStat::dumpData ()
 
     // SF917289 << M_counters[CPT_C_UnexpectedMessage]    << stat_delimiter;
     for (int i = 1; i <= nRtds(); i++) {
-        (*M_outputStream) << msToHHMMSSus( (unsigned long)computeRtdMean(i, GENERIC_PL)) << stat_delimiter;
-        (*M_outputStream) << msToHHMMSSus( (unsigned long)computeRtdMean(i, GENERIC_C)) << stat_delimiter;
-        (*M_outputStream) << msToHHMMSSus( (unsigned long)computeRtdStdev(i, GENERIC_PL)) << stat_delimiter;
-        (*M_outputStream) << msToHHMMSSus( (unsigned long)computeRtdStdev(i, GENERIC_C)) << stat_delimiter;
+        (*M_outputStream) << msToHHMMSSus((unsigned long)computeRtdMean(i, GENERIC_PL)) << stat_delimiter;
+        (*M_outputStream) << msToHHMMSSus((unsigned long)computeRtdMean(i, GENERIC_C)) << stat_delimiter;
+        (*M_outputStream) << msToHHMMSSus((unsigned long)computeRtdStdev(i, GENERIC_PL)) << stat_delimiter;
+        (*M_outputStream) << msToHHMMSSus((unsigned long)computeRtdStdev(i, GENERIC_C)) << stat_delimiter;
     }
     (*M_outputStream)
-            << msToHHMMSSus( (unsigned long)computeMean(CPT_PL_AverageCallLength_Sum, CPT_PL_NbOfCallUsedForAverageCallLength) ) << stat_delimiter;
+            << msToHHMMSSus((unsigned long)computeMean(CPT_PL_AverageCallLength_Sum, CPT_PL_NbOfCallUsedForAverageCallLength)) << stat_delimiter;
     (*M_outputStream)
-            << msToHHMMSSus( (unsigned long)computeMean(CPT_C_AverageCallLength_Sum, CPT_C_NbOfCallUsedForAverageCallLength) ) << stat_delimiter;
+            << msToHHMMSSus((unsigned long)computeMean(CPT_C_AverageCallLength_Sum, CPT_C_NbOfCallUsedForAverageCallLength)) << stat_delimiter;
     (*M_outputStream)
-            << msToHHMMSSus( (unsigned long)computeStdev(CPT_PL_AverageCallLength_Sum,
-                              CPT_PL_NbOfCallUsedForAverageCallLength,
-                              CPT_PL_AverageCallLength_Squares )) << stat_delimiter;
+            << msToHHMMSSus((unsigned long)computeStdev(CPT_PL_AverageCallLength_Sum,
+                            CPT_PL_NbOfCallUsedForAverageCallLength,
+                            CPT_PL_AverageCallLength_Squares)) << stat_delimiter;
     (*M_outputStream)
-            << msToHHMMSSus( (unsigned long)computeStdev(CPT_C_AverageCallLength_Sum,
-                              CPT_C_NbOfCallUsedForAverageCallLength,
-                              CPT_C_AverageCallLength_Squares )) << stat_delimiter;
+            << msToHHMMSSus((unsigned long)computeStdev(CPT_C_AverageCallLength_Sum,
+                            CPT_C_NbOfCallUsedForAverageCallLength,
+                            CPT_C_AverageCallLength_Squares)) << stat_delimiter;
 
     for (unsigned int i = 0; i < M_genericMap.size(); i++) {
         (*M_outputStream) << M_genericCounters[GENERIC_TYPES * i + GENERIC_PL] << stat_delimiter;
@@ -1688,27 +1688,27 @@ void CStat::dumpData ()
 
 } /* end of logData () */
 
-void CStat::dumpDataRtt ()
+void CStat::dumpDataRtt()
 {
-    if(M_outputStreamRtt == NULL) {
+    if (M_outputStreamRtt == NULL) {
         // if the file is still not opened, we opened it now
         M_outputStreamRtt = new ofstream(M_fileNameRtt);
         M_headerAlreadyDisplayedRtt = false;
 
-        if(M_outputStreamRtt == NULL) {
+        if (M_outputStreamRtt == NULL) {
             cerr << "Unable to open rtt file '" << M_fileNameRtt << "' !" << endl;
             exit(EXIT_FATAL_ERROR);
         }
 
 #ifndef __osf__
-        if(!M_outputStreamRtt->is_open()) {
+        if (!M_outputStreamRtt->is_open()) {
             cerr << "Unable to open rtt file '" << M_fileNameRtt << "' !" << endl;
             exit(EXIT_FATAL_ERROR);
         }
 #endif
     }
 
-    if(M_headerAlreadyDisplayedRtt == false) {
+    if (M_headerAlreadyDisplayedRtt == false) {
         (*M_outputStreamRtt) << "Date_ms" << stat_delimiter
                              << "response_time_ms" << stat_delimiter
                              << "rtd_no" << endl;
@@ -1733,7 +1733,7 @@ void CStat::dumpDataRtt ()
 
 
 /* Time Gestion */
-char* CStat::msToHHMMSS (unsigned long P_ms)
+char* CStat::msToHHMMSS(unsigned long P_ms)
 {
     static char L_time [TIME_LENGTH];
     unsigned long hh, mm, ss;
@@ -1742,11 +1742,11 @@ char* CStat::msToHHMMSS (unsigned long P_ms)
     hh = P_ms / 3600;
     mm = (P_ms - hh * 3600) / 60;
     ss = P_ms - (hh * 3600) - (mm * 60);
-    sprintf (L_time, "%2.2lu:%2.2lu:%2.2lu", hh, mm, ss);
+    sprintf(L_time, "%2.2lu:%2.2lu:%2.2lu", hh, mm, ss);
     return (L_time);
 } /* end of msToHHMMSS */
 
-char* CStat::msToHHMMSSus (unsigned long P_ms)
+char* CStat::msToHHMMSSus(unsigned long P_ms)
 {
     static char L_time [TIME_LENGTH];
     unsigned long sec, hh, mm, ss, us;
@@ -1755,22 +1755,22 @@ char* CStat::msToHHMMSSus (unsigned long P_ms)
     hh   = sec / 3600;
     mm   = (sec - hh * 3600) / 60;
     ss   = sec - (hh * 3600) - (mm * 60);
-    us  = 1000*(P_ms - (hh * 3600000) - (mm * 60000) - (ss*1000));
-    sprintf (L_time, "%2.2lu:%2.2lu:%2.2lu:%06lu", hh, mm, ss, us);
+    us  = 1000 * (P_ms - (hh * 3600000) - (mm * 60000) - (ss * 1000));
+    sprintf(L_time, "%2.2lu:%2.2lu:%2.2lu:%06lu", hh, mm, ss, us);
     return (L_time);
 } /* end of msToHHMMSSus */
 
-char* CStat::formatTime (struct timeval* P_tv, bool with_epoch)
+char* CStat::formatTime(struct timeval* P_tv, bool with_epoch)
 {
     static char L_time [TIME_LENGTH];
     struct tm * L_currentDate;
 
     // Get the current date and time
-    L_currentDate = localtime ((const time_t *)&P_tv->tv_sec);
+    L_currentDate = localtime((const time_t *)&P_tv->tv_sec);
 
     // Format the time
     if (L_currentDate == NULL) {
-        memset (L_time, 0, TIME_LENGTH);
+        memset(L_time, 0, TIME_LENGTH);
     } else {
         if (with_epoch) {
             sprintf(L_time, "%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d.%06ld",
@@ -1797,14 +1797,14 @@ char* CStat::formatTime (struct timeval* P_tv, bool with_epoch)
     return (L_time);
 } /* end of formatTime */
 
-long CStat::computeDiffTimeInMs (struct timeval* tf, struct timeval* ti)
+long CStat::computeDiffTimeInMs(struct timeval* tf, struct timeval* ti)
 {
     long v1, v2;
 
     v1 = tf->tv_sec - ti->tv_sec;
     v2 = tf->tv_usec - ti->tv_usec;
     if (v2 < 0) v2 += 1000000, v1--;
-    return (v1*1000 + v2/1000);
+    return (v1 * 1000 + v2 / 1000);
 }
 
 CSample::~CSample()
@@ -1868,7 +1868,7 @@ CUniform::CUniform(double min, double max)
 }
 double CUniform::sample()
 {
-    double rval = ((double)rand())/((double)RAND_MAX);
+    double rval = ((double)rand()) / ((double)RAND_MAX);
     return min + (rval * (max - min));
 }
 int CUniform::textDescr(char *s, int len)
@@ -2094,7 +2094,7 @@ int CGPareto::timeDescr(char *s, int len)
 }
 double CGPareto::cdfInv(double percentile)
 {
-    return location + ((scale * (pow(percentile, -shape) - 1))/shape);
+    return location + ((scale * (pow(percentile, -shape) - 1)) / shape);
 }
 
 /* Gamma distribution. */

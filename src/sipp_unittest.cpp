@@ -24,7 +24,7 @@
 #include <string.h>
 
 namespace testing {
-    std::string FLAGS_gmock_verbose = "verbose";
+std::string FLAGS_gmock_verbose = "verbose";
 }
 
 int main(int argc, char* argv[])

@@ -80,22 +80,22 @@ struct KeywordMap SimpleKeywords[] = {
     {"cryptosuiteaescm128sha1322video", E_Message_CryptoSuiteAesCm128Sha1322Video },
     {"cryptokeyparams1video", E_Message_CryptoKeyParams1Video },
     {"cryptokeyparams2video", E_Message_CryptoKeyParams2Video },
-    {"cryptosuitenullsha1801audio" , E_Message_CryptoSuiteNullSha1801Audio },
-    {"cryptosuitenullsha1802audio" , E_Message_CryptoSuiteNullSha1802Audio },
-    {"cryptosuitenullsha1321audio" , E_Message_CryptoSuiteNullSha1321Audio },
-    {"cryptosuitenullsha1322audio" , E_Message_CryptoSuiteNullSha1322Audio },
-    {"cryptosuitenullsha1801video" , E_Message_CryptoSuiteNullSha1801Video },
-    {"cryptosuitenullsha1802video" , E_Message_CryptoSuiteNullSha1802Video },
-    {"cryptosuitenullsha1321video" , E_Message_CryptoSuiteNullSha1321Video },
-    {"cryptosuitenullsha1322video" , E_Message_CryptoSuiteNullSha1322Video },
-    {"ueaescm128sha1801audio" , E_Message_UEAesCm128Sha1801Audio },
-    {"ueaescm128sha1802audio" , E_Message_UEAesCm128Sha1802Audio },
-    {"ueaescm128sha1321audio" , E_Message_UEAesCm128Sha1321Audio },
-    {"ueaescm128sha1322audio" , E_Message_UEAesCm128Sha1322Audio },
-    {"ueaescm128sha1801video" , E_Message_UEAesCm128Sha1801Video },
-    {"ueaescm128sha1802video" , E_Message_UEAesCm128Sha1802Video },
-    {"ueaescm128sha1321video" , E_Message_UEAesCm128Sha1321Video },
-    {"ueaescm128sha1322video" , E_Message_UEAesCm128Sha1322Video },
+    {"cryptosuitenullsha1801audio", E_Message_CryptoSuiteNullSha1801Audio },
+    {"cryptosuitenullsha1802audio", E_Message_CryptoSuiteNullSha1802Audio },
+    {"cryptosuitenullsha1321audio", E_Message_CryptoSuiteNullSha1321Audio },
+    {"cryptosuitenullsha1322audio", E_Message_CryptoSuiteNullSha1322Audio },
+    {"cryptosuitenullsha1801video", E_Message_CryptoSuiteNullSha1801Video },
+    {"cryptosuitenullsha1802video", E_Message_CryptoSuiteNullSha1802Video },
+    {"cryptosuitenullsha1321video", E_Message_CryptoSuiteNullSha1321Video },
+    {"cryptosuitenullsha1322video", E_Message_CryptoSuiteNullSha1322Video },
+    {"ueaescm128sha1801audio", E_Message_UEAesCm128Sha1801Audio },
+    {"ueaescm128sha1802audio", E_Message_UEAesCm128Sha1802Audio },
+    {"ueaescm128sha1321audio", E_Message_UEAesCm128Sha1321Audio },
+    {"ueaescm128sha1322audio", E_Message_UEAesCm128Sha1322Audio },
+    {"ueaescm128sha1801video", E_Message_UEAesCm128Sha1801Video },
+    {"ueaescm128sha1802video", E_Message_UEAesCm128Sha1802Video },
+    {"ueaescm128sha1321video", E_Message_UEAesCm128Sha1321Video },
+    {"ueaescm128sha1322video", E_Message_UEAesCm128Sha1322Video },
 #endif
     {"media_port", E_Message_Media_Port },
     {"media_ip_type", E_Message_Media_IP_Type },
@@ -159,13 +159,13 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
     current_line[0] = '\0';
     *dest = 0;
 
-    while(*src) {
+    while (*src) {
         if (current_line[0] == '\0') {
             line_mark = strchr(src, '\n');
             if (line_mark) {
                 int header_len =  line_mark - src;
-                if (header_len > MAX_HEADER_LEN-1)
-                    header_len = MAX_HEADER_LEN-1;
+                if (header_len > MAX_HEADER_LEN - 1)
+                    header_len = MAX_HEADER_LEN - 1;
                 memcpy(current_line, src, header_len);
                 current_line[header_len] = '\0';
             }
@@ -173,7 +173,7 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
 
         /* This hex encoding could be done in XML parsing, allowing us to skip
          * these conditionals and branches. */
-        if ((*src == '\\') && (*(src+1) == 'x')) {
+        if ((*src == '\\') && (*(src + 1) == 'x')) {
             /* Allows any hex coded char like '\x5B' ([) */
             src += 2;
             if (isxdigit(*src)) {
@@ -223,19 +223,19 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
                 ERROR("Out of memory!");
             }
 
-            char keyword [KEYWORD_SIZE+1];
+            char keyword [KEYWORD_SIZE + 1];
             src++;
 
             tsrc = quoted_strchr(src, '[');
             key = quoted_strchr(src, ']');
 
-            if ((tsrc) && (tsrc<key)) {
-                memcpy(keyword, src-1,  tsrc - src + 1);
-                src=tsrc+1;
+            if ((tsrc) && (tsrc < key)) {
+                memcpy(keyword, src - 1,  tsrc - src + 1);
+                src = tsrc + 1;
                 dest += sprintf(dest, "%s", keyword);
             }
 
-            if((!key) || ((key - src) > KEYWORD_SIZE) || (!(key - src))) {
+            if ((!key) || ((key - src) > KEYWORD_SIZE) || (!(key - src))) {
                 ERROR("Syntax error or invalid [keyword] in scenario while parsing '%s'", current_line);
             }
             memcpy(keyword, src,  key - src);
@@ -245,8 +245,8 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
             newcomp->offset = 0;
             if ((strncmp(keyword, "authentication", strlen("authentication")) &&
                     strncmp(keyword, "tdmmap", strlen("tdmmap"))) &&
-                    ((key = strchr(keyword,'+')) || (key = strchr(keyword,'-')))) {
-                if (isdigit(*(key+1))) {
+                    ((key = strchr(keyword, '+')) || (key = strchr(keyword, '-')))) {
+                if (isdigit(*(key + 1))) {
                     newcomp->offset = atoi(key);
                     *key = 0;
                 }
@@ -271,7 +271,7 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
             }
 
             bool simple_keyword = false;
-            for (unsigned int i = 0; i < sizeof(SimpleKeywords)/sizeof(SimpleKeywords[0]); i++) {
+            for (unsigned int i = 0; i < sizeof(SimpleKeywords) / sizeof(SimpleKeywords[0]); i++) {
                 if (!strcmp(keyword, SimpleKeywords[i].keyword)) {
                     newcomp->type = SimpleKeywords[i].type;
                     simple_keyword = true;
@@ -284,7 +284,7 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
                 continue;
             }
 
-            if(!strncmp(keyword, "field", strlen("field"))) {
+            if (!strncmp(keyword, "field", strlen("field"))) {
                 newcomp->type = E_Message_Injection;
 
                 /* Parse out the interesting things like file and number. */
@@ -310,7 +310,7 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
                     /* Turn this into a new message component. */
                     newcomp->comp_param.field_param.line = new SendingMessage(msg_scenario, line, true);
                 }
-            } else if(!strncmp(keyword, "file", strlen("file"))) {
+            } else if (!strncmp(keyword, "file", strlen("file"))) {
                 newcomp->type = E_Message_File;
 
                 /* Parse out the interesting things like file and number. */
@@ -321,13 +321,13 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
                 }
                 /* Turn this into a new message component. */
                 newcomp->comp_param.filename = new SendingMessage(msg_scenario, fileName, true);
-            } else if(*keyword == '$') {
+            } else if (*keyword == '$') {
                 newcomp->type = E_Message_Variable;
                 if (!msg_scenario) {
                     ERROR("SendingMessage with variable usage outside of scenario!");
                 }
                 newcomp->varId = msg_scenario->get_var(keyword + 1, "Variable keyword");
-            } else if(!strncmp(keyword, "fill", strlen("fill"))) {
+            } else if (!strncmp(keyword, "fill", strlen("fill"))) {
                 newcomp->type = E_Message_Fill;
                 char filltext[KEYWORD_SIZE];
                 char varName[KEYWORD_SIZE];
@@ -344,15 +344,15 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
                     ERROR("SendingMessage with variable usage outside of scenario!");
                 }
                 newcomp->varId = msg_scenario->get_var(varName, "Fill Variable");
-            } else if(!strncmp(keyword, "last_", strlen("last_"))) {
+            } else if (!strncmp(keyword, "last_", strlen("last_"))) {
                 newcomp->type = E_Message_Last_Header;
                 newcomp->literal = strdup(keyword + strlen("last_"));
                 newcomp->literalLen = strlen(newcomp->literal);
-            } else if(!strncmp(keyword, "authentication", strlen("authentication"))) {
+            } else if (!strncmp(keyword, "authentication", strlen("authentication"))) {
                 parseAuthenticationKeyword(msg_scenario, newcomp, keyword);
             }
 #ifndef PCAPPLAY
-            else if(!strcmp(keyword, "auto_media_port")) {
+            else if (!strcmp(keyword, "auto_media_port")) {
                 ERROR("The %s keyword requires PCAPPLAY", keyword);
             }
 #endif
@@ -363,7 +363,7 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
                 while (generic[i]) {
                     char *msg1 = *generic[i];
                     char *msg2 = *(generic[i] + 1);
-                    if(!strcmp(keyword, msg1)) {
+                    if (!strcmp(keyword, msg1)) {
                         newcomp->type = E_Message_Literal;
                         newcomp->literal = strdup(msg2);
                         newcomp->literalLen = strlen(newcomp->literal);
@@ -395,7 +395,7 @@ SendingMessage::SendingMessage(scenario* msg_scenario, const char* const_src, bo
 
         newcomp->type = E_Message_Literal;
         newcomp->literal = literal;
-        newcomp->literalLen = literalLen-1;
+        newcomp->literalLen = literalLen - 1;
         messageComponents.push_back(newcomp);
     } else {
         free(literal);
@@ -487,10 +487,10 @@ int SendingMessage::getCode()
 
 void SendingMessage::getQuotedParam(char * dest, char * src, int * len)
 {
-    *len=0;
+    *len = 0;
     /* Allows any hex coded string like '0x5B07F6' */
     while (char c = *src++) {
-        switch(c) {
+        switch (c) {
         case '"':
             (*len)++;
             *dest = '\0';
@@ -502,7 +502,7 @@ void SendingMessage::getQuotedParam(char * dest, char * src, int * len)
                 *dest = '\0';
                 return;
             }
-            /* Fall-Through. */
+        /* Fall-Through. */
         default:
             *dest++ = c;
             (*len)++;
@@ -513,7 +513,7 @@ void SendingMessage::getQuotedParam(char * dest, char * src, int * len)
 
 void SendingMessage::getHexStringParam(char * dest, char * src, int * len)
 {
-    *len=0;
+    *len = 0;
     /* Allows any hex coded string like '0x5B07F6' */
     while (isxdigit(*src)) {
         int val = get_decimal_from_hex(*src);
@@ -537,7 +537,7 @@ void SendingMessage::getKeywordParam(char * src, const char * param, char * outp
     if ((tmp = strstr(src, param))) {
         tmp += strlen(param);
         key = tmp;
-        if ((*key == '0') && (*(key+1) == 'x')) {
+        if ((*key == '0') && (*(key + 1) == 'x')) {
             key += 2;
             getHexStringParam(output, key, &len);
         } else if (*key == '\"') {
@@ -552,8 +552,8 @@ void SendingMessage::getKeywordParam(char * src, const char * param, char * outp
                 }
                 key++;
             }
-            strncpy(output, tmp, key-tmp);
-            output[key-tmp] = '\0';
+            strncpy(output, tmp, key - tmp);
+            output[key - tmp] = '\0';
         }
     } else {
         output[0] = '\0';
@@ -568,17 +568,17 @@ void SendingMessage::parseAuthenticationKeyword(scenario *msg_scenario, struct M
 
     dst->type = E_Message_Authentication;
 
-    memset(my_auth_user,0,KEYWORD_SIZE);
-    memset(my_auth_pass,0,KEYWORD_SIZE);
+    memset(my_auth_user, 0, KEYWORD_SIZE);
+    memset(my_auth_pass, 0, KEYWORD_SIZE);
     /* Look for optional username and password parameters */
     getKeywordParam(keyword, "username=", my_auth_user);
     getKeywordParam(keyword, "password=", my_auth_pass);
 
-    if(*my_auth_user == '\0') {
+    if (*my_auth_user == '\0') {
         strncpy(my_auth_user, auth_username ? auth_username : service,
                 sizeof(my_auth_user) - 1);
     }
-    if(*my_auth_pass == '\0') {
+    if (*my_auth_pass == '\0') {
         strncpy(my_auth_pass, auth_password, sizeof(my_auth_pass) - 1);
     }
 
@@ -588,9 +588,9 @@ void SendingMessage::parseAuthenticationKeyword(scenario *msg_scenario, struct M
 
     /* add aka_OP, aka_AMF, aka_K */
     getKeywordParam(keyword, "aka_K=", my_aka);
-    if (my_aka[0]==0) {
-        memcpy(my_aka,my_auth_pass,16);
-        my_aka[16]=0;
+    if (my_aka[0] == 0) {
+        memcpy(my_aka, my_auth_pass, 16);
+        my_aka[16] = 0;
     }
     dst->comp_param.auth_param.aka_K = new SendingMessage(msg_scenario, my_aka, true);
 

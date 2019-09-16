@@ -275,9 +275,9 @@ protected:
     // P_index use for message index in scenario and ctrl of CRLF
     // P_index = -2 No ctrl of CRLF
     // P_index = -1 Add crlf to end of message
-    char* createSendingMessage(SendingMessage *src, int P_index, int *msgLen=NULL);
+    char* createSendingMessage(SendingMessage *src, int P_index, int *msgLen = NULL);
     char* createSendingMessage(char * src, int P_index, bool skip_sanity = false);
-    char* createSendingMessage(SendingMessage *src, int P_index, char *msg_buffer, int buflen, int *msgLen=NULL);
+    char* createSendingMessage(SendingMessage *src, int P_index, char *msg_buffer, int buflen, int *msgLen = NULL);
 
     // method for the management of unexpected messages
     bool  checkInternalCmd(char* cmd);  // check of specific internal command
@@ -314,8 +314,8 @@ protected:
     bool process_unexpected(const char* msg);
     void do_bookkeeping(message *curmsg);
 
-    void  extract_cseq_method (char* responseCseq, const char* msg);
-    void  extract_transaction (char* txn, const char* msg);
+    void  extract_cseq_method(char* responseCseq, const char* msg);
+    void  extract_transaction(char* txn, const char* msg);
 
     int   send_raw(const char * msg, int index, int len);
     char * send_scene(int index, int *send_status, int *msgLen);

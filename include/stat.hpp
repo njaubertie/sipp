@@ -287,12 +287,12 @@ public:
     /**
      * Constructor.
      */
-    CStat ();
+    CStat();
 
     /**
      * Destructor.
      */
-    ~CStat ();
+    ~CStat();
 
 
     /**
@@ -301,7 +301,7 @@ public:
      * Only one instance of CStat exists in the component. This
      * instance is deleted when the close method is called.
      */
-    void close ();
+    void close();
 
     void setRtpEchoErrors(int value);
     int getRtpEchoErrors();
@@ -313,24 +313,24 @@ public:
      * @return 0 if the action is known
      *        -1 else
      */
-    int computeStat (E_Action P_action);
-    int computeStat (E_Action P_action, unsigned long P_value);
-    int computeStat (E_Action P_action, unsigned long P_value, int which);
+    int computeStat(E_Action P_action);
+    int computeStat(E_Action P_action, unsigned long P_value);
+    int computeStat(E_Action P_action, unsigned long P_value, int which);
 
     /* This works for global counters and does not require an instance. */
-    static int globalStat (E_Action P_action);
+    static int globalStat(E_Action P_action);
 
     /**
      * ComputeRtt Methods are used to calculate the response time
      */
-    void computeRtt ( unsigned long long P_start_time, unsigned long long P_stop_time, int which);
+    void computeRtt(unsigned long long P_start_time, unsigned long long P_stop_time, int which);
 
     /**
      * GetStat Method is used to retrieve a counter value
      *
      * @return the counter value
      **/
-    unsigned long long GetStat (E_CounterName P_counter);
+    unsigned long long GetStat(E_CounterName P_counter);
 
     /* Get the current start time. */
     void getStartTime(struct timeval *t);
@@ -344,7 +344,7 @@ public:
      * @param P_tv.
      * @return a pointer on a static string containing formated time
      */
-    static char* formatTime (struct timeval* P_tv, bool with_epoch = false);
+    static char* formatTime(struct timeval* P_tv, bool with_epoch = false);
 
     /**
      * setRepartitionCallLength
@@ -363,10 +363,10 @@ public:
      *  M_ResponseTimeRepartition variableinstead of M_CallLengthRepartition
      *  variable
      */
-    void setRepartitionCallLength   (unsigned int* repartition, int nombre);
-    void setRepartitionCallLength   (char * liste);
-    void setRepartitionResponseTime (unsigned int* repartition, int nombre);
-    void setRepartitionResponseTime (char * liste);
+    void setRepartitionCallLength(unsigned int* repartition, int nombre);
+    void setRepartitionCallLength(char * liste);
+    void setRepartitionResponseTime(unsigned int* repartition, int nombre);
+    void setRepartitionResponseTime(char * liste);
 
     /* define the file name to use to dump statistic in file */
     void setFileName(const char* name);
@@ -376,17 +376,17 @@ public:
     /**
      * Display data periodically updated on screen.
      */
-    void displayData (FILE *f);
+    void displayData(FILE *f);
     void displayStat(FILE *f);
     void displayRepartition(FILE *f);
-    void displayRtdRepartition (FILE *f, int which);
+    void displayRtdRepartition(FILE *f, int which);
 
     /**
      * Dump data periodically in the file M_FileName
      */
-    void dumpData ();
+    void dumpData();
 
-    void dumpDataRtt ();
+    void dumpDataRtt();
 
     /**
      * initialize the class variable member
@@ -403,7 +403,7 @@ public:
      *
      * @return number of ms between the 2 dates
      */
-    static long computeDiffTimeInMs (struct timeval* tf, struct timeval* ti);
+    static long computeDiffTimeInMs(struct timeval* tf, struct timeval* ti);
 
     /**
      * msToHHMMSS.
@@ -415,7 +415,7 @@ public:
      *
      * @return a pointer on a static string containing formated time
      */
-    static char* msToHHMMSS (unsigned long P_ms);
+    static char* msToHHMMSS(unsigned long P_ms);
 
     /**
      * msToHHMMSSmm.
@@ -427,7 +427,7 @@ public:
      *
      * @return a pointer on a static string containing formated time
      */
-    static char* msToHHMMSSus (unsigned long P_ms);
+    static char* msToHHMMSSus(unsigned long P_ms);
 
     /* Get a counter ID by name. */
     int findCounter(const char *counter, bool alloc);
@@ -522,9 +522,9 @@ private:
      * The method looks for the place to set the value passed in parameter
      * Once found, the associated counter is incremented
      */
-    void  updateRepartition( T_dynamicalRepartition* tabRepart,
-                             int sizeOfTab,
-                             unsigned long value);
+    void  updateRepartition(T_dynamicalRepartition* tabRepart,
+                            int sizeOfTab,
+                            unsigned long value);
 
     /**
      * resetRepartition
@@ -590,7 +590,7 @@ private:
      *
      * To prevent public copy ctor usage: no implementation
      */
-    CStat (const CStat&);
+    CStat(const CStat&);
 
     /**
      * Effective C++

@@ -35,8 +35,8 @@
 bool JLSRTP::isBase64(unsigned char c)
 {
     return (isalnum(c) ||
-           (c == '+') ||
-           (c == '/'));
+            (c == '+') ||
+            (c == '/'));
 }
 
 int JLSRTP::resetPseudoRandomState(std::vector<unsigned char> iv)
@@ -77,121 +77,121 @@ int JLSRTP::pseudorandomFunction(std::vector<unsigned char> iv, int n, std::vect
 
     switch (_active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        ivSize = iv.size();
+        keySize = _primary_crypto.master_key.size();
+
+        assert(ivSize == JLSRTP_SALTING_KEY_LENGTH);
+        assert(keySize == JLSRTP_ENCRYPTION_KEY_LENGTH);
+        if (ivSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            ivSize = iv.size();
-            keySize = _primary_crypto.master_key.size();
-
-            assert(ivSize == JLSRTP_SALTING_KEY_LENGTH);
-            assert(keySize == JLSRTP_ENCRYPTION_KEY_LENGTH);
-            if (ivSize == JLSRTP_SALTING_KEY_LENGTH)
+            if (keySize == JLSRTP_ENCRYPTION_KEY_LENGTH)
             {
-                if (keySize == JLSRTP_ENCRYPTION_KEY_LENGTH)
+                input.resize(AES_BLOCK_SIZE, 0);
+                output.clear();
+
+                // Determine how many AES_BLOCK_SIZE-byte encryption loops will be necessary to achieve at least n/8 bytes of pseudorandom ciphertext
+                num_loops = (n % JLSRTP_PSEUDORANDOM_BITS) ? ((n / JLSRTP_PSEUDORANDOM_BITS) + 1) : (n / JLSRTP_PSEUDORANDOM_BITS);
+
+                // Set encryption key
+                rc = AES_set_encrypt_key(_primary_crypto.master_key.data(), 128, &aes_key);
+                if (rc >= 0)
                 {
-                    input.resize(AES_BLOCK_SIZE, 0);
-                    output.clear();
+                    // Reset IV/counter state
+                    resetPseudoRandomState(iv);
 
-                    // Determine how many AES_BLOCK_SIZE-byte encryption loops will be necessary to achieve at least n/8 bytes of pseudorandom ciphertext
-                    num_loops = (n % JLSRTP_PSEUDORANDOM_BITS) ? ((n / JLSRTP_PSEUDORANDOM_BITS) + 1) : (n / JLSRTP_PSEUDORANDOM_BITS);
-
-                    // Set encryption key
-                    rc = AES_set_encrypt_key(_primary_crypto.master_key.data(), 128, &aes_key);
-                    if (rc >= 0)
+                    for (int i = 0; i < num_loops; i++)
                     {
-                        // Reset IV/counter state
-                        resetPseudoRandomState(iv);
-
-                        for (int i = 0; i < num_loops; i++)
-                        {
-                            // Encrypt given _pseudorandomstate.ivec input using aes_key to block
-                            block.clear();
-                            block.resize(AES_BLOCK_SIZE, 0);
-                            CRYPTO_ctr128_encrypt(input.data(), block.data(), AES_BLOCK_SIZE, &aes_key, _pseudorandomstate.ivec, _pseudorandomstate.ecount, &_pseudorandomstate.num, (block128_f)AES_encrypt);
-                            output.insert(output.end(), block.begin(), block.end());
-                        }
-
-                        // Truncate output to n/8 bytes
-                        output.resize(n / 8);
-
-                        retVal = 0;
+                        // Encrypt given _pseudorandomstate.ivec input using aes_key to block
+                        block.clear();
+                        block.resize(AES_BLOCK_SIZE, 0);
+                        CRYPTO_ctr128_encrypt(input.data(), block.data(), AES_BLOCK_SIZE, &aes_key, _pseudorandomstate.ivec, _pseudorandomstate.ecount, &_pseudorandomstate.num, (block128_f)AES_encrypt);
+                        output.insert(output.end(), block.begin(), block.end());
                     }
-                    else
-                    {
-                        retVal = -3;
-                    }
+
+                    // Truncate output to n/8 bytes
+                    output.resize(n / 8);
+
+                    retVal = 0;
                 }
                 else
                 {
-                    retVal = -2;
+                    retVal = -3;
                 }
             }
             else
             {
-                retVal = -1;
+                retVal = -2;
             }
         }
-        break;
-
-        case SECONDARY_CRYPTO:
+        else
         {
-            ivSize = iv.size();
-            keySize = _secondary_crypto.master_key.size();
+            retVal = -1;
+        }
+    }
+    break;
 
-            assert(ivSize == JLSRTP_SALTING_KEY_LENGTH);
-            assert(keySize == JLSRTP_ENCRYPTION_KEY_LENGTH);
-            if (ivSize == JLSRTP_SALTING_KEY_LENGTH)
+    case SECONDARY_CRYPTO:
+    {
+        ivSize = iv.size();
+        keySize = _secondary_crypto.master_key.size();
+
+        assert(ivSize == JLSRTP_SALTING_KEY_LENGTH);
+        assert(keySize == JLSRTP_ENCRYPTION_KEY_LENGTH);
+        if (ivSize == JLSRTP_SALTING_KEY_LENGTH)
+        {
+            if (keySize == JLSRTP_ENCRYPTION_KEY_LENGTH)
             {
-                if (keySize == JLSRTP_ENCRYPTION_KEY_LENGTH)
+                input.resize(AES_BLOCK_SIZE, 0);
+                output.clear();
+
+                // Determine how many AES_BLOCK_SIZE-byte encryption loops will be necessary to achieve at least n/8 bytes of pseudorandom ciphertext
+                num_loops = (n % JLSRTP_PSEUDORANDOM_BITS) ? ((n / JLSRTP_PSEUDORANDOM_BITS) + 1) : (n / JLSRTP_PSEUDORANDOM_BITS);
+
+                // Set encryption key
+                rc = AES_set_encrypt_key(_secondary_crypto.master_key.data(), 128, &aes_key);
+                if (rc >= 0)
                 {
-                    input.resize(AES_BLOCK_SIZE, 0);
-                    output.clear();
+                    // Reset IV/counter state
+                    resetPseudoRandomState(iv);
 
-                    // Determine how many AES_BLOCK_SIZE-byte encryption loops will be necessary to achieve at least n/8 bytes of pseudorandom ciphertext
-                    num_loops = (n % JLSRTP_PSEUDORANDOM_BITS) ? ((n / JLSRTP_PSEUDORANDOM_BITS) + 1) : (n / JLSRTP_PSEUDORANDOM_BITS);
-
-                    // Set encryption key
-                    rc = AES_set_encrypt_key(_secondary_crypto.master_key.data(), 128, &aes_key);
-                    if (rc >= 0)
+                    for (int i = 0; i < num_loops; i++)
                     {
-                        // Reset IV/counter state
-                        resetPseudoRandomState(iv);
-
-                        for (int i = 0; i < num_loops; i++)
-                        {
-                            // Encrypt given _pseudorandomstate.ivec input using aes_key to block
-                            block.clear();
-                            block.resize(AES_BLOCK_SIZE, 0);
-                            CRYPTO_ctr128_encrypt(input.data(), block.data(), AES_BLOCK_SIZE, &aes_key, _pseudorandomstate.ivec, _pseudorandomstate.ecount, &_pseudorandomstate.num, (block128_f)AES_encrypt);
-                            output.insert(output.end(), block.begin(), block.end());
-                        }
-
-                        // Truncate output to n/8 bytes
-                        output.resize(n / 8);
-
-                        retVal = 0;
+                        // Encrypt given _pseudorandomstate.ivec input using aes_key to block
+                        block.clear();
+                        block.resize(AES_BLOCK_SIZE, 0);
+                        CRYPTO_ctr128_encrypt(input.data(), block.data(), AES_BLOCK_SIZE, &aes_key, _pseudorandomstate.ivec, _pseudorandomstate.ecount, &_pseudorandomstate.num, (block128_f)AES_encrypt);
+                        output.insert(output.end(), block.begin(), block.end());
                     }
-                    else
-                    {
-                        retVal = -3;
-                    }
+
+                    // Truncate output to n/8 bytes
+                    output.resize(n / 8);
+
+                    retVal = 0;
                 }
                 else
                 {
-                    retVal = -2;
+                    retVal = -3;
                 }
             }
             else
             {
-                retVal = -1;
+                retVal = -2;
             }
         }
-        break;
-
-        default:
+        else
         {
-            retVal = -4;
+            retVal = -1;
         }
-        break;
+    }
+    break;
+
+    default:
+    {
+        retVal = -4;
+    }
+    break;
     }
 
     return retVal;
@@ -353,7 +353,7 @@ unsigned long JLSRTP::determineV(unsigned short SEQ)
     {
         if ((SEQ - _s_l) > 32768)
         {
-            v = _ROC-1;
+            v = _ROC - 1;
         }
         else
         {
@@ -364,7 +364,7 @@ unsigned long JLSRTP::determineV(unsigned short SEQ)
     {
         if ((SEQ - _s_l) < -32768)
         {
-            v = _ROC+1;
+            v = _ROC + 1;
         }
         else
         {
@@ -483,89 +483,89 @@ int JLSRTP::encryptVector(std::vector<unsigned char> &invdata, std::vector<unsig
     {
         switch (_active_crypto)
         {
-            case PRIMARY_CRYPTO:
+        case PRIMARY_CRYPTO:
+        {
+            switch (_primary_crypto.cipher_algorithm)
             {
-                switch (_primary_crypto.cipher_algorithm)
+            case AES_CM_128:
+            {
+                assert(_aes_key.rounds != 0);
+                if (_aes_key.rounds != 0)
                 {
-                    case AES_CM_128:
-                    {
-                        assert(_aes_key.rounds != 0);
-                        if (_aes_key.rounds != 0)
-                        {
-                            ciphertext_output.resize(invdata.size(), 0);
-                            resetCipherBlockOffset();
-                            resetCipherOutputBlock();
-                            resetCipherBlockCounter();
-                            CRYPTO_ctr128_encrypt(invdata.data(), ciphertext_output.data(), invdata.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    }
-                    break;
-
-                    case NULL_CIPHER:
-                    {
-                        ciphertext_output = invdata;
-                        retVal = 0;
-                    }
-                    break;
-
-                    default:
-                    {
-                        retVal = -3;
-                    }
-                    break;
+                    ciphertext_output.resize(invdata.size(), 0);
+                    resetCipherBlockOffset();
+                    resetCipherOutputBlock();
+                    resetCipherBlockCounter();
+                    CRYPTO_ctr128_encrypt(invdata.data(), ciphertext_output.data(), invdata.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
                 }
             }
             break;
 
-            case SECONDARY_CRYPTO:
+            case NULL_CIPHER:
             {
-                switch (_secondary_crypto.cipher_algorithm)
-                {
-                    case AES_CM_128:
-                    {
-                        assert(_aes_key.rounds != 0);
-                        if (_aes_key.rounds != 0)
-                        {
-                            ciphertext_output.resize(invdata.size(), 0);
-                            resetCipherBlockOffset();
-                            resetCipherOutputBlock();
-                            resetCipherBlockCounter();
-                            CRYPTO_ctr128_encrypt(invdata.data(), ciphertext_output.data(), invdata.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    }
-                    break;
-
-                    case NULL_CIPHER:
-                    {
-                        ciphertext_output = invdata;
-                        retVal = 0;
-                    }
-                    break;
-
-                    default:
-                    {
-                        retVal = -3;
-                    }
-                    break;
-                }
+                ciphertext_output = invdata;
+                retVal = 0;
             }
             break;
 
             default:
             {
-                retVal = -4;
+                retVal = -3;
             }
             break;
+            }
+        }
+        break;
+
+        case SECONDARY_CRYPTO:
+        {
+            switch (_secondary_crypto.cipher_algorithm)
+            {
+            case AES_CM_128:
+            {
+                assert(_aes_key.rounds != 0);
+                if (_aes_key.rounds != 0)
+                {
+                    ciphertext_output.resize(invdata.size(), 0);
+                    resetCipherBlockOffset();
+                    resetCipherOutputBlock();
+                    resetCipherBlockCounter();
+                    CRYPTO_ctr128_encrypt(invdata.data(), ciphertext_output.data(), invdata.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
+                }
+            }
+            break;
+
+            case NULL_CIPHER:
+            {
+                ciphertext_output = invdata;
+                retVal = 0;
+            }
+            break;
+
+            default:
+            {
+                retVal = -3;
+            }
+            break;
+            }
+        }
+        break;
+
+        default:
+        {
+            retVal = -4;
+        }
+        break;
         }
     }
     else
@@ -585,89 +585,89 @@ int JLSRTP::decryptVector(std::vector<unsigned char> &ciphertext_input, std::vec
     {
         switch (_active_crypto)
         {
-            case PRIMARY_CRYPTO:
+        case PRIMARY_CRYPTO:
+        {
+            switch (_primary_crypto.cipher_algorithm)
             {
-                switch (_primary_crypto.cipher_algorithm)
+            case AES_CM_128:
+            {
+                assert(_aes_key.rounds != 0);
+                if (_aes_key.rounds != 0)
                 {
-                    case AES_CM_128:
-                    {
-                        assert(_aes_key.rounds != 0);
-                        if (_aes_key.rounds != 0)
-                        {
-                            outvdata.resize(ciphertext_input.size(), 0);
-                            resetCipherBlockOffset();
-                            resetCipherOutputBlock();
-                            resetCipherBlockCounter();
-                            CRYPTO_ctr128_encrypt(ciphertext_input.data(), outvdata.data(), ciphertext_input.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    }
-                    break;
-
-                    case NULL_CIPHER:
-                    {
-                        outvdata = ciphertext_input;
-                        retVal = 0;
-                    }
-                    break;
-
-                    default:
-                    {
-                        retVal = -3;
-                    }
-                    break;
+                    outvdata.resize(ciphertext_input.size(), 0);
+                    resetCipherBlockOffset();
+                    resetCipherOutputBlock();
+                    resetCipherBlockCounter();
+                    CRYPTO_ctr128_encrypt(ciphertext_input.data(), outvdata.data(), ciphertext_input.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
                 }
             }
             break;
 
-            case SECONDARY_CRYPTO:
+            case NULL_CIPHER:
             {
-                switch (_secondary_crypto.cipher_algorithm)
-                {
-                    case AES_CM_128:
-                    {
-                        assert(_aes_key.rounds != 0);
-                        if (_aes_key.rounds != 0)
-                        {
-                            outvdata.resize(ciphertext_input.size(), 0);
-                            resetCipherBlockOffset();
-                            resetCipherOutputBlock();
-                            resetCipherBlockCounter();
-                            CRYPTO_ctr128_encrypt(ciphertext_input.data(), outvdata.data(), ciphertext_input.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    }
-                    break;
-
-                    case NULL_CIPHER:
-                    {
-                        outvdata = ciphertext_input;
-                        retVal = 0;
-                    }
-                    break;
-
-                    default:
-                    {
-                        retVal = -3;
-                    }
-                    break;
-                }
+                outvdata = ciphertext_input;
+                retVal = 0;
             }
             break;
 
             default:
             {
-                retVal = -4;
+                retVal = -3;
             }
             break;
+            }
+        }
+        break;
+
+        case SECONDARY_CRYPTO:
+        {
+            switch (_secondary_crypto.cipher_algorithm)
+            {
+            case AES_CM_128:
+            {
+                assert(_aes_key.rounds != 0);
+                if (_aes_key.rounds != 0)
+                {
+                    outvdata.resize(ciphertext_input.size(), 0);
+                    resetCipherBlockOffset();
+                    resetCipherOutputBlock();
+                    resetCipherBlockCounter();
+                    CRYPTO_ctr128_encrypt(ciphertext_input.data(), outvdata.data(), ciphertext_input.size(), &_aes_key, _cipherstate.ivec, _cipherstate.ecount, &_cipherstate.num, (block128_f)AES_encrypt);
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
+                }
+            }
+            break;
+
+            case NULL_CIPHER:
+            {
+                outvdata = ciphertext_input;
+                retVal = 0;
+            }
+            break;
+
+            default:
+            {
+                retVal = -3;
+            }
+            break;
+            }
+        }
+        break;
+
+        default:
+        {
+            retVal = -4;
+        }
+        break;
         }
     }
     else
@@ -701,59 +701,59 @@ int JLSRTP::issueAuthenticationTag(std::vector<unsigned char> &data, std::vector
 
             if (digest != NULL)
             {
-                hash.assign(digest, digest+JLSRTP_SHA1_HASH_LENGTH);
+                hash.assign(digest, digest + JLSRTP_SHA1_HASH_LENGTH);
 
                 switch (_active_crypto)
                 {
-                    case PRIMARY_CRYPTO:
+                case PRIMARY_CRYPTO:
+                {
+                    switch (_primary_crypto.hmac_algorithm)
                     {
-                        switch (_primary_crypto.hmac_algorithm)
-                        {
-                            case HMAC_SHA1_80:
-                                hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80); // Truncate to 10 bytes (80 bits / 8 bits/byte = 10 bytes)
-                                retVal = 0;
-                            break;
+                    case HMAC_SHA1_80:
+                        hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80); // Truncate to 10 bytes (80 bits / 8 bits/byte = 10 bytes)
+                        retVal = 0;
+                        break;
 
-                            case HMAC_SHA1_32:
-                                hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32);  // Truncate to  4 bytes (32 bits / 8 bits/byte = 4 bytes)
-                                retVal = 0;
-                            break;
-
-                            default:
-                                // Unrecognized input value -- NO-OP...
-                                retVal = -3;
-                            break;
-                        }
-                    }
-                    break;
-
-                    case SECONDARY_CRYPTO:
-                    {
-                        switch (_secondary_crypto.hmac_algorithm)
-                        {
-                            case HMAC_SHA1_80:
-                                hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80); // Truncate to 10 bytes (80 bits / 8 bits/byte = 10 bytes)
-                                retVal = 0;
-                            break;
-
-                            case HMAC_SHA1_32:
-                                hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32);  // Truncate to  4 bytes (32 bits / 8 bits/byte = 4 bytes)
-                                retVal = 0;
-                            break;
-
-                            default:
-                                // Unrecognized input value -- NO-OP...
-                                retVal = -3;
-                            break;
-                        }
-                    }
-                    break;
+                    case HMAC_SHA1_32:
+                        hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32);  // Truncate to  4 bytes (32 bits / 8 bits/byte = 4 bytes)
+                        retVal = 0;
+                        break;
 
                     default:
-                    {
-                        retVal = -5;
+                        // Unrecognized input value -- NO-OP...
+                        retVal = -3;
+                        break;
                     }
-                    break;
+                }
+                break;
+
+                case SECONDARY_CRYPTO:
+                {
+                    switch (_secondary_crypto.hmac_algorithm)
+                    {
+                    case HMAC_SHA1_80:
+                        hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80); // Truncate to 10 bytes (80 bits / 8 bits/byte = 10 bytes)
+                        retVal = 0;
+                        break;
+
+                    case HMAC_SHA1_32:
+                        hash.resize(JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32);  // Truncate to  4 bytes (32 bits / 8 bits/byte = 4 bytes)
+                        retVal = 0;
+                        break;
+
+                    default:
+                        // Unrecognized input value -- NO-OP...
+                        retVal = -3;
+                        break;
+                    }
+                }
+                break;
+
+                default:
+                {
+                    retVal = -5;
+                }
+                break;
                 }
             }
             else
@@ -785,91 +785,91 @@ int JLSRTP::extractAuthenticationTag(std::vector<unsigned char> srtp_packet, std
     {
         switch (_active_crypto)
         {
-            case PRIMARY_CRYPTO:
+        case PRIMARY_CRYPTO:
+        {
+            switch (_primary_crypto.hmac_algorithm)
             {
-                switch (_primary_crypto.hmac_algorithm)
+            case HMAC_SHA1_80:
+                if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80)
                 {
-                    case HMAC_SHA1_80:
-                        if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80)
-                        {
-                            authtag_pos = srtp_packet.size() - 10;
-                            std::advance(it, authtag_pos);
-                            hash.assign(it, srtp_packet.end()); // Fetch trailing 10 bytes (80 bits / 8 bits/byte = 10 bytes)
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    break;
-
-                    case HMAC_SHA1_32:
-                        if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32)
-                        {
-                            authtag_pos = srtp_packet.size() - 4;
-                            std::advance(it, authtag_pos);
-                            hash.assign(it, srtp_packet.end());  // Fetch trailing  4 bytes (32 bits / 8 bits/byte = 4 bytes)
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    break;
-
-                    default:
-                        // Unrecognized input value -- NO-OP...
-                        retVal = -3;
-                    break;
+                    authtag_pos = srtp_packet.size() - 10;
+                    std::advance(it, authtag_pos);
+                    hash.assign(it, srtp_packet.end()); // Fetch trailing 10 bytes (80 bits / 8 bits/byte = 10 bytes)
+                    retVal = 0;
                 }
-            }
-            break;
-
-            case SECONDARY_CRYPTO:
-            {
-                switch (_secondary_crypto.hmac_algorithm)
+                else
                 {
-                    case HMAC_SHA1_80:
-                        if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80)
-                        {
-                            authtag_pos = srtp_packet.size() - 10;
-                            std::advance(it, authtag_pos);
-                            hash.assign(it, srtp_packet.end()); // Fetch trailing 10 bytes (80 bits / 8 bits/byte = 10 bytes)
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    break;
-
-                    case HMAC_SHA1_32:
-                        if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32)
-                        {
-                            authtag_pos = srtp_packet.size() - 4;
-                            std::advance(it, authtag_pos);
-                            hash.assign(it, srtp_packet.end());  // Fetch trailing  4 bytes (32 bits / 8 bits/byte = 4 bytes)
-                            retVal = 0;
-                        }
-                        else
-                        {
-                            retVal = -2;
-                        }
-                    break;
-
-                    default:
-                        // Unrecognized input value -- NO-OP...
-                        retVal = -3;
-                    break;
+                    retVal = -2;
                 }
-            }
-            break;
+                break;
+
+            case HMAC_SHA1_32:
+                if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32)
+                {
+                    authtag_pos = srtp_packet.size() - 4;
+                    std::advance(it, authtag_pos);
+                    hash.assign(it, srtp_packet.end());  // Fetch trailing  4 bytes (32 bits / 8 bits/byte = 4 bytes)
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
+                }
+                break;
 
             default:
-            {
-                retVal = -4;
+                // Unrecognized input value -- NO-OP...
+                retVal = -3;
+                break;
             }
-            break;
+        }
+        break;
+
+        case SECONDARY_CRYPTO:
+        {
+            switch (_secondary_crypto.hmac_algorithm)
+            {
+            case HMAC_SHA1_80:
+                if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80)
+                {
+                    authtag_pos = srtp_packet.size() - 10;
+                    std::advance(it, authtag_pos);
+                    hash.assign(it, srtp_packet.end()); // Fetch trailing 10 bytes (80 bits / 8 bits/byte = 10 bytes)
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
+                }
+                break;
+
+            case HMAC_SHA1_32:
+                if (srtp_packet.size() >= JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32)
+                {
+                    authtag_pos = srtp_packet.size() - 4;
+                    std::advance(it, authtag_pos);
+                    hash.assign(it, srtp_packet.end());  // Fetch trailing  4 bytes (32 bits / 8 bits/byte = 4 bytes)
+                    retVal = 0;
+                }
+                else
+                {
+                    retVal = -2;
+                }
+                break;
+
+            default:
+                // Unrecognized input value -- NO-OP...
+                retVal = -3;
+                break;
+            }
+        }
+        break;
+
+        default:
+        {
+            retVal = -4;
+        }
+        break;
         }
     }
     else
@@ -966,7 +966,7 @@ std::string JLSRTP::base64Encode(std::vector<unsigned char> const& s)
             char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
             char_array_4[3] = char_array_3[2] & 0x3f;
 
-            for(i = 0; (i <4) ; i++)
+            for (i = 0; (i < 4) ; i++)
             {
                 ret += base64Chars[char_array_4[i]];
             }
@@ -976,7 +976,7 @@ std::string JLSRTP::base64Encode(std::vector<unsigned char> const& s)
 
     if (i)
     {
-        for(j = i; j < 3; j++)
+        for (j = i; j < 3; j++)
         {
             char_array_3[j] = '\0';
         }
@@ -991,7 +991,7 @@ std::string JLSRTP::base64Encode(std::vector<unsigned char> const& s)
             ret += base64Chars[char_array_4[j]];
         }
 
-        while((i++ < 3))
+        while ((i++ < 3))
         {
             ret += '=';
         }
@@ -1010,13 +1010,13 @@ std::vector<unsigned char> JLSRTP::base64Decode(std::string const& encoded_strin
     int in_len = encoded_string.size();
     std::vector<unsigned char> ret;
 
-    while (in_len-- && ( encoded_string[in_] != '=') && isBase64(encoded_string[in_]))
+    while (in_len-- && (encoded_string[in_] != '=') && isBase64(encoded_string[in_]))
     {
         char_array_4[i++] = encoded_string[in_];
         in_++;
-        if (i ==4)
+        if (i == 4)
         {
-            for (i = 0; i <4; i++)
+            for (i = 0; i < 4; i++)
             {
                 char_array_4[i] = base64Chars.find(char_array_4[i]);
             }
@@ -1035,12 +1035,12 @@ std::vector<unsigned char> JLSRTP::base64Decode(std::string const& encoded_strin
 
     if (i)
     {
-        for (j = i; j <4; j++)
+        for (j = i; j < 4; j++)
         {
             char_array_4[j] = 0;
         }
 
-        for (j = 0; j <4; j++)
+        for (j = 0; j < 4; j++)
         {
             char_array_4[j] = base64Chars.find(char_array_4[j]);
         }
@@ -1075,7 +1075,7 @@ int JLSRTP::resetCipherOutputBlock()
 int JLSRTP::resetCipherBlockCounter()
 {
     // Clear low-order bytes [14..15] for 'counter'
-    memset(_cipherstate.ivec+14, 0, 2);
+    memset(_cipherstate.ivec + 14, 0, 2);
 
     return 0;
 }
@@ -1168,69 +1168,69 @@ int JLSRTP::deriveSessionEncryptionKey()
 
     switch (_active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        saltSize = _primary_crypto.master_salt.size();
+        assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
+        if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            saltSize = _primary_crypto.master_salt.size();
-            assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
-            if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
-            {
-                input_vector.clear();
+            input_vector.clear();
 
-                keyid_encryption.clear();
-                keyid_encryption.resize(7, 0);
-                keyid_encryption.push_back(JLSRTP_KEY_ENCRYPTION_LABEL);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
+            keyid_encryption.clear();
+            keyid_encryption.resize(7, 0);
+            keyid_encryption.push_back(JLSRTP_KEY_ENCRYPTION_LABEL);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
 
-                xorVector(keyid_encryption, _primary_crypto.master_salt, input_vector);
+            xorVector(keyid_encryption, _primary_crypto.master_salt, input_vector);
 
-                retVal = pseudorandomFunction(input_vector, 128, _session_enc_key);
-            }
-            else
-            {
-                retVal = -1;
-            }
+            retVal = pseudorandomFunction(input_vector, 128, _session_enc_key);
         }
-        break;
-
-        case SECONDARY_CRYPTO:
+        else
         {
-            saltSize = _secondary_crypto.master_salt.size();
-            assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
-            if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
-            {
-                input_vector.clear();
-
-                keyid_encryption.clear();
-                keyid_encryption.resize(7, 0);
-                keyid_encryption.push_back(JLSRTP_KEY_ENCRYPTION_LABEL);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-                keyid_encryption.push_back(0x00);
-
-                xorVector(keyid_encryption, _secondary_crypto.master_salt, input_vector);
-
-                retVal = pseudorandomFunction(input_vector, 128, _session_enc_key);
-            }
-            else
-            {
-                retVal = -1;
-            }
+            retVal = -1;
         }
-        break;
+    }
+    break;
 
-        default:
+    case SECONDARY_CRYPTO:
+    {
+        saltSize = _secondary_crypto.master_salt.size();
+        assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
+        if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            retVal = -4;
+            input_vector.clear();
+
+            keyid_encryption.clear();
+            keyid_encryption.resize(7, 0);
+            keyid_encryption.push_back(JLSRTP_KEY_ENCRYPTION_LABEL);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+            keyid_encryption.push_back(0x00);
+
+            xorVector(keyid_encryption, _secondary_crypto.master_salt, input_vector);
+
+            retVal = pseudorandomFunction(input_vector, 128, _session_enc_key);
         }
-        break;
+        else
+        {
+            retVal = -1;
+        }
+    }
+    break;
+
+    default:
+    {
+        retVal = -4;
+    }
+    break;
     }
 
     return retVal;
@@ -1245,69 +1245,69 @@ int JLSRTP::deriveSessionSaltingKey()
 
     switch (_active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        saltSize = _primary_crypto.master_salt.size();
+        assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
+        if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            saltSize = _primary_crypto.master_salt.size();
-            assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
-            if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
-            {
-                input_vector.clear();
+            input_vector.clear();
 
-                keyid_salting.clear();
-                keyid_salting.resize(7, 0);
-                keyid_salting.push_back(JLSRTP_KEY_SALTING_LABEL);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
+            keyid_salting.clear();
+            keyid_salting.resize(7, 0);
+            keyid_salting.push_back(JLSRTP_KEY_SALTING_LABEL);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
 
-               xorVector(keyid_salting, _primary_crypto.master_salt, input_vector);
+            xorVector(keyid_salting, _primary_crypto.master_salt, input_vector);
 
-                retVal = pseudorandomFunction(input_vector, 112, _session_salt_key);
-            }
-            else
-            {
-                retVal = -1;
-            }
+            retVal = pseudorandomFunction(input_vector, 112, _session_salt_key);
         }
-        break;
-
-        case SECONDARY_CRYPTO:
+        else
         {
-            saltSize = _secondary_crypto.master_salt.size();
-            assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
-            if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
-            {
-                input_vector.clear();
-
-                keyid_salting.clear();
-                keyid_salting.resize(7, 0);
-                keyid_salting.push_back(JLSRTP_KEY_SALTING_LABEL);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-                keyid_salting.push_back(0x00);
-
-               xorVector(keyid_salting, _secondary_crypto.master_salt, input_vector);
-
-                retVal = pseudorandomFunction(input_vector, 112, _session_salt_key);
-            }
-            else
-            {
-                retVal = -1;
-            }
+            retVal = -1;
         }
-        break;
+    }
+    break;
 
-        default:
+    case SECONDARY_CRYPTO:
+    {
+        saltSize = _secondary_crypto.master_salt.size();
+        assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
+        if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            retVal = -4;
+            input_vector.clear();
+
+            keyid_salting.clear();
+            keyid_salting.resize(7, 0);
+            keyid_salting.push_back(JLSRTP_KEY_SALTING_LABEL);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+            keyid_salting.push_back(0x00);
+
+            xorVector(keyid_salting, _secondary_crypto.master_salt, input_vector);
+
+            retVal = pseudorandomFunction(input_vector, 112, _session_salt_key);
         }
-        break;
+        else
+        {
+            retVal = -1;
+        }
+    }
+    break;
+
+    default:
+    {
+        retVal = -4;
+    }
+    break;
     }
 
     return retVal;
@@ -1322,69 +1322,69 @@ int JLSRTP::deriveSessionAuthenticationKey()
 
     switch (_active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        saltSize = _primary_crypto.master_salt.size();
+        assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
+        if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            saltSize = _primary_crypto.master_salt.size();
-            assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
-            if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
-            {
-                input_vector.clear();
+            input_vector.clear();
 
-                keyid_authentication.clear();
-                keyid_authentication.resize(7, 0);
-                keyid_authentication.push_back(JLSRTP_KEY_AUTHENTICATION_LABEL);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
+            keyid_authentication.clear();
+            keyid_authentication.resize(7, 0);
+            keyid_authentication.push_back(JLSRTP_KEY_AUTHENTICATION_LABEL);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
 
-                xorVector(keyid_authentication, _primary_crypto.master_salt, input_vector);
+            xorVector(keyid_authentication, _primary_crypto.master_salt, input_vector);
 
-                retVal = pseudorandomFunction(input_vector, 160, _session_auth_key);
-            }
-            else
-            {
-                retVal = -1;
-            }
+            retVal = pseudorandomFunction(input_vector, 160, _session_auth_key);
         }
-        break;
-
-        case SECONDARY_CRYPTO:
+        else
         {
-            saltSize = _secondary_crypto.master_salt.size();
-            assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
-            if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
-            {
-                input_vector.clear();
-
-                keyid_authentication.clear();
-                keyid_authentication.resize(7, 0);
-                keyid_authentication.push_back(JLSRTP_KEY_AUTHENTICATION_LABEL);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-                keyid_authentication.push_back(0x00);
-
-                xorVector(keyid_authentication, _secondary_crypto.master_salt, input_vector);
-
-                retVal = pseudorandomFunction(input_vector, 160, _session_auth_key);
-            }
-            else
-            {
-                retVal = -1;
-            }
+            retVal = -1;
         }
-        break;
+    }
+    break;
 
-        default:
+    case SECONDARY_CRYPTO:
+    {
+        saltSize = _secondary_crypto.master_salt.size();
+        assert(saltSize == JLSRTP_SALTING_KEY_LENGTH);
+        if (saltSize == JLSRTP_SALTING_KEY_LENGTH)
         {
-            retVal = -4;
+            input_vector.clear();
+
+            keyid_authentication.clear();
+            keyid_authentication.resize(7, 0);
+            keyid_authentication.push_back(JLSRTP_KEY_AUTHENTICATION_LABEL);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+            keyid_authentication.push_back(0x00);
+
+            xorVector(keyid_authentication, _secondary_crypto.master_salt, input_vector);
+
+            retVal = pseudorandomFunction(input_vector, 160, _session_auth_key);
         }
-        break;
+        else
+        {
+            retVal = -1;
+        }
+    }
+    break;
+
+    default:
+    {
+        retVal = -4;
+    }
+    break;
     }
 
     return retVal;
@@ -1484,23 +1484,23 @@ CipherType JLSRTP::getCipherAlgorithm(ActiveCrypto crypto_attrib /*= ACTIVE_CRYP
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            retVal = _primary_crypto.cipher_algorithm;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        retVal = _primary_crypto.cipher_algorithm;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            retVal = _secondary_crypto.cipher_algorithm;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        retVal = _secondary_crypto.cipher_algorithm;
+    }
+    break;
 
-        default:
-        {
-            retVal = INVALID_CIPHER;
-        }
-        break;
+    default:
+    {
+        retVal = INVALID_CIPHER;
+    }
+    break;
     }
 
     return retVal;
@@ -1522,65 +1522,65 @@ int JLSRTP::selectCipherAlgorithm(CipherType cipherType, ActiveCrypto crypto_att
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        switch (cipherType)
         {
-            switch (cipherType)
-            {
-                case AES_CM_128:
-                {
-                    _primary_crypto.cipher_algorithm = AES_CM_128;
-                    retVal = 0;
-                }
-                break;
-
-                case NULL_CIPHER:
-                {
-                    _primary_crypto.cipher_algorithm = NULL_CIPHER;
-                    retVal = 0;
-                }
-                break;
-
-                default:
-                {
-                    retVal = -1;
-                }
-                break;
-            }
+        case AES_CM_128:
+        {
+            _primary_crypto.cipher_algorithm = AES_CM_128;
+            retVal = 0;
         }
         break;
 
-        case SECONDARY_CRYPTO:
+        case NULL_CIPHER:
         {
-            switch (cipherType)
-            {
-                case AES_CM_128:
-                {
-                    _secondary_crypto.cipher_algorithm = AES_CM_128;
-                    retVal = 0;
-                }
-                break;
-
-                case NULL_CIPHER:
-                {
-                    _secondary_crypto.cipher_algorithm = NULL_CIPHER;
-                    retVal = 0;
-                }
-                break;
-
-                default:
-                {
-                    retVal = -1;
-                }
-                break;
-            }
+            _primary_crypto.cipher_algorithm = NULL_CIPHER;
+            retVal = 0;
         }
         break;
 
         default:
         {
-            retVal = -2;
+            retVal = -1;
         }
         break;
+        }
+    }
+    break;
+
+    case SECONDARY_CRYPTO:
+    {
+        switch (cipherType)
+        {
+        case AES_CM_128:
+        {
+            _secondary_crypto.cipher_algorithm = AES_CM_128;
+            retVal = 0;
+        }
+        break;
+
+        case NULL_CIPHER:
+        {
+            _secondary_crypto.cipher_algorithm = NULL_CIPHER;
+            retVal = 0;
+        }
+        break;
+
+        default:
+        {
+            retVal = -1;
+        }
+        break;
+        }
+    }
+    break;
+
+    default:
+    {
+        retVal = -2;
+    }
+    break;
     }
 
     return retVal;
@@ -1602,23 +1602,23 @@ HashType JLSRTP::getHashAlgorithm(ActiveCrypto crypto_attrib /*= ACTIVE_CRYPTO*/
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            retVal = _primary_crypto.hmac_algorithm;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        retVal = _primary_crypto.hmac_algorithm;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            retVal = _secondary_crypto.hmac_algorithm;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        retVal = _secondary_crypto.hmac_algorithm;
+    }
+    break;
 
-        default:
-        {
-            retVal = INVALID_HASH;
-        }
-        break;
+    default:
+    {
+        retVal = INVALID_HASH;
+    }
+    break;
     }
 
     return retVal;
@@ -1641,65 +1641,65 @@ int JLSRTP::selectHashAlgorithm(HashType hashType, ActiveCrypto crypto_attrib /*
     switch (active_crypto)
     {
 
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        switch (hashType)
         {
-            switch (hashType)
-            {
-                case HMAC_SHA1_80:
-                {
-                    _primary_crypto.hmac_algorithm = HMAC_SHA1_80;
-                    retVal = 0;
-                }
-                break;
-
-                case HMAC_SHA1_32:
-                {
-                    _primary_crypto.hmac_algorithm = HMAC_SHA1_32;
-                    retVal = 0;
-                }
-                break;
-
-                default:
-                {
-                    retVal = -1;
-                }
-                break;
-            }
+        case HMAC_SHA1_80:
+        {
+            _primary_crypto.hmac_algorithm = HMAC_SHA1_80;
+            retVal = 0;
         }
         break;
 
-        case SECONDARY_CRYPTO:
+        case HMAC_SHA1_32:
         {
-            switch (hashType)
-            {
-                case HMAC_SHA1_80:
-                {
-                    _secondary_crypto.hmac_algorithm = HMAC_SHA1_80;
-                    retVal = 0;
-                }
-                break;
-
-                case HMAC_SHA1_32:
-                {
-                    _secondary_crypto.hmac_algorithm = HMAC_SHA1_32;
-                    retVal = 0;
-                }
-                break;
-
-                default:
-                {
-                    retVal = -1;
-                }
-                break;
-            }
+            _primary_crypto.hmac_algorithm = HMAC_SHA1_32;
+            retVal = 0;
         }
         break;
 
         default:
         {
-            retVal = -2;
+            retVal = -1;
         }
         break;
+        }
+    }
+    break;
+
+    case SECONDARY_CRYPTO:
+    {
+        switch (hashType)
+        {
+        case HMAC_SHA1_80:
+        {
+            _secondary_crypto.hmac_algorithm = HMAC_SHA1_80;
+            retVal = 0;
+        }
+        break;
+
+        case HMAC_SHA1_32:
+        {
+            _secondary_crypto.hmac_algorithm = HMAC_SHA1_32;
+            retVal = 0;
+        }
+        break;
+
+        default:
+        {
+            retVal = -1;
+        }
+        break;
+        }
+    }
+    break;
+
+    default:
+    {
+        retVal = -2;
+    }
+    break;
     }
 
     return retVal;
@@ -1714,51 +1714,51 @@ int JLSRTP::getAuthenticationTagSize()
     {
         switch (_active_crypto)
         {
-            case PRIMARY_CRYPTO:
+        case PRIMARY_CRYPTO:
+        {
+            switch (_primary_crypto.hmac_algorithm)
             {
-                switch (_primary_crypto.hmac_algorithm)
-                {
-                    case HMAC_SHA1_80:
-                        retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80;
-                    break;
+            case HMAC_SHA1_80:
+                retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80;
+                break;
 
-                    case HMAC_SHA1_32:
-                        retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32;
-                    break;
-
-                    default:
-                        // Unrecognized input value -- NO-OP...
-                        retVal = -2;
-                    break;
-                }
-            }
-            break;
-
-            case SECONDARY_CRYPTO:
-            {
-                switch (_secondary_crypto.hmac_algorithm)
-                {
-                    case HMAC_SHA1_80:
-                        retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80;
-                    break;
-
-                    case HMAC_SHA1_32:
-                        retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32;
-                    break;
-
-                    default:
-                        // Unrecognized input value -- NO-OP...
-                        retVal = -2;
-                    break;
-                }
-            }
-            break;
+            case HMAC_SHA1_32:
+                retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32;
+                break;
 
             default:
-            {
-                retVal = -3;
+                // Unrecognized input value -- NO-OP...
+                retVal = -2;
+                break;
             }
-            break;
+        }
+        break;
+
+        case SECONDARY_CRYPTO:
+        {
+            switch (_secondary_crypto.hmac_algorithm)
+            {
+            case HMAC_SHA1_80:
+                retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_80;
+                break;
+
+            case HMAC_SHA1_32:
+                retVal = JLSRTP_AUTHENTICATION_TAG_SIZE_SHA1_32;
+                break;
+
+            default:
+                // Unrecognized input value -- NO-OP...
+                retVal = -2;
+                break;
+            }
+        }
+        break;
+
+        default:
+        {
+            retVal = -3;
+        }
+        break;
         }
     }
     else
@@ -2095,25 +2095,25 @@ int JLSRTP::setCryptoTag(unsigned int tag, ActiveCrypto crypto_attrib /*= ACTIVE
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            _primary_crypto.tag = tag;
-            retVal = 0;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        _primary_crypto.tag = tag;
+        retVal = 0;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            _secondary_crypto.tag = tag;
-            retVal = 0;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        _secondary_crypto.tag = tag;
+        retVal = 0;
+    }
+    break;
 
-        default:
-        {
-            retVal = -1;
-        }
-        break;
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -2135,23 +2135,23 @@ unsigned int JLSRTP::getCryptoTag(ActiveCrypto crypto_attrib /*= ACTIVE_CRYPTO*/
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            return _primary_crypto.tag;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        return _primary_crypto.tag;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            return _secondary_crypto.tag;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        return _secondary_crypto.tag;
+    }
+    break;
 
-        default:
-        {
-            retVal = -1;
-        }
-        break;
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -2163,128 +2163,56 @@ std::string JLSRTP::getCryptoSuite()
 
     switch (_active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        switch (_primary_crypto.cipher_algorithm)
         {
-            switch (_primary_crypto.cipher_algorithm)
+        case AES_CM_128:
+        {
+            switch (_primary_crypto.hmac_algorithm)
             {
-                case AES_CM_128:
-                {
-                    switch (_primary_crypto.hmac_algorithm)
-                    {
-                        case HMAC_SHA1_80:
-                        {
-                             cryptosuite = "AES_CM_128_HMAC_SHA1_80";
-                        }
-                        break;
+            case HMAC_SHA1_80:
+            {
+                cryptosuite = "AES_CM_128_HMAC_SHA1_80";
+            }
+            break;
 
-                        case HMAC_SHA1_32:
-                        {
-                            cryptosuite = "AES_CM_128_HMAC_SHA1_32";
-                        }
-                        break;
+            case HMAC_SHA1_32:
+            {
+                cryptosuite = "AES_CM_128_HMAC_SHA1_32";
+            }
+            break;
 
-                        default:
-                        {
-                            cryptosuite = "";
-                        }
-                        break;
-                    }
-                }
-                break;
-
-                case NULL_CIPHER:
-                {
-                    switch (_primary_crypto.hmac_algorithm)
-                    {
-                        case HMAC_SHA1_80:
-                        {
-                            cryptosuite = "NULL_HMAC_SHA1_80";
-                        }
-                        break;
-
-                        case HMAC_SHA1_32:
-                        {
-                            cryptosuite = "NULL_HMAC_SHA1_32";
-                        }
-                        break;
-
-                        default:
-                        {
-                            cryptosuite = "";
-                        }
-                        break;
-                    }
-                }
-                break;
-
-                default:
-                {
-                    cryptosuite = "";
-                }
-                break;
+            default:
+            {
+                cryptosuite = "";
+            }
+            break;
             }
         }
         break;
 
-        case SECONDARY_CRYPTO:
+        case NULL_CIPHER:
         {
-            switch (_secondary_crypto.cipher_algorithm)
+            switch (_primary_crypto.hmac_algorithm)
             {
-                case AES_CM_128:
-                {
-                    switch (_secondary_crypto.hmac_algorithm)
-                    {
-                        case HMAC_SHA1_80:
-                        {
-                             cryptosuite = "AES_CM_128_HMAC_SHA1_80";
-                        }
-                        break;
+            case HMAC_SHA1_80:
+            {
+                cryptosuite = "NULL_HMAC_SHA1_80";
+            }
+            break;
 
-                        case HMAC_SHA1_32:
-                        {
-                            cryptosuite = "AES_CM_128_HMAC_SHA1_32";
-                        }
-                        break;
+            case HMAC_SHA1_32:
+            {
+                cryptosuite = "NULL_HMAC_SHA1_32";
+            }
+            break;
 
-                        default:
-                        {
-                            cryptosuite = "";
-                        }
-                        break;
-                    }
-                }
-                break;
-
-                case NULL_CIPHER:
-                {
-                    switch (_secondary_crypto.hmac_algorithm)
-                    {
-                        case HMAC_SHA1_80:
-                        {
-                            cryptosuite = "NULL_HMAC_SHA1_80";
-                        }
-                        break;
-
-                        case HMAC_SHA1_32:
-                        {
-                            cryptosuite = "NULL_HMAC_SHA1_32";
-                        }
-                        break;
-
-                        default:
-                        {
-                            cryptosuite = "";
-                        }
-                        break;
-                    }
-                }
-                break;
-
-                default:
-                {
-                    cryptosuite = "";
-                }
-                break;
+            default:
+            {
+                cryptosuite = "";
+            }
+            break;
             }
         }
         break;
@@ -2294,6 +2222,78 @@ std::string JLSRTP::getCryptoSuite()
             cryptosuite = "";
         }
         break;
+        }
+    }
+    break;
+
+    case SECONDARY_CRYPTO:
+    {
+        switch (_secondary_crypto.cipher_algorithm)
+        {
+        case AES_CM_128:
+        {
+            switch (_secondary_crypto.hmac_algorithm)
+            {
+            case HMAC_SHA1_80:
+            {
+                cryptosuite = "AES_CM_128_HMAC_SHA1_80";
+            }
+            break;
+
+            case HMAC_SHA1_32:
+            {
+                cryptosuite = "AES_CM_128_HMAC_SHA1_32";
+            }
+            break;
+
+            default:
+            {
+                cryptosuite = "";
+            }
+            break;
+            }
+        }
+        break;
+
+        case NULL_CIPHER:
+        {
+            switch (_secondary_crypto.hmac_algorithm)
+            {
+            case HMAC_SHA1_80:
+            {
+                cryptosuite = "NULL_HMAC_SHA1_80";
+            }
+            break;
+
+            case HMAC_SHA1_32:
+            {
+                cryptosuite = "NULL_HMAC_SHA1_32";
+            }
+            break;
+
+            default:
+            {
+                cryptosuite = "";
+            }
+            break;
+            }
+        }
+        break;
+
+        default:
+        {
+            cryptosuite = "";
+        }
+        break;
+        }
+    }
+    break;
+
+    default:
+    {
+        cryptosuite = "";
+    }
+    break;
     }
 
     return cryptosuite;
@@ -2317,48 +2317,48 @@ int JLSRTP::encodeMasterKeySalt(std::string &mks, ActiveCrypto crypto_attrib /*=
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            concat.insert(concat.end(), _primary_crypto.master_key.begin(), _primary_crypto.master_key.end());
-            concat.insert(concat.end(), _primary_crypto.master_salt.begin(), _primary_crypto.master_salt.end());
+    case PRIMARY_CRYPTO:
+    {
+        concat.insert(concat.end(), _primary_crypto.master_key.begin(), _primary_crypto.master_key.end());
+        concat.insert(concat.end(), _primary_crypto.master_salt.begin(), _primary_crypto.master_salt.end());
 
-            //std::cout << "encodeMasterKeySalt(): concat:[";
-            //for (int i = 0; i < concat.size(); i++)
-            //{
-            //    printf("%02X", concat[i]);
-            //}
-            //std::cout << "]" << std::endl;
+        //std::cout << "encodeMasterKeySalt(): concat:[";
+        //for (int i = 0; i < concat.size(); i++)
+        //{
+        //    printf("%02X", concat[i]);
+        //}
+        //std::cout << "]" << std::endl;
 
-            mks = base64Encode(concat);
+        mks = base64Encode(concat);
 
-            //std::cout << "encodeMasterKeySalt():  [" << mks << "]" << std::endl;
-            retVal = 0;
-        }
-        break;
+        //std::cout << "encodeMasterKeySalt():  [" << mks << "]" << std::endl;
+        retVal = 0;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            concat.insert(concat.end(), _secondary_crypto.master_key.begin(), _secondary_crypto.master_key.end());
-            concat.insert(concat.end(), _secondary_crypto.master_salt.begin(), _secondary_crypto.master_salt.end());
+    case SECONDARY_CRYPTO:
+    {
+        concat.insert(concat.end(), _secondary_crypto.master_key.begin(), _secondary_crypto.master_key.end());
+        concat.insert(concat.end(), _secondary_crypto.master_salt.begin(), _secondary_crypto.master_salt.end());
 
-            //std::cout << "encodeMasterKeySalt(): concat:[";
-            //for (int i = 0; i < concat.size(); i++)
-            //{
-            //    printf("%02X", concat[i]);
-            //}
-            //std::cout << "]" << std::endl;
+        //std::cout << "encodeMasterKeySalt(): concat:[";
+        //for (int i = 0; i < concat.size(); i++)
+        //{
+        //    printf("%02X", concat[i]);
+        //}
+        //std::cout << "]" << std::endl;
 
-            mks = base64Encode(concat);
+        mks = base64Encode(concat);
 
-            //std::cout << "encodeMasterKeySalt():  [" << mks << "]" << std::endl;
-            retVal = 0;
-        }
-        break;
+        //std::cout << "encodeMasterKeySalt():  [" << mks << "]" << std::endl;
+        retVal = 0;
+    }
+    break;
 
-        default:
-        {
-            retVal = -1;
-        }
+    default:
+    {
+        retVal = -1;
+    }
     }
 
     return retVal;
@@ -2385,81 +2385,81 @@ int JLSRTP::decodeMasterKeySalt(std::string &mks, ActiveCrypto crypto_attrib /*=
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            concat = base64Decode(mks);
+    case PRIMARY_CRYPTO:
+    {
+        concat = base64Decode(mks);
 
-            //std::cout << "decodeMasterKeySalt(): concat:[";
-            //for (int i = 0; i < concat.size(); i++)
-            //{
-            //    printf("%02X", concat[i]);
-            //}
-            //std::cout << "]" << std::endl;
+        //std::cout << "decodeMasterKeySalt(): concat:[";
+        //for (int i = 0; i < concat.size(); i++)
+        //{
+        //    printf("%02X", concat[i]);
+        //}
+        //std::cout << "]" << std::endl;
 
-            split_pos = _primary_crypto.n_e;
-            it_begin = concat.begin();
-            it_middle = concat.begin();
-            it_end = concat.end();
+        split_pos = _primary_crypto.n_e;
+        it_begin = concat.begin();
+        it_middle = concat.begin();
+        it_end = concat.end();
 
-            std::advance(it_middle, split_pos);
-            _primary_crypto.master_key.assign(it_begin, it_middle);
-            _primary_crypto.master_salt.assign(it_middle, it_end);
+        std::advance(it_middle, split_pos);
+        _primary_crypto.master_key.assign(it_begin, it_middle);
+        _primary_crypto.master_salt.assign(it_middle, it_end);
 
-            //std::cout << "decodeMasterKeySalt():  _masterKey:[";
-            //for (int i = 0; i < _primary_crypto.master_key.size(); i++)
-            //{
-            //    printf("%02X", _primary_crypto.master_key[i]);
-            //}
-            //std::cout << "] _masterSalt:[";
-            //for (int i = 0; i < _primary_crypto.master_salt.size(); i++)
-            //{
-            //    printf("%02X", _primary_crypto.master_salt[i]);
-            //}
-            //std::cout << "]" << std::endl;
-            retVal = 0;
-        }
-        break;
+        //std::cout << "decodeMasterKeySalt():  _masterKey:[";
+        //for (int i = 0; i < _primary_crypto.master_key.size(); i++)
+        //{
+        //    printf("%02X", _primary_crypto.master_key[i]);
+        //}
+        //std::cout << "] _masterSalt:[";
+        //for (int i = 0; i < _primary_crypto.master_salt.size(); i++)
+        //{
+        //    printf("%02X", _primary_crypto.master_salt[i]);
+        //}
+        //std::cout << "]" << std::endl;
+        retVal = 0;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            concat = base64Decode(mks);
+    case SECONDARY_CRYPTO:
+    {
+        concat = base64Decode(mks);
 
-            //std::cout << "decodeMasterKeySalt(): concat:[";
-            //for (int i = 0; i < concat.size(); i++)
-            //{
-            //    printf("%02X", concat[i]);
-            //}
-            //std::cout << "]" << std::endl;
+        //std::cout << "decodeMasterKeySalt(): concat:[";
+        //for (int i = 0; i < concat.size(); i++)
+        //{
+        //    printf("%02X", concat[i]);
+        //}
+        //std::cout << "]" << std::endl;
 
-            split_pos = _secondary_crypto.n_e;
-            it_begin = concat.begin();
-            it_middle = concat.begin();
-            it_end = concat.end();
+        split_pos = _secondary_crypto.n_e;
+        it_begin = concat.begin();
+        it_middle = concat.begin();
+        it_end = concat.end();
 
-            std::advance(it_middle, split_pos);
-            _secondary_crypto.master_key.assign(it_begin, it_middle);
-            _secondary_crypto.master_salt.assign(it_middle, it_end);
+        std::advance(it_middle, split_pos);
+        _secondary_crypto.master_key.assign(it_begin, it_middle);
+        _secondary_crypto.master_salt.assign(it_middle, it_end);
 
-            //std::cout << "decodeMasterKeySalt():  _masterKey:[";
-            //for (int i = 0; i < _secondary_crypto.master_key.size(); i++)
-            //{
-            //    printf("%02X", _secondary_crypto.master_key[i]);
-            //}
-            //std::cout << "] _masterSalt:[";
-            //for (int i = 0; i < _secondary_crypto.master_salt.size(); i++)
-            //{
-            //    printf("%02X", _secondary_crypto.master_salt[i]);
-            //}
-            //std::cout << "]" << std::endl;
-            retVal = 0;
-        }
-        break;
+        //std::cout << "decodeMasterKeySalt():  _masterKey:[";
+        //for (int i = 0; i < _secondary_crypto.master_key.size(); i++)
+        //{
+        //    printf("%02X", _secondary_crypto.master_key[i]);
+        //}
+        //std::cout << "] _masterSalt:[";
+        //for (int i = 0; i < _secondary_crypto.master_salt.size(); i++)
+        //{
+        //    printf("%02X", _secondary_crypto.master_salt[i]);
+        //}
+        //std::cout << "]" << std::endl;
+        retVal = 0;
+    }
+    break;
 
-        default:
-        {
-            retVal = -1;
-        }
-        break;
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -2569,7 +2569,7 @@ void JLSRTP::displayCryptoContext()
     std::cout << "_pseudorandomstate.ecount                    : [";
     for (unsigned i = 0; i < AES_BLOCK_SIZE; i++)
     {
-       printf("%02x", _pseudorandomstate.ecount[i]);
+        printf("%02x", _pseudorandomstate.ecount[i]);
     }
     std::cout << "]" << std::endl;
 
@@ -2759,77 +2759,77 @@ int JLSRTP::generateMasterKey(ActiveCrypto crypto_attrib /*= ACTIVE_CRYPTO*/)
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        if (RAND_bytes(_primary_crypto.master_key.data(), _primary_crypto.master_key.size()) == 1)
         {
-            if (RAND_bytes(_primary_crypto.master_key.data(), _primary_crypto.master_key.size()) == 1)
-            {
-                retVal = 0;
-            }
-            else
-            {
-                retVal = -1;
-            }
-/*
-            _primary_crypto.master_key.clear();
-            _primary_crypto.master_key.push_back(0xE1);
-            _primary_crypto.master_key.push_back(0xF9);
-            _primary_crypto.master_key.push_back(0x7A);
-            _primary_crypto.master_key.push_back(0x0D);
-            _primary_crypto.master_key.push_back(0x3E);
-            _primary_crypto.master_key.push_back(0x01);
-            _primary_crypto.master_key.push_back(0x8B);
-            _primary_crypto.master_key.push_back(0xE0);
-            _primary_crypto.master_key.push_back(0xD6);
-            _primary_crypto.master_key.push_back(0x4F);
-            _primary_crypto.master_key.push_back(0xA3);
-            _primary_crypto.master_key.push_back(0x2C);
-            _primary_crypto.master_key.push_back(0x06);
-            _primary_crypto.master_key.push_back(0xDE);
-            _primary_crypto.master_key.push_back(0x41);
-            _primary_crypto.master_key.push_back(0x39);
             retVal = 0;
-*/
         }
-        break;
-
-        case SECONDARY_CRYPTO:
-        {
-            if (RAND_bytes(_secondary_crypto.master_key.data(), _secondary_crypto.master_key.size()) == 1)
-            {
-                retVal = 0;
-            }
-            else
-            {
-                retVal = -1;
-            }
-/*
-            _secondary_crypto.master_key.clear();
-            _secondary_crypto.master_key.push_back(0xE1);
-            _secondary_crypto.master_key.push_back(0xF9);
-            _secondary_crypto.master_key.push_back(0x7A);
-            _secondary_crypto.master_key.push_back(0x0D);
-            _secondary_crypto.master_key.push_back(0x3E);
-            _secondary_crypto.master_key.push_back(0x01);
-            _secondary_crypto.master_key.push_back(0x8B);
-            _secondary_crypto.master_key.push_back(0xE0);
-            _secondary_crypto.master_key.push_back(0xD6);
-            _secondary_crypto.master_key.push_back(0x4F);
-            _secondary_crypto.master_key.push_back(0xA3);
-            _secondary_crypto.master_key.push_back(0x2C);
-            _secondary_crypto.master_key.push_back(0x06);
-            _secondary_crypto.master_key.push_back(0xDE);
-            _secondary_crypto.master_key.push_back(0x41);
-            _secondary_crypto.master_key.push_back(0x39);
-            retVal = 0;
-*/
-        }
-        break;
-
-        default:
+        else
         {
             retVal = -1;
         }
-        break;
+        /*
+                    _primary_crypto.master_key.clear();
+                    _primary_crypto.master_key.push_back(0xE1);
+                    _primary_crypto.master_key.push_back(0xF9);
+                    _primary_crypto.master_key.push_back(0x7A);
+                    _primary_crypto.master_key.push_back(0x0D);
+                    _primary_crypto.master_key.push_back(0x3E);
+                    _primary_crypto.master_key.push_back(0x01);
+                    _primary_crypto.master_key.push_back(0x8B);
+                    _primary_crypto.master_key.push_back(0xE0);
+                    _primary_crypto.master_key.push_back(0xD6);
+                    _primary_crypto.master_key.push_back(0x4F);
+                    _primary_crypto.master_key.push_back(0xA3);
+                    _primary_crypto.master_key.push_back(0x2C);
+                    _primary_crypto.master_key.push_back(0x06);
+                    _primary_crypto.master_key.push_back(0xDE);
+                    _primary_crypto.master_key.push_back(0x41);
+                    _primary_crypto.master_key.push_back(0x39);
+                    retVal = 0;
+        */
+    }
+    break;
+
+    case SECONDARY_CRYPTO:
+    {
+        if (RAND_bytes(_secondary_crypto.master_key.data(), _secondary_crypto.master_key.size()) == 1)
+        {
+            retVal = 0;
+        }
+        else
+        {
+            retVal = -1;
+        }
+        /*
+                    _secondary_crypto.master_key.clear();
+                    _secondary_crypto.master_key.push_back(0xE1);
+                    _secondary_crypto.master_key.push_back(0xF9);
+                    _secondary_crypto.master_key.push_back(0x7A);
+                    _secondary_crypto.master_key.push_back(0x0D);
+                    _secondary_crypto.master_key.push_back(0x3E);
+                    _secondary_crypto.master_key.push_back(0x01);
+                    _secondary_crypto.master_key.push_back(0x8B);
+                    _secondary_crypto.master_key.push_back(0xE0);
+                    _secondary_crypto.master_key.push_back(0xD6);
+                    _secondary_crypto.master_key.push_back(0x4F);
+                    _secondary_crypto.master_key.push_back(0xA3);
+                    _secondary_crypto.master_key.push_back(0x2C);
+                    _secondary_crypto.master_key.push_back(0x06);
+                    _secondary_crypto.master_key.push_back(0xDE);
+                    _secondary_crypto.master_key.push_back(0x41);
+                    _secondary_crypto.master_key.push_back(0x39);
+                    retVal = 0;
+        */
+    }
+    break;
+
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -2851,73 +2851,73 @@ int JLSRTP::generateMasterSalt(ActiveCrypto crypto_attrib /*= ACTIVE_CRYPTO*/)
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
+    case PRIMARY_CRYPTO:
+    {
+        if (RAND_bytes(_primary_crypto.master_salt.data(), _primary_crypto.master_salt.size()) == 1)
         {
-            if (RAND_bytes(_primary_crypto.master_salt.data(), _primary_crypto.master_salt.size()) == 1)
-            {
-                retVal = 0;
-            }
-            else
-            {
-                retVal = -1;
-            }
-/*
-            _primary_crypto.master_salt.clear();
-            _primary_crypto.master_salt.push_back(0x0E);
-            _primary_crypto.master_salt.push_back(0xC6);
-            _primary_crypto.master_salt.push_back(0x75);
-            _primary_crypto.master_salt.push_back(0xAD);
-            _primary_crypto.master_salt.push_back(0x49);
-            _primary_crypto.master_salt.push_back(0x8A);
-            _primary_crypto.master_salt.push_back(0xFE);
-            _primary_crypto.master_salt.push_back(0xEB);
-            _primary_crypto.master_salt.push_back(0xB6);
-            _primary_crypto.master_salt.push_back(0x96);
-            _primary_crypto.master_salt.push_back(0x0B);
-            _primary_crypto.master_salt.push_back(0x3A);
-            _primary_crypto.master_salt.push_back(0xAB);
-            _primary_crypto.master_salt.push_back(0xE6);
             retVal = 0;
-*/
         }
-        break;
-
-        case SECONDARY_CRYPTO:
-        {
-            if (RAND_bytes(_secondary_crypto.master_salt.data(), _secondary_crypto.master_salt.size()) == 1)
-            {
-                retVal = 0;
-            }
-            else
-            {
-                retVal = -1;
-            }
-/*
-            _secondary_crypto.master_salt.clear();
-            _secondary_crypto.master_salt.push_back(0x0E);
-            _secondary_crypto.master_salt.push_back(0xC6);
-            _secondary_crypto.master_salt.push_back(0x75);
-            _secondary_crypto.master_salt.push_back(0xAD);
-            _secondary_crypto.master_salt.push_back(0x49);
-            _secondary_crypto.master_salt.push_back(0x8A);
-            _secondary_crypto.master_salt.push_back(0xFE);
-            _secondary_crypto.master_salt.push_back(0xEB);
-            _secondary_crypto.master_salt.push_back(0xB6);
-            _secondary_crypto.master_salt.push_back(0x96);
-            _secondary_crypto.master_salt.push_back(0x0B);
-            _secondary_crypto.master_salt.push_back(0x3A);
-            _secondary_crypto.master_salt.push_back(0xAB);
-            _secondary_crypto.master_salt.push_back(0xE6);
-            retVal = 0;
-*/
-        }
-        break;
-
-        default:
+        else
         {
             retVal = -1;
         }
-        break;
+        /*
+                    _primary_crypto.master_salt.clear();
+                    _primary_crypto.master_salt.push_back(0x0E);
+                    _primary_crypto.master_salt.push_back(0xC6);
+                    _primary_crypto.master_salt.push_back(0x75);
+                    _primary_crypto.master_salt.push_back(0xAD);
+                    _primary_crypto.master_salt.push_back(0x49);
+                    _primary_crypto.master_salt.push_back(0x8A);
+                    _primary_crypto.master_salt.push_back(0xFE);
+                    _primary_crypto.master_salt.push_back(0xEB);
+                    _primary_crypto.master_salt.push_back(0xB6);
+                    _primary_crypto.master_salt.push_back(0x96);
+                    _primary_crypto.master_salt.push_back(0x0B);
+                    _primary_crypto.master_salt.push_back(0x3A);
+                    _primary_crypto.master_salt.push_back(0xAB);
+                    _primary_crypto.master_salt.push_back(0xE6);
+                    retVal = 0;
+        */
+    }
+    break;
+
+    case SECONDARY_CRYPTO:
+    {
+        if (RAND_bytes(_secondary_crypto.master_salt.data(), _secondary_crypto.master_salt.size()) == 1)
+        {
+            retVal = 0;
+        }
+        else
+        {
+            retVal = -1;
+        }
+        /*
+                    _secondary_crypto.master_salt.clear();
+                    _secondary_crypto.master_salt.push_back(0x0E);
+                    _secondary_crypto.master_salt.push_back(0xC6);
+                    _secondary_crypto.master_salt.push_back(0x75);
+                    _secondary_crypto.master_salt.push_back(0xAD);
+                    _secondary_crypto.master_salt.push_back(0x49);
+                    _secondary_crypto.master_salt.push_back(0x8A);
+                    _secondary_crypto.master_salt.push_back(0xFE);
+                    _secondary_crypto.master_salt.push_back(0xEB);
+                    _secondary_crypto.master_salt.push_back(0xB6);
+                    _secondary_crypto.master_salt.push_back(0x96);
+                    _secondary_crypto.master_salt.push_back(0x0B);
+                    _secondary_crypto.master_salt.push_back(0x3A);
+                    _secondary_crypto.master_salt.push_back(0xAB);
+                    _secondary_crypto.master_salt.push_back(0xE6);
+                    retVal = 0;
+        */
+    }
+    break;
+
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -2939,23 +2939,23 @@ std::vector<unsigned char> JLSRTP::getMasterKey(ActiveCrypto crypto_attrib /*= A
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            retVal = _primary_crypto.master_key;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        retVal = _primary_crypto.master_key;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            retVal = _secondary_crypto.master_key;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        retVal = _secondary_crypto.master_key;
+    }
+    break;
 
-        default:
-        {
-            retVal.clear();
-        }
-        break;
+    default:
+    {
+        retVal.clear();
+    }
+    break;
     }
 
     return retVal;
@@ -2977,23 +2977,23 @@ std::vector<unsigned char> JLSRTP::getMasterSalt(ActiveCrypto crypto_attrib /*= 
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            retVal = _primary_crypto.master_salt;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        retVal = _primary_crypto.master_salt;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            retVal = _secondary_crypto.master_salt;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        retVal = _secondary_crypto.master_salt;
+    }
+    break;
 
-        default:
-        {
-            retVal.clear();
-        }
-        break;
+    default:
+    {
+        retVal.clear();
+    }
+    break;
     }
 
     return retVal;
@@ -3015,25 +3015,25 @@ int JLSRTP::setMasterKey(std::vector<unsigned char> &key, ActiveCrypto crypto_at
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            _primary_crypto.master_key = key;
-            retVal = 0;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        _primary_crypto.master_key = key;
+        retVal = 0;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            _secondary_crypto.master_key = key;
-            retVal = 0;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        _secondary_crypto.master_key = key;
+        retVal = 0;
+    }
+    break;
 
-        default:
-        {
-            retVal = -1;
-        }
-        break;
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -3055,25 +3055,25 @@ int JLSRTP::setMasterSalt(std::vector<unsigned char> &salt, ActiveCrypto crypto_
 
     switch (active_crypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            _primary_crypto.master_salt = salt;
-            retVal = 0;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        _primary_crypto.master_salt = salt;
+        retVal = 0;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            _secondary_crypto.master_salt = salt;
-            retVal = 0;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        _secondary_crypto.master_salt = salt;
+        retVal = 0;
+    }
+    break;
 
-        default:
-        {
-            retVal = -1;
-        }
-        break;
+    default:
+    {
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -3152,26 +3152,26 @@ int JLSRTP::selectActiveCrypto(ActiveCrypto activeCrypto)
 
     switch (activeCrypto)
     {
-        case PRIMARY_CRYPTO:
-        {
-            _active_crypto = activeCrypto;
-            retVal = 0;
-        }
-        break;
+    case PRIMARY_CRYPTO:
+    {
+        _active_crypto = activeCrypto;
+        retVal = 0;
+    }
+    break;
 
-        case SECONDARY_CRYPTO:
-        {
-            _active_crypto = activeCrypto;
-            retVal = 0;
-        }
-        break;
+    case SECONDARY_CRYPTO:
+    {
+        _active_crypto = activeCrypto;
+        retVal = 0;
+    }
+    break;
 
-        default:
-        {
-            _active_crypto = INVALID_CRYPTO;
-            retVal = -1;
-        }
-        break;
+    default:
+    {
+        _active_crypto = INVALID_CRYPTO;
+        retVal = -1;
+    }
+    break;
     }
 
     return retVal;
@@ -3287,7 +3287,7 @@ bool JLSRTP::operator==(const JLSRTP& that)
         (_srtp_header_size == that._srtp_header_size) &&
         (_srtp_payload_size == that._srtp_payload_size) &&
         (_active_crypto == that._active_crypto)
-       )
+    )
     {
         return true;
     }

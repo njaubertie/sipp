@@ -106,7 +106,7 @@ extern  map<string, SIPpSocket *>     map_perip_fd;
 void *send_wrapper(void *);
 #endif
 int call::dynamicId       = 0;
-int call::maxDynamicId    = 10000+2000*4;      // FIXME both param to be in command line !!!!
+int call::maxDynamicId    = 10000 + 2000 * 4;  // FIXME both param to be in command line !!!!
 int call::startDynamicId  = 10000;             // FIXME both param to be in command line !!!!
 int call::stepDynamicId   = 4;                // FIXME both param to be in command line !!!!
 
@@ -116,15 +116,15 @@ static unsigned int next_number = 1;
 static unsigned int get_tdm_map_number()
 {
     unsigned int nb = 0;
-    unsigned int i=0;
-    unsigned int interval=0;
-    unsigned int random=0;
+    unsigned int i = 0;
+    unsigned int interval = 0;
+    unsigned int random = 0;
     bool found = false;
 
     /* Find a number in the tdm_map which is not in use */
-    interval = (tdm_map_a+1) * (tdm_map_b+1) * (tdm_map_c+1);
+    interval = (tdm_map_a + 1) * (tdm_map_b + 1) * (tdm_map_c + 1);
     random = rand() % interval;
-    while ((i<interval) && (!found)) {
+    while ((i < interval) && (!found)) {
         if (tdm_map[(random + i - 1) % interval] == false) {
             nb = (random + i - 1) % interval;
             found = true;
@@ -135,7 +135,7 @@ static unsigned int get_tdm_map_number()
     if (!found) {
         return 0;
     } else {
-        return nb+1;
+        return nb + 1;
     }
 }
 
@@ -229,9 +229,9 @@ int call::check_audio_ciphersuite_match(SrtpAudioInfoParams &pA)
     {
         audio_cs_len = strlen(_pref_audio_cs_out);
         if (!strncmp(_pref_audio_cs_out, "AES_CM_128_HMAC_SHA1_80", audio_cs_len) ||
-            !strncmp(_pref_audio_cs_out, "AES_CM_128_HMAC_SHA1_32", audio_cs_len) ||
-            !strncmp(_pref_audio_cs_out, "NULL_HMAC_SHA1_80", audio_cs_len) ||
-            !strncmp(_pref_audio_cs_out, "NULL_HMAC_SHA1_32", audio_cs_len))
+                !strncmp(_pref_audio_cs_out, "AES_CM_128_HMAC_SHA1_32", audio_cs_len) ||
+                !strncmp(_pref_audio_cs_out, "NULL_HMAC_SHA1_80", audio_cs_len) ||
+                !strncmp(_pref_audio_cs_out, "NULL_HMAC_SHA1_32", audio_cs_len))
         {
             if (!strncmp(pA.primary_audio_cryptosuite, _pref_audio_cs_out, audio_cs_len))
             {
@@ -262,9 +262,9 @@ int call::check_video_ciphersuite_match(SrtpVideoInfoParams &pV)
     {
         video_cs_len = strlen(_pref_video_cs_out);
         if (!strncmp(_pref_video_cs_out, "AES_CM_128_HMAC_SHA1_80", video_cs_len) ||
-            !strncmp(_pref_video_cs_out, "AES_CM_128_HMAC_SHA1_32", video_cs_len) ||
-            !strncmp(_pref_video_cs_out, "NULL_HMAC_SHA1_80", video_cs_len) ||
-            !strncmp(_pref_video_cs_out, "NULL_HMAC_SHA1_32", video_cs_len))
+                !strncmp(_pref_video_cs_out, "AES_CM_128_HMAC_SHA1_32", video_cs_len) ||
+                !strncmp(_pref_video_cs_out, "NULL_HMAC_SHA1_80", video_cs_len) ||
+                !strncmp(_pref_video_cs_out, "NULL_HMAC_SHA1_32", video_cs_len))
         {
             if (!strncmp(pV.primary_video_cryptosuite, _pref_video_cs_out, video_cs_len))
             {
@@ -329,7 +329,7 @@ std::string call::extract_rtp_remote_addr(const char* msg, int &ip_ver, int &aud
         pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
         if (pos2 != std::string::npos)
         {
-            sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+            sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
             sscanf(sub.c_str(), "%d", &image_port); /* parse port substring as integer */
         }
     }
@@ -343,7 +343,7 @@ std::string call::extract_rtp_remote_addr(const char* msg, int &ip_ver, int &aud
         pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
         if (pos2 != std::string::npos)
         {
-            sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+            sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
             sscanf(sub.c_str(), "%d", &audio_port); /* parse port substring as integer */
         }
     }
@@ -359,7 +359,7 @@ std::string call::extract_rtp_remote_addr(const char* msg, int &ip_ver, int &aud
             pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
             if (pos2 != std::string::npos)
             {
-                sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+                sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
                 sscanf(sub.c_str(), "%d", &audio_port);
             }
         }
@@ -374,8 +374,8 @@ std::string call::extract_rtp_remote_addr(const char* msg, int &ip_ver, int &aud
         pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
         if (pos2 != std::string::npos)
         {
-            sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
-           sscanf(sub.c_str(), "%d", &video_port); /* parse port substring as integer */
+            sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
+            sscanf(sub.c_str(), "%d", &video_port); /* parse port substring as integer */
         }
     }
 
@@ -390,13 +390,13 @@ std::string call::extract_rtp_remote_addr(const char* msg, int &ip_ver, int &aud
             pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
             if (pos2 != std::string::npos)
             {
-                sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+                sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
                 sscanf(sub.c_str(), "%d", &video_port);
             }
         }
     }
 
-    if ((audio_port==0)&&(video_port==0)&&(image_port==0)) {
+    if ((audio_port == 0) && (video_port == 0) && (image_port == 0)) {
         ERROR("extract_rtp_remote_addr: no m=audio or m=video or m=image line found in SDP message body");
     }
 
@@ -458,8 +458,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
     std::size_t vmsection_limit = 0;
 
     /* Look for start of message body */
-    ro_search= strstr(msg,"\n\n"); // UNIX line endings (LFLF) between header/body sections
-    alt_search= strstr(msg, "\r\n\r\n"); // DOS line endings (CRLFCRLF) between header/body sections
+    ro_search = strstr(msg, "\n\n"); // UNIX line endings (LFLF) between header/body sections
+    alt_search = strstr(msg, "\r\n\r\n"); // DOS line endings (CRLFCRLF) between header/body sections
 
     if (ro_search) {
         sdp_body = strdup(ro_search);
@@ -488,7 +488,7 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
             pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
             if (pos2 != std::string::npos)
             {
-                sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+                sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
                 sscanf(sub.c_str(), "%d", &audio_port); /* parse port substring as integer */
                 if (audio_port != 0)
                 {
@@ -507,7 +507,7 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
                         pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
                         if (pos2 != std::string::npos)
                         {
-                            sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+                            sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
                             sscanf(sub.c_str(), "%d", &audio_port);
                             if (audio_port != 0)
                             {
@@ -550,8 +550,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
         vmsection_limit = msgstr.find("\nm=video", cur_pos, 8);
 
         if (audioExists &&
-            (((amsection_limit != std::string::npos) && (cur_pos != std::string::npos) && (cur_pos < amsection_limit)) ||
-             ((amsection_limit == std::string::npos) && (vmsection_limit == std::string::npos) && (cur_pos != std::string::npos))))
+                (((amsection_limit != std::string::npos) && (cur_pos != std::string::npos) && (cur_pos < amsection_limit)) ||
+                 ((amsection_limit == std::string::npos) && (vmsection_limit == std::string::npos) && (cur_pos != std::string::npos))))
         {
             // AUDIO "m=audio" prefix found...
             pA.audio_found = true;
@@ -563,9 +563,9 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
                 if (mline_eol != std::string::npos) {
                     mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pA.primary_audio_cryptotag,
-                                                                                    pA.primary_audio_cryptosuite,
-                                                                                    pA.primary_audio_cryptokeyparams,
-                                                                                    crypto_audio_sessionparams);
+                           pA.primary_audio_cryptosuite,
+                           pA.primary_audio_cryptokeyparams,
+                           crypto_audio_sessionparams);
                     checkUESRTP = strstr(crypto_audio_sessionparams, "UNENCRYPTED_SRTP");
                     if (checkUESRTP) {
                         logSrtpInfo("call::extract_srtp_remote_info():  Detected UNENCRYPTED_SRTP token for PRIMARY AUDIO\n");
@@ -578,19 +578,19 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
             }
 
             // Look for end-of-audio-media section
-            msection_limit = msgstr.find("\nm=", mline_eol+1, 3);
+            msection_limit = msgstr.find("\nm=", mline_eol + 1, 3);
 
-            mline_sol = msgstr.find(SDP_AUDIOCRYPTO_PREFIX, mline_eol+1, 10);
+            mline_sol = msgstr.find(SDP_AUDIOCRYPTO_PREFIX, mline_eol + 1, 10);
             if (((msection_limit != std::string::npos) && (mline_sol != std::string::npos) && (mline_sol < msection_limit)) ||
-                ((msection_limit == std::string::npos) && (mline_sol != std::string::npos))) {
+                    ((msection_limit == std::string::npos) && (mline_sol != std::string::npos))) {
                 // SECONDARY AUDIO "a:crypto:" crypto prefix found
                 mline_eol = msgstr.find("\n", mline_sol, 1);
                 if (mline_eol != std::string::npos) {
                     mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pA.secondary_audio_cryptotag,
-                                                                                    pA.secondary_audio_cryptosuite,
-                                                                                    pA.secondary_audio_cryptokeyparams,
-                                                                                    crypto_audio_sessionparams);
+                           pA.secondary_audio_cryptosuite,
+                           pA.secondary_audio_cryptokeyparams,
+                           crypto_audio_sessionparams);
                     checkUESRTP = strstr(crypto_audio_sessionparams, "UNENCRYPTED_SRTP");
                     if (checkUESRTP) {
                         logSrtpInfo("call::extract_srtp_remote_info():  Detected UNENCRYPTED_SRTP token for SECONDARY AUDIO\n");
@@ -614,7 +614,7 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
             pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
             if (pos2 != std::string::npos)
             {
-                sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+                sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
                 sscanf(sub.c_str(), "%d", &video_port); /* parse port substring as integer */
                 if (video_port != 0)
                 {
@@ -633,7 +633,7 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
                         pos2 = msgstr.find(" ", pos1); /* find second whitespace AFTER port */
                         if (pos2 != std::string::npos)
                         {
-                            sub = msgstr.substr(pos1, pos2-pos1); /* extract port substring */
+                            sub = msgstr.substr(pos1, pos2 - pos1); /* extract port substring */
                             sscanf(sub.c_str(), "%d", &video_port);
                             if (video_port != 0)
                             {
@@ -676,8 +676,8 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
         amsection_limit = msgstr.find("\nm=audio", cur_pos, 8);
 
         if (videoExists &&
-            (((vmsection_limit != std::string::npos) && (cur_pos != std::string::npos) && (cur_pos < vmsection_limit)) ||
-             ((vmsection_limit == std::string::npos) && (amsection_limit == std::string::npos) && (cur_pos != std::string::npos))))
+                (((vmsection_limit != std::string::npos) && (cur_pos != std::string::npos) && (cur_pos < vmsection_limit)) ||
+                 ((vmsection_limit == std::string::npos) && (amsection_limit == std::string::npos) && (cur_pos != std::string::npos))))
         {
             // VIDEO "m=video" prefix found...
             pV.video_found = true;
@@ -689,9 +689,9 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
                 if (mline_eol != std::string::npos) {
                     mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pV.primary_video_cryptotag,
-                                                                                    pV.primary_video_cryptosuite,
-                                                                                    pV.primary_video_cryptokeyparams,
-                                                                                    crypto_video_sessionparams);
+                           pV.primary_video_cryptosuite,
+                           pV.primary_video_cryptokeyparams,
+                           crypto_video_sessionparams);
                     checkUESRTP = strstr(crypto_video_sessionparams, "UNENCRYPTED_SRTP");
                     if (checkUESRTP) {
                         logSrtpInfo("call::extract_srtp_remote_info():  Detected UNENCRYPTED_SRTP token for PRIMARY VIDEO\n");
@@ -704,19 +704,19 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
             }
 
             // Look for end-of-video-media section
-            msection_limit = msgstr.find("\nm=", mline_eol+1, 3);
+            msection_limit = msgstr.find("\nm=", mline_eol + 1, 3);
 
-            mline_sol = msgstr.find(SDP_VIDEOCRYPTO_PREFIX, mline_eol+1, 10);
+            mline_sol = msgstr.find(SDP_VIDEOCRYPTO_PREFIX, mline_eol + 1, 10);
             if (((msection_limit != std::string::npos) && (mline_sol != std::string::npos) && (mline_sol < msection_limit)) ||
-                ((msection_limit == std::string::npos) && (mline_sol != std::string::npos))) {
+                    ((msection_limit == std::string::npos) && (mline_sol != std::string::npos))) {
                 // SECONDARY VIDEO "a:crypto:" crypto prefix found
                 mline_eol = msgstr.find("\n", mline_sol, 1);
                 if (mline_eol != std::string::npos) {
                     mline_contents = msgstr.substr(mline_sol, mline_eol);
                     sscanf(mline_contents.c_str(), "\na=crypto:%d %s inline:%s %s", &pV.secondary_video_cryptotag,
-                                                                                    pV.secondary_video_cryptosuite,
-                                                                                    pV.secondary_video_cryptokeyparams,
-                                                                                    crypto_video_sessionparams);
+                           pV.secondary_video_cryptosuite,
+                           pV.secondary_video_cryptokeyparams,
+                           crypto_video_sessionparams);
                     checkUESRTP = strstr(crypto_video_sessionparams, "UNENCRYPTED_SRTP");
                     if (checkUESRTP) {
                         logSrtpInfo("call::extract_srtp_remote_info():  Detected UNENCRYPTED_SRTP token for SECONDARY VIDEO\n");
@@ -733,7 +733,7 @@ int call::extract_srtp_remote_info(const char * msg, SrtpAudioInfoParams &pA, Sr
 
         return 0; /* SUCCESS -- parsed SDP SRTP INFO */
     } else {
-      return -1; /* FAILURE -- No SDP body found */
+        return -1; /* FAILURE -- No SDP body found */
     }
 }
 #endif
@@ -808,22 +808,22 @@ call *call::add_call(int userId, bool ipv6, struct sockaddr_storage *dest)
     const char * src = call_id_string;
     int count = 0;
 
-    if(!next_number) {
+    if (!next_number) {
         next_number ++;
     }
 
-    while (*src && count < MAX_HEADER_LEN-1) {
+    while (*src && count < MAX_HEADER_LEN - 1) {
         if (*src == '%') {
             ++src;
-            switch(*src++) {
+            switch (*src++) {
             case 'u':
-                count += snprintf(&call_id[count], MAX_HEADER_LEN-count-1,"%u", next_number);
+                count += snprintf(&call_id[count], MAX_HEADER_LEN - count - 1, "%u", next_number);
                 break;
             case 'p':
-                count += snprintf(&call_id[count], MAX_HEADER_LEN-count-1,"%u", pid);
+                count += snprintf(&call_id[count], MAX_HEADER_LEN - count - 1, "%u", pid);
                 break;
             case 's':
-                count += snprintf(&call_id[count], MAX_HEADER_LEN-count-1,"%s", local_ip);
+                count += snprintf(&call_id[count], MAX_HEADER_LEN - count - 1, "%s", local_ip);
                 break;
             default:      // treat all unknown sequences as %%
                 call_id[count++] = '%';
@@ -902,8 +902,8 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
     comp_state = NULL;
 
     start_time = clock_tick;
-    call_established=false ;
-    ack_is_pending=false ;
+    call_established = false ;
+    ack_is_pending = false ;
     last_recv_msg = NULL;
     cseq = base_cseq;
     nb_last_delay = 0;
@@ -1102,13 +1102,13 @@ bool call::checkAckCSeq(const char* msg)
     memset(request, 0, sizeof(request));
 
     if ((msg[0] == 'S') &&
-        (msg[1] == 'I') &&
-        (msg[2] == 'P') &&
-        (msg[3] == '/') &&
-        (msg[4] == '2') &&
-        (msg[5] == '.') &&
-        (msg[6] == '0')) {
-        request[0]=0;
+            (msg[1] == 'I') &&
+            (msg[2] == 'P') &&
+            (msg[3] == '/') &&
+            (msg[4] == '2') &&
+            (msg[5] == '.') &&
+            (msg[6] == '0')) {
+        request[0] = 0;
     } else if ((ptr = strchr(msg, ' '))) {
         if ((ptr - msg) < 64) {
             memcpy(request, msg, ptr - msg);
@@ -1162,7 +1162,7 @@ call::~call()
 {
     computeStat(CStat::E_ADD_CALL_DURATION, clock_tick - start_time);
 
-    if(comp_state) {
+    if (comp_state) {
         comp_free(&comp_state);
     }
 
@@ -1171,7 +1171,7 @@ call::~call()
     }
 
     /* Deletion of the call variable */
-    if(M_callVariableTable) {
+    if (M_callVariableTable) {
         M_callVariableTable->putTable();
     }
     if (m_lineNumber) {
@@ -1267,7 +1267,7 @@ void call::computeStat(CStat::E_Action P_action)
     call_scenario->stats->computeStat(P_action);
 }
 
-void call::computeStat (CStat::E_Action P_action, unsigned long P_value)
+void call::computeStat(CStat::E_Action P_action, unsigned long P_value)
 {
     if (initCall) {
         return;
@@ -1275,7 +1275,7 @@ void call::computeStat (CStat::E_Action P_action, unsigned long P_value)
     call_scenario->stats->computeStat(P_action, P_value);
 }
 
-void call::computeStat (CStat::E_Action P_action, unsigned long P_value, int which)
+void call::computeStat(CStat::E_Action P_action, unsigned long P_value, int which)
 {
     if (initCall) {
         return;
@@ -1312,13 +1312,13 @@ bool call::connect_socket_if_needed()
 {
     bool existing;
 
-    if(call_socket) return true;
-    if(!multisocket) return true;
+    if (call_socket) return true;
+    if (!multisocket) return true;
 
-    if(transport == T_UDP) {
+    if (transport == T_UDP) {
         struct sockaddr_storage saddr;
 
-        if(sendMode != MODE_CLIENT)
+        if (sendMode != MODE_CLIENT)
             return true;
 
         char peripaddr[256];
@@ -1384,7 +1384,7 @@ bool call::connect_socket_if_needed()
 
         if (call_socket->connect(L_dest)) {
             if (reconnect_allowed()) {
-                if(errno == EINVAL) {
+                if (errno == EINVAL) {
                     /* This occurs sometime on HPUX but is not a true INVAL */
                     WARNING("Unable to connect a TCP/SCTP/TLS socket, remote peer error");
                 } else {
@@ -1404,7 +1404,7 @@ bool call::connect_socket_if_needed()
 
                 return false;
             } else {
-                if(errno == EINVAL) {
+                if (errno == EINVAL) {
                     /* This occurs sometime on HPUX but is not a true INVAL */
                     ERROR("Unable to connect a TCP/SCTP/TLS socket, remote peer error");
                 } else {
@@ -1422,7 +1422,7 @@ bool call::lost(int index)
     static int inited = 0;
     double percent = global_lost;
 
-    if(!lose_packets) return false;
+    if (!lose_packets) return false;
 
     if (call_scenario->messages[index]->lost >= 0) {
         percent = call_scenario->messages[index]->lost;
@@ -1432,7 +1432,7 @@ bool call::lost(int index)
         return false;
     }
 
-    if(!inited) {
+    if (!inited) {
         srand((unsigned int) time(NULL));
         inited = 1;
     }
@@ -1448,12 +1448,12 @@ int call::send_raw(const char * msg, int index, int len)
     callDebug("Sending %s message for call %s (index %d, hash %lu):\n%s\n\n",
               TRANSPORT_TO_STRING(transport), id, index, hash(msg), msg);
 
-    if((index!=-1) && (lost(index))) {
+    if ((index != -1) && (lost(index))) {
         TRACE_MSG("%s message voluntary lost (while sending).", TRANSPORT_TO_STRING(transport));
         callDebug("%s message voluntary lost (while sending) (index %d, hash %lu).\n",
                   TRANSPORT_TO_STRING(transport), index, hash(msg));
 
-        if(comp_state) {
+        if (comp_state) {
             comp_free(&comp_state);
         }
         call_scenario->messages[index] -> nb_lost++;
@@ -1467,15 +1467,15 @@ int call::send_raw(const char * msg, int index, int len)
             if (multisocket || !main_remote_socket) {
                 struct sockaddr_storage *L_dest = &remote_sending_sockaddr;
 
-                if((call_remote_socket= new_sipp_socket(use_ipv6, transport)) == NULL) {
+                if ((call_remote_socket = new_sipp_socket(use_ipv6, transport)) == NULL) {
                     ERROR_NO("Unable to get a socket for rsa option");
                 }
 
                 sipp_customize_socket(call_remote_socket);
 
-                if(transport != T_UDP) {
+                if (transport != T_UDP) {
                     if (call_remote_socket->connect(L_dest)) {
-                        if(errno == EINVAL) {
+                        if (errno == EINVAL) {
                             /* This occurs sometime on HPUX but is not a true INVAL */
                             ERROR("Unable to connect a %s socket for rsa option, remote peer error", TRANSPORT_TO_STRING(transport));
                         } else {
@@ -1493,22 +1493,22 @@ int call::send_raw(const char * msg, int index, int len)
                 main_remote_socket->ss_count++;
             }
         }
-        sock=call_remote_socket ;
+        sock = call_remote_socket ;
     }
 
     // If the length hasn't been explicitly specified, treat the message as a string
-    if (len==0) {
+    if (len == 0) {
         len = strlen(msg);
     }
 
     assert(sock);
 
     rc = sock->write(msg, len, WS_BUFFER, &call_peer);
-    if(rc < 0 && errno == EWOULDBLOCK) {
+    if (rc < 0 && errno == EWOULDBLOCK) {
         return rc;
     }
 
-    if(rc < 0) {
+    if (rc < 0) {
         computeStat(CStat::E_CALL_FAILED);
         computeStat(CStat::E_FAILED_CANNOT_SEND_MSG);
         delete this;
@@ -1541,10 +1541,10 @@ char * call::get_header_field_code(const char *msg, const char * name)
     i = 0;
     /* If we find the field in msg */
     last_header = get_header_content(msg, name);
-    if(last_header) {
+    if (last_header) {
         /* Extract the integer value of the field */
-        while(isspace(*last_header)) last_header++;
-        sscanf(last_header,"%d", &i);
+        while (isspace(*last_header)) last_header++;
+        sscanf(last_header, "%d", &i);
         sprintf(code, "%s %d", name, i);
     }
     return code;
@@ -1554,7 +1554,7 @@ char * call::get_last_header(const char * name)
 {
     int len;
 
-    if((!last_recv_msg) || (!strlen(last_recv_msg))) {
+    if ((!last_recv_msg) || (!strlen(last_recv_msg))) {
         return NULL;
     }
 
@@ -1650,8 +1650,8 @@ char * call::send_scene(int index, int *send_status, int *len)
         return NULL;
     }
 
-    L_ptr1=msg_name ;
-    L_ptr2=dest ;
+    L_ptr1 = msg_name ;
+    L_ptr2 = dest ;
     while ((*L_ptr2 != ' ') && (*L_ptr2 != '\n') && (*L_ptr2 != '\t'))  {
         *L_ptr1 = *L_ptr2;
         L_ptr1 ++;
@@ -1659,7 +1659,7 @@ char * call::send_scene(int index, int *send_status, int *len)
     }
     *L_ptr1 = '\0' ;
 
-    if (strcmp(msg_name,"ACK") == 0) {
+    if (strcmp(msg_name, "ACK") == 0) {
         call_established = true ;
         ack_is_pending = false ;
     }
@@ -1713,8 +1713,8 @@ void call::terminate(CStat::E_Action reason)
     stopListening();
 
     // Call end -> was it successful?
-    if(call::last_action_result != call::E_AR_NO_ERROR) {
-        switch(call::last_action_result) {
+    if (call::last_action_result != call::E_AR_NO_ERROR) {
+        switch (call::last_action_result) {
         case call::E_AR_REGEXP_DOESNT_MATCH:
             computeStat(CStat::E_CALL_FAILED);
             computeStat(CStat::E_FAILED_REGEXP_DOESNT_MATCH);
@@ -1829,7 +1829,7 @@ bool call::next()
              M_callVariableTable->getVar(test)->isSet())) {
         /* Branching possible, check the probability */
         int chance = (*msgs)[msg_index]->chance;
-        if ((chance <= 0) || (rand() > chance )) {
+        if ((chance <= 0) || (rand() > chance)) {
             /* Branch == overwrite with the 'next' attribute value */
             new_msg_index = (*msgs)[msg_index]->next;
         }
@@ -1881,16 +1881,16 @@ bool call::executeMessage(message *curmsg)
         callDebug("Pausing call until %d (is now %ld).\n", paused_until, clock_tick);
         setPaused();
         return true;
-    } else if(curmsg -> M_type == MSG_TYPE_SENDCMD) {
+    } else if (curmsg -> M_type == MSG_TYPE_SENDCMD) {
         int send_status;
 
-        if(next_retrans) {
+        if (next_retrans) {
             return true;
         }
 
         send_status = sendCmdMessage(curmsg);
 
-        if(send_status != 0) { /* Send error */
+        if (send_status != 0) { /* Send error */
             return false; /* call deleted */
         }
         curmsg -> M_nbCmdSent++;
@@ -1898,8 +1898,8 @@ bool call::executeMessage(message *curmsg)
 
         do_bookkeeping(curmsg);
         executeAction(NULL, curmsg);
-        return(next());
-    } else if(curmsg -> M_type == MSG_TYPE_NOP) {
+        return (next());
+    } else if (curmsg -> M_type == MSG_TYPE_NOP) {
         callDebug("Executing NOP at index %d.\n", curmsg->index);
         do_bookkeeping(curmsg);
         actionResult = executeAction(NULL, curmsg);
@@ -1915,7 +1915,7 @@ bool call::executeMessage(message *curmsg)
         }
     }
 
-    else if(curmsg -> send_scheme) {
+    else if (curmsg -> send_scheme) {
         char * msg_snd;
         int msgLen;
         int send_status;
@@ -1923,7 +1923,7 @@ bool call::executeMessage(message *curmsg)
         /* Do not send a new message until the previous one which had
          * retransmission enabled is acknowledged */
 
-        if(next_retrans) {
+        if (next_retrans) {
             setPaused();
             return true;
         }
@@ -1952,7 +1952,7 @@ bool call::executeMessage(message *curmsg)
             ERROR("Call failed, cannot continue safely...");
         }
 
-        if(send_status < 0 && errno == EWOULDBLOCK) {
+        if (send_status < 0 && errno == EWOULDBLOCK) {
             if (incr_cseq) --cseq;
             /* Have we set the timeout yet? */
             if (send_timeout) {
@@ -1977,7 +1977,7 @@ bool call::executeMessage(message *curmsg)
                 send_timeout = clock_tick + defl_send_timeout;
             }
             return true; /* No step, nothing done, retry later */
-        } else if(send_status < 0) { /* Send error */
+        } else if (send_status < 0) { /* Send error */
             /* The call was already deleted by connect_socket_if_needed or send_raw,
              * so we should no longer access members. */
             return false;
@@ -1987,7 +1987,7 @@ bool call::executeMessage(message *curmsg)
 
         last_send_index = curmsg->index;
         last_send_len = msgLen;
-        realloc_ptr = (char *) realloc(last_send_msg, msgLen+1);
+        realloc_ptr = (char *) realloc(last_send_msg, msgLen + 1);
         if (realloc_ptr) {
             last_send_msg = realloc_ptr;
         } else {
@@ -2006,7 +2006,7 @@ bool call::executeMessage(message *curmsg)
             transactions[curmsg->ack_txn - 1].ackIndex = curmsg->index;
         }
 
-        if(last_recv_index >= 0) {
+        if (last_recv_index >= 0) {
             /* We are sending just after msg reception. There is a great
              * chance that we will be asked to retransmit this message */
             recv_retrans_hash       = last_recv_hash;
@@ -2022,8 +2022,8 @@ bool call::executeMessage(message *curmsg)
         }
 
         /* Update retransmission information */
-        if(curmsg -> retrans_delay) {
-            if((transport == T_UDP) && (retrans_enabled)) {
+        if (curmsg -> retrans_delay) {
+            if ((transport == T_UDP) && (retrans_enabled)) {
                 next_retrans = clock_tick + curmsg -> retrans_delay;
                 nb_retrans = 0;
                 nb_last_delay = curmsg->retrans_delay;
@@ -2048,7 +2048,7 @@ bool call::executeMessage(message *curmsg)
             free(msg);
             return ret;
         } else if (recv_timeout) {
-            if(recv_timeout > getmilliseconds()) {
+            if (recv_timeout > getmilliseconds()) {
                 setPaused();
                 return true;
             }
@@ -2116,12 +2116,12 @@ bool call::run()
 
     message *curmsg;
     if (initCall) {
-        if(msg_index >= (int)call_scenario->initmessages.size()) {
+        if (msg_index >= (int)call_scenario->initmessages.size()) {
             ERROR("Scenario initialization overrun for call %s (%p) (index = %d)", id, _RCAST(void*, this), msg_index);
         }
         curmsg = call_scenario->initmessages[msg_index];
     } else {
-        if(msg_index >= (int)call_scenario->messages.size()) {
+        if (msg_index >= (int)call_scenario->messages.size()) {
             ERROR("Scenario overrun for call %s (%p) (index = %d)", id, _RCAST(void*, this), msg_index);
         }
         curmsg = call_scenario->messages[msg_index];
@@ -2141,10 +2141,10 @@ bool call::run()
     }
 
     /* Manages retransmissions or delete if max retrans reached */
-    if(next_retrans && (next_retrans < clock_tick)) {
+    if (next_retrans && (next_retrans < clock_tick)) {
         nb_retrans++;
 
-        if ( (0 == strncmp (last_send_msg, "INVITE", 6)) ) {
+        if ((0 == strncmp(last_send_msg, "INVITE", 6))) {
             bInviteTransaction = true;
         }
 
@@ -2152,7 +2152,7 @@ bool call::run()
 
         callDebug("Retransmisison required (%d retransmissions, max %d)\n", nb_retrans, rtAllowed);
 
-        if(nb_retrans > rtAllowed) {
+        if (nb_retrans > rtAllowed) {
             call_scenario->messages[last_send_index] -> nb_timeout ++;
             if (call_scenario->messages[last_send_index]->on_timeout >= 0) {  // action on timeout
                 WARNING("Call-Id: %s, timeout on max UDP retrans for message %d, jumping to label %d ",
@@ -2169,7 +2169,7 @@ bool call::run()
                 computeStat(CStat::E_FAILED_MAX_UDP_RETRANS);
                 if (default_behaviors & DEFAULT_BEHAVIOR_BYE) {
                     // Abort the call by sending proper SIP message
-                    return(abortCall(true));
+                    return (abortCall(true));
                 } else {
                     // Just delete existing call
                     delete this;
@@ -2181,7 +2181,7 @@ bool call::run()
             if (default_behaviors & DEFAULT_BEHAVIOR_BYE) {
                 // Abort the call by sending proper SIP message
                 WARNING("Aborting call on UDP retransmission timeout for Call-ID '%s'", id);
-                return(abortCall(true));
+                return (abortCall(true));
             } else {
                 // Just delete existing call
                 delete this;
@@ -2194,7 +2194,7 @@ bool call::run()
                     nb_last_delay = global_t2;
                 }
             }
-            if(send_raw(last_send_msg, last_send_index, last_send_len) < -1) {
+            if (send_raw(last_send_msg, last_send_index, last_send_len) < -1) {
                 return false;
             }
             call_scenario->messages[last_send_index] -> nb_sent_retrans++;
@@ -2203,9 +2203,9 @@ bool call::run()
         }
     }
 
-    if(paused_until) {
+    if (paused_until) {
         /* Process a pending pause instruction until delay expiration */
-        if(paused_until > clock_tick) {
+        if (paused_until > clock_tick) {
             callDebug("Call is paused until %d (now %ld).\n", paused_until, clock_tick);
             setPaused();
             callDebug("Running: %d (wake %d).\n", running, wake());
@@ -2287,7 +2287,7 @@ SendingMessage **default_messages;
 
 void init_default_messages()
 {
-    int messages = sizeof(default_message_strings)/sizeof(default_message_strings[0]);
+    int messages = sizeof(default_message_strings) / sizeof(default_message_strings[0]);
     default_messages = new SendingMessage* [messages];
     for (int i = 0; i < messages; i++) {
         default_messages[i] = new SendingMessage(main_scenario, const_cast<char*>(default_message_strings[i]));
@@ -2296,7 +2296,7 @@ void init_default_messages()
 
 void free_default_messages()
 {
-    int messages = sizeof(default_message_strings)/sizeof(default_message_strings[0]);
+    int messages = sizeof(default_message_strings) / sizeof(default_message_strings[0]);
     if (!default_messages) {
         return;
     }
@@ -2308,7 +2308,7 @@ void free_default_messages()
 
 SendingMessage *get_default_message(const char *which)
 {
-    int messages = sizeof(default_message_names)/sizeof(default_message_names[0]);
+    int messages = sizeof(default_message_names) / sizeof(default_message_names[0]);
     for (int i = 0; i < messages; i++) {
         if (!strcmp(which, default_message_names[i])) {
             return default_messages[i];
@@ -2319,7 +2319,7 @@ SendingMessage *get_default_message(const char *which)
 
 void set_default_message(const char *which, char *msg)
 {
-    int messages = sizeof(default_message_names)/sizeof(default_message_names[0]);
+    int messages = sizeof(default_message_names) / sizeof(default_message_names[0]);
     for (int i = 0; i < messages; i++) {
         if (!strcmp(which, default_message_names[i])) {
             default_message_strings[i] = msg;
@@ -2440,7 +2440,7 @@ bool call::abortCall(bool writeLog)
 
             // Answer unexpected errors (4XX, 5XX and beyond) with an ACK
             // Contributed by F. Tarek Rogers
-            if((src_recv) && (get_reply_code(src_recv) >= 400)) {
+            if ((src_recv) && (get_reply_code(src_recv) >= 400)) {
                 sendBuffer(createSendingMessage(get_default_message("ack"), -2));
             } else if (src_recv) {
                 /* Call is not established and the reply is not a 4XX, 5XX */
@@ -2475,8 +2475,8 @@ bool call::abortCall(bool writeLog)
     }
 
     if (writeLog && useCallDebugf) {
-        TRACE_CALLDEBUG ("-------------------------------------------------------------------------------\n");
-        TRACE_CALLDEBUG ("Call debugging information for call %s:\n", id);
+        TRACE_CALLDEBUG("-------------------------------------------------------------------------------\n");
+        TRACE_CALLDEBUG("Call debugging information for call %s:\n", id);
         TRACE_CALLDEBUG("%s", debugBuffer);
     }
 
@@ -2504,14 +2504,14 @@ int call::sendCmdMessage(message *curmsg)
 {
     char * dest;
     char delimitor[2];
-    delimitor[0]=27;
-    delimitor[1]=0;
+    delimitor[0] = 27;
+    delimitor[1] = 0;
 
     /* 3pcc extended mode */
     char * peer_dest;
     SIPpSocket **peer_socket;
 
-    if(curmsg -> M_sendCmdData) {
+    if (curmsg -> M_sendCmdData) {
         // WARNING("---PREPARING_TWIN_CMD---%s---", scenario[index] -> M_sendCmdData);
         dest = createSendingMessage(curmsg -> M_sendCmdData, -1);
         strcat(dest, delimitor);
@@ -2521,22 +2521,22 @@ int call::sendCmdMessage(message *curmsg)
 
         /* 3pcc extended mode */
         peer_dest = curmsg->peer_dest;
-        if(peer_dest) {
+        if (peer_dest) {
             peer_socket = get_peer_socket(peer_dest);
             rc = (*peer_socket)->write(dest, strlen(dest), WS_BUFFER, &call_peer);
         } else {
             rc = twinSippSocket->write(dest, strlen(dest), WS_BUFFER, &call_peer);
         }
-        if(rc <  0) {
+        if (rc <  0) {
             computeStat(CStat::E_CALL_FAILED);
             computeStat(CStat::E_FAILED_CMD_NOT_SENT);
             delete this;
-            return(-1);
+            return (-1);
         }
 
-        return(0);
+        return (0);
     } else
-        return(-1);
+        return (-1);
 }
 
 
@@ -2546,28 +2546,28 @@ int call::sendCmdBuffer(char* cmd)
     char delimitor[2];
     int  rc;
 
-    delimitor[0]=27;
-    delimitor[1]=0;
+    delimitor[0] = 27;
+    delimitor[1] = 0;
 
     dest = cmd ;
 
     strcat(dest, delimitor);
 
     rc = twinSippSocket->write(dest, strlen(dest), WS_BUFFER, &twinSippSocket->ss_dest);
-    if(rc <  0) {
+    if (rc <  0) {
         computeStat(CStat::E_CALL_FAILED);
         computeStat(CStat::E_FAILED_CMD_NOT_SENT);
         delete this;
-        return(-1);
+        return (-1);
     }
 
-    return(0);
+    return (0);
 }
 
 
 char* call::createSendingMessage(SendingMessage *src, int P_index, int *msgLen)
 {
-    static char msg_buffer[SIPP_MAX_MSG_SIZE+2];
+    static char msg_buffer[SIPP_MAX_MSG_SIZE + 2];
     return createSendingMessage(src, P_index, msg_buffer, sizeof(msg_buffer), msgLen);
 }
 
@@ -2615,7 +2615,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
     for (int i = 0; i < src->numComponents(); i++) {
         MessageComponent *comp = src->getComponent(i);
         int left = buf_len - (dest - msg_buffer);
-        switch(comp->type) {
+        switch (comp->type) {
         case E_Message_Literal:
             if (suppresscrlf) {
                 char *ptr = comp->literal;
@@ -2642,7 +2642,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             break;
         case E_Message_Local_Port:
             int port;
-            if((multisocket) && (sendMode != MODE_SERVER)) {
+            if ((multisocket) && (sendMode != MODE_SERVER)) {
                 port = call_port;
             } else {
                 port =  local_port;
@@ -2745,36 +2745,36 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
 #ifdef RTP_STREAM
         case E_Message_RTPStream_Audio_Port:
         {
-          int temp_audio_port= 0;
-          // Only obtain port for RTP ([rtpstream_audio_port+0]) *BUT NOT* RTCP ([rtpstream_audio_port+1])
-          if (comp->offset == 0) {
-              temp_audio_port = rtpstream_get_local_audioport (&rtpstream_callinfo);
-              if (!temp_audio_port) {
-                /* Make this a warning instead? */
-                ERROR("cannot assign a free audio port to this call - using 0 for [rtpstream_audio_port]");
-              }
-          } else if (comp->offset >= 1) {
-              temp_audio_port = rtpstream_callinfo.local_audioport + comp->offset;
-          }
-          logSrtpInfo("call::createSendingMessage():  E_Message_RTPStream_Audio_Port: %d\n", temp_audio_port);
-          dest += snprintf(dest, left, "%d",temp_audio_port);
+            int temp_audio_port = 0;
+            // Only obtain port for RTP ([rtpstream_audio_port+0]) *BUT NOT* RTCP ([rtpstream_audio_port+1])
+            if (comp->offset == 0) {
+                temp_audio_port = rtpstream_get_local_audioport(&rtpstream_callinfo);
+                if (!temp_audio_port) {
+                    /* Make this a warning instead? */
+                    ERROR("cannot assign a free audio port to this call - using 0 for [rtpstream_audio_port]");
+                }
+            } else if (comp->offset >= 1) {
+                temp_audio_port = rtpstream_callinfo.local_audioport + comp->offset;
+            }
+            logSrtpInfo("call::createSendingMessage():  E_Message_RTPStream_Audio_Port: %d\n", temp_audio_port);
+            dest += snprintf(dest, left, "%d", temp_audio_port);
         }
         break;
         case E_Message_RTPStream_Video_Port:
         {
-          int temp_video_port= 0;
-          // Only obtain port for RTP ([rtpstream_video_port+0]) *BUT NOT* RTCP ([rtpstream_video_port+1])
-          if (comp->offset == 0) {
-              temp_video_port = rtpstream_get_local_videoport (&rtpstream_callinfo);
-              if (!temp_video_port) {
-                /* Make this a warning instead? */
-                ERROR("cannot assign a free video port to this call - using 0 for [rtpstream_video_port]");
-              }
-          } else if (comp->offset >= 1) {
-              temp_video_port = rtpstream_callinfo.local_videoport + comp->offset;
-          }
-          logSrtpInfo("call::createSendingMessage():  E_Message_RTPStream_Video_Port: %d\n", temp_video_port);
-          dest += snprintf(dest, left, "%d",temp_video_port);
+            int temp_video_port = 0;
+            // Only obtain port for RTP ([rtpstream_video_port+0]) *BUT NOT* RTCP ([rtpstream_video_port+1])
+            if (comp->offset == 0) {
+                temp_video_port = rtpstream_get_local_videoport(&rtpstream_callinfo);
+                if (!temp_video_port) {
+                    /* Make this a warning instead? */
+                    ERROR("cannot assign a free video port to this call - using 0 for [rtpstream_video_port]");
+                }
+            } else if (comp->offset >= 1) {
+                temp_video_port = rtpstream_callinfo.local_videoport + comp->offset;
+            }
+            logSrtpInfo("call::createSendingMessage():  E_Message_RTPStream_Video_Port: %d\n", temp_video_port);
+            dest += snprintf(dest, left, "%d", temp_video_port);
         }
         break;
         case E_Message_CryptoTag1Audio:
@@ -3797,7 +3797,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             dest += snprintf(dest, left, "%u", call::dynamicId);
             // increment at each request
             dynamicId += stepDynamicId;
-            if ( this->dynamicId > maxDynamicId ) {
+            if (this->dynamicId > maxDynamicId) {
                 call::dynamicId = call::startDynamicId;
             } ;
             break;
@@ -3815,8 +3815,8 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             break;
         case E_Message_Branch:
             /* Branch is magic cookie + call number + message index in scenario */
-            if(P_index == -2) {
-                dest += snprintf(dest, left, "z9hG4bK-%u-%u-%d", pid, number, msg_index-1 + comp->offset);
+            if (P_index == -2) {
+                dest += snprintf(dest, left, "z9hG4bK-%u-%u-%d", pid, number, msg_index - 1 + comp->offset);
             } else {
                 dest += snprintf(dest, left, "z9hG4bK-%u-%u-%d", pid, number, P_index + comp->offset);
             }
@@ -3843,7 +3843,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             auth_comp = comp;
             break;
         case E_Message_Peer_Tag_Param:
-            if(peer_tag) {
+            if (peer_tag) {
                 dest += snprintf(dest, left, ";tag=%s", peer_tag);
             }
             break;
@@ -3886,7 +3886,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
         case E_Message_Variable: {
             int varId = comp->varId;
             CCallVariable *var = M_callVariableTable->getVar(varId);
-            if(var->isSet()) {
+            if (var->isSet()) {
                 if (var->isRegExp()) {
                     dest += sprintf(dest, "%s", var->getMatchingValue());
                 } else if (var->isDouble()) {
@@ -3967,7 +3967,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
         }
         case E_Message_Last_Header: {
             char * last_header = get_last_header(comp->literal);
-            if(last_header) {
+            if (last_header) {
                 dest += sprintf(dest, "%s", last_header);
             }
             if (*(dest - 1) == '\n') {
@@ -3980,7 +3980,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             break;
         }
         case E_Message_Last_Message:
-            if(last_recv_msg && strlen(last_recv_msg)) {
+            if (last_recv_msg && strlen(last_recv_msg)) {
                 dest += sprintf(dest, "%s", last_recv_msg);
             }
             break;
@@ -3994,11 +3994,11 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             int last_cseq = 0;
 
             char *last_header = get_last_header("CSeq:");
-            if(last_header) {
+            if (last_header) {
                 last_header += 5;
                 /* Extract the integer value of the field */
-                while(isspace(*last_header)) last_header++;
-                sscanf(last_header,"%d", &last_cseq);
+                while (isspace(*last_header)) last_header++;
+                sscanf(last_header, "%d", &last_cseq);
             }
             dest += sprintf(dest, "%d", last_cseq + comp->offset);
             break;
@@ -4007,10 +4007,10 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             if (!use_tdmmap)
                 ERROR("[tdmmap] keyword without -tdmmap parameter on command line");
             dest += snprintf(dest, left, "%d.%d.%d/%d",
-                             tdm_map_x+(int((tdm_map_number)/((tdm_map_b+1)*(tdm_map_c+1))))%(tdm_map_a+1),
+                             tdm_map_x + (int((tdm_map_number) / ((tdm_map_b + 1) * (tdm_map_c + 1)))) % (tdm_map_a + 1),
                              tdm_map_h,
-                             tdm_map_y+(int((tdm_map_number)/(tdm_map_c+1)))%(tdm_map_b+1),
-                             tdm_map_z+(tdm_map_number)%(tdm_map_c+1)
+                             tdm_map_y + (int((tdm_map_number) / (tdm_map_c + 1))) % (tdm_map_b + 1),
+                             tdm_map_z + (tdm_map_number) % (tdm_map_c + 1)
                             );
             break;
         }
@@ -4068,12 +4068,12 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
         /* Need the Method name from the CSeq of the Challenge */
         char method[MAX_HEADER_LEN];
         tmp = get_last_header("CSeq:");
-        if(!tmp) {
+        if (!tmp) {
             ERROR("Could not extract method from cseq of challenge");
         }
         tmp += 5;
-        while(isspace(*tmp) || isdigit(*tmp)) tmp++;
-        sscanf(tmp,"%s", method);
+        while (isspace(*tmp) || isdigit(*tmp)) tmp++;
+        sscanf(tmp, "%s", method);
 
         /* Determine the type of credentials. */
         char result[MAX_HEADER_LEN];
@@ -4087,7 +4087,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
 
         /* Build the auth credenticals */
         char uri[MAX_HEADER_LEN];
-        sprintf (uri, "%s:%d", remote_ip, remote_port);
+        sprintf(uri, "%s:%d", remote_ip, remote_port);
         /* These cause this function to  not be reentrant. */
         static char my_auth_user[MAX_HEADER_LEN + 2];
         static char my_auth_pass[MAX_HEADER_LEN + 2];
@@ -4156,7 +4156,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
     }
 
     if (body &&
-        !strcmp(get_header_content(msg_buffer, (char*)"Content-Type:"), "application/sdp"))
+            !strcmp(get_header_content(msg_buffer, (char*)"Content-Type:"), "application/sdp"))
     {
         if (getSessionStateCurrent() == eNoSession)
         {
@@ -4193,12 +4193,12 @@ bool call::process_twinSippCom(char * msg)
 
     if (checkInternalCmd(msg) == false) {
 
-        for(search_index = msg_index;
+        for (search_index = msg_index;
                 search_index < (int)call_scenario->messages.size();
                 search_index++) {
-            if(call_scenario->messages[search_index] -> M_type != MSG_TYPE_RECVCMD) {
+            if (call_scenario->messages[search_index] -> M_type != MSG_TYPE_RECVCMD) {
                 if ((call_scenario->messages[search_index] -> optional) ||
-                    (call_scenario->messages[search_index] -> M_type == MSG_TYPE_NOP)) {
+                        (call_scenario->messages[search_index] -> M_type == MSG_TYPE_NOP)) {
                     continue;
                 }
                 /* The received message is different from the expected one */
@@ -4206,8 +4206,8 @@ bool call::process_twinSippCom(char * msg)
                 callDebug("Unexpected control message received (I was expecting a different type of message):\n%s\n\n", msg);
                 return rejectCall();
             } else {
-                if(extendedTwinSippMode) {                  // 3pcc extended mode
-                    if(check_peer_src(msg, search_index)) {
+                if (extendedTwinSippMode) {                 // 3pcc extended mode
+                    if (check_peer_src(msg, search_index)) {
                         found = true;
                         break;
                     } else {
@@ -4228,13 +4228,13 @@ bool call::process_twinSippCom(char * msg)
             // variable treatment
             // Remove \r, \n at the end of a received command
             // (necessary for transport, to be removed for usage)
-            while ( (msg[strlen(msg)-1] == '\n') &&
-                    (msg[strlen(msg)-2] == '\r') ) {
-                msg[strlen(msg)-2] = 0;
+            while ((msg[strlen(msg) - 1] == '\n') &&
+                    (msg[strlen(msg) - 2] == '\r')) {
+                msg[strlen(msg) - 2] = 0;
             }
             actionResult = executeAction(msg, call_scenario->messages[search_index]);
 
-            if(actionResult != call::E_AR_NO_ERROR) {
+            if (actionResult != call::E_AR_NO_ERROR) {
                 // Store last action result if it is an error
                 // and go on with the scenario
                 call::last_action_result = actionResult;
@@ -4251,7 +4251,7 @@ bool call::process_twinSippCom(char * msg)
             return rejectCall();
         }
         msg_index = search_index; //update the state machine
-        return(next());
+        return (next());
     } else {
         return (false);
     }
@@ -4267,21 +4267,21 @@ bool call::checkInternalCmd(char * cmd)
         return (false);
     }
     L_ptr1 += 13 ;
-    while((*L_ptr1 == ' ') || (*L_ptr1 == '\t')) {
+    while ((*L_ptr1 == ' ') || (*L_ptr1 == '\t')) {
         L_ptr1++;
     }
     if (!(*L_ptr1)) {
         return (false);
     }
     L_ptr2 = L_ptr1;
-    while((*L_ptr2) &&
+    while ((*L_ptr2) &&
             (*L_ptr2 != ' ') &&
             (*L_ptr2 != '\t') &&
             (*L_ptr2 != '\r') &&
             (*L_ptr2 != '\n')) {
         L_ptr2 ++;
     }
-    if(!*L_ptr2) {
+    if (!*L_ptr2) {
         return (false);
     }
     L_backup = *L_ptr2;
@@ -4307,28 +4307,28 @@ bool call::check_peer_src(char * msg, int search_index)
         return (false);
     }
     L_ptr1 += 5 ;
-    while((*L_ptr1 == ' ') || (*L_ptr1 == '\t')) {
+    while ((*L_ptr1 == ' ') || (*L_ptr1 == '\t')) {
         L_ptr1++;
     }
     if (!(*L_ptr1)) {
         return (false);
     }
     L_ptr2 = L_ptr1;
-    while((*L_ptr2) &&
+    while ((*L_ptr2) &&
             (*L_ptr2 != ' ') &&
             (*L_ptr2 != '\t') &&
             (*L_ptr2 != '\r') &&
             (*L_ptr2 != '\n')) {
         L_ptr2 ++;
     }
-    if(!*L_ptr2) {
+    if (!*L_ptr2) {
         return (false);
     }
     L_backup = *L_ptr2;
     *L_ptr2 = 0;
     if (strcmp(L_ptr1, call_scenario->messages[search_index] -> peer_src) == 0) {
         *L_ptr2 = L_backup;
-        return(true);
+        return (true);
     }
 
     *L_ptr2 = L_backup;
@@ -4339,7 +4339,7 @@ bool call::check_peer_src(char * msg, int search_index)
 void call::extract_cseq_method(char* method, const char* msg)
 {
     const char* cseq;
-    if ((cseq = strstr (msg, "CSeq"))) {
+    if ((cseq = strstr(msg, "CSeq"))) {
         const char* value;
         if ((value = strchr(cseq, ':'))) {
             value++;
@@ -4353,7 +4353,7 @@ void call::extract_cseq_method(char* method, const char* msg)
                 end++;
                 nbytes++;
             }
-            if (nbytes > 0) strncpy (method, value, nbytes);
+            if (nbytes > 0) strncpy(method, value, nbytes);
             method[nbytes] = '\0';
         }
     }
@@ -4477,7 +4477,7 @@ bool call::matches_scenario(unsigned int index, int reply_code, char * request, 
                 /* No regex match position needed (NOSUB), we're simply
                  * looking for the <request method="INVITE|REGISTER"../>
                  * regex. */
-                if (regcomp(re, curmsg->recv_request, REGCOMP_PARAMS|REG_NOSUB)) {
+                if (regcomp(re, curmsg->recv_request, REGCOMP_PARAMS | REG_NOSUB)) {
                     ERROR("Invalid regular expression for index %d: %s", index, curmsg->recv_request);
                 }
                 curmsg->regexp_compile = re;
@@ -4570,16 +4570,16 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
         /* Detects retransmissions from peer and retransmit the
          * message which was sent just after this one was received */
         cookie = hash(msg);
-        if((recv_retrans_recv_index >= 0) && (recv_retrans_hash == cookie)) {
+        if ((recv_retrans_recv_index >= 0) && (recv_retrans_hash == cookie)) {
 
             int status;
 
-            if(lost(recv_retrans_recv_index)) {
+            if (lost(recv_retrans_recv_index)) {
                 TRACE_MSG("%s message (retrans) lost (recv).",
                           TRANSPORT_TO_STRING(transport));
                 callDebug("%s message (retrans) lost (recv) (hash %lu)\n", TRANSPORT_TO_STRING(transport), hash(msg));
 
-                if(comp_state) {
+                if (comp_state) {
                     comp_free(&comp_state);
                 }
                 call_scenario->messages[recv_retrans_recv_index] -> nb_lost++;
@@ -4590,17 +4590,17 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
 
             send_scene(recv_retrans_send_index, &status, NULL);
 
-            if(status >= 0) {
+            if (status >= 0) {
                 call_scenario->messages[recv_retrans_send_index] -> nb_sent_retrans++;
                 computeStat(CStat::E_RETRANSMISSION);
-            } else if(status < 0) {
+            } else if (status < 0) {
                 return false;
             }
 
             return true;
         }
 
-        if((last_recv_index >= 0) && (last_recv_hash == cookie)) {
+        if ((last_recv_index >= 0) && (last_recv_hash == cookie)) {
             /* This one has already been received, but not processed
              * yet => (has not triggered something yet) so we can discard.
              *
@@ -4675,7 +4675,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
 
         host = extract_rtp_remote_addr(msg, ip_ver, audio_port, video_port);
         extract_srtp_remote_info(msg, pA, pV);
-        rtpstream_set_remote (&rtpstream_callinfo,ip_ver,host.c_str(),audio_port,video_port);
+        rtpstream_set_remote(&rtpstream_callinfo, ip_ver, host.c_str(), audio_port, video_port);
         // PASS INCOMING SRTP PARAMETERS...
         if (pA.audio_found && (pA.primary_audio_cryptotag != 0))
         {
@@ -4774,7 +4774,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
 
                     if (!strcmp(pA.secondary_audio_cryptosuite, "AES_CM_128_HMAC_SHA1_80") && !pA.secondary_unencrypted_audio_srtp)
                     {
-                         logSrtpInfo("call::process_incoming():  (b) RX-UAC-AUDIO SRTP context -- ENCRYPTION -- secondary cryptosuite: [%s]\n", pA.secondary_audio_cryptosuite);
+                        logSrtpInfo("call::process_incoming():  (b) RX-UAC-AUDIO SRTP context -- ENCRYPTION -- secondary cryptosuite: [%s]\n", pA.secondary_audio_cryptosuite);
                         _rxUACAudio.selectCipherAlgorithm(AES_CM_128, SECONDARY_CRYPTO);
                         _rxUACAudio.selectHashAlgorithm(HMAC_SHA1_80, SECONDARY_CRYPTO);
                     }
@@ -4798,7 +4798,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                     }
                     else if (!strcmp(pA.secondary_audio_cryptosuite, "AES_CM_128_HMAC_SHA1_80") && pA.secondary_unencrypted_audio_srtp)
                     {
-                         logSrtpInfo("call::process_incoming():  (b) RX-UAC-AUDIO SRTP context -- NOENCRYPTION -- secondary cryptosuite: [%s]\n", pA.secondary_audio_cryptosuite);
+                        logSrtpInfo("call::process_incoming():  (b) RX-UAC-AUDIO SRTP context -- NOENCRYPTION -- secondary cryptosuite: [%s]\n", pA.secondary_audio_cryptosuite);
                         _rxUACAudio.selectCipherAlgorithm(NULL_CIPHER, SECONDARY_CRYPTO); /* Request JLSRTP NOT to decrypt */
                         _rxUACAudio.selectHashAlgorithm(HMAC_SHA1_80, SECONDARY_CRYPTO);
                     }
@@ -5185,7 +5185,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
             (msg[3] == '/') &&
             (msg[4] == '2') &&
             (msg[5] == '.') &&
-            (msg[6] == '0')    ) {
+            (msg[6] == '0')) {
 
         reply_code = get_reply_code(msg);
         if (!reply_code) {
@@ -5201,10 +5201,10 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
         /* It is a response: update peer_tag */
         ptr = get_peer_tag(msg);
         if (ptr) {
-            if(strlen(ptr) > (MAX_HEADER_LEN - 1)) {
+            if (strlen(ptr) > (MAX_HEADER_LEN - 1)) {
                 ERROR("Peer tag too long. Change MAX_HEADER_LEN and recompile sipp");
             }
-            if(peer_tag) {
+            if (peer_tag) {
                 free(peer_tag);
             }
             peer_tag = strdup(ptr);
@@ -5212,16 +5212,16 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                 ERROR("Out of memory allocating peer tag.");
             }
         }
-        request[0]=0;
+        request[0] = 0;
         // extract the cseq method from the response
-        extract_cseq_method (responsecseqmethod, msg);
-        extract_transaction (txn, msg);
+        extract_cseq_method(responsecseqmethod, msg);
+        extract_transaction(txn, msg);
     } else if ((ptr = strchr(msg, ' '))) {
         if ((ptr - msg) < 64) {
             memcpy(request, msg, ptr - msg);
             request[ptr - msg] = 0;
             // Check if we received an ACK => call established
-            if (strcmp(request,"ACK") == 0) {
+            if (strcmp(request, "ACK") == 0) {
                 call_established = true;
             }
 #ifdef PCAPPLAY
@@ -5273,7 +5273,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
     /* Try to find it in the old non-mandatory receptions */
     if (!found) {
         bool contig = true;
-        for(search_index = msg_index - 1;
+        for (search_index = msg_index - 1;
                 search_index >= 0;
                 search_index--) {
             if (call_scenario->messages[search_index]->optional == OPTIONAL_FALSE) {
@@ -5297,11 +5297,11 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                                 return true;
                             } else if (int ackIndex = transactions[checkTxn - 1].ackIndex) {
                                 /* This is the message before an ACK, so verify that this is an invite transaction. */
-                                assert (call_scenario->transactions[checkTxn - 1].isInvite);
+                                assert(call_scenario->transactions[checkTxn - 1].isInvite);
                                 sendBuffer(createSendingMessage(call_scenario->messages[ackIndex] -> send_scheme, ackIndex));
                                 return true;
                             } else {
-                                assert (!call_scenario->transactions[checkTxn - 1].isInvite);
+                                assert(!call_scenario->transactions[checkTxn - 1].isInvite);
                                 /* This is a non-provisional message for the transaction, and
                                  * we have already gotten our allowable response.  Just make sure
                                  * that it is not a retransmission of the final response. */
@@ -5323,11 +5323,11 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
                          * we received a non mandatory msg for an old transaction (this could be due to a retransmit.
                          * If this response is for an INVITE transaction, retransmit the ACK to quench retransmits.
                          */
-                        if ( (reply_code) &&
-                                (0 == strncmp (responsecseqmethod, "INVITE", strlen(responsecseqmethod)) ) &&
-                                (call_scenario->messages[search_index+1]->M_type == MSG_TYPE_SEND) &&
-                                (call_scenario->messages[search_index+1]->send_scheme->isAck()) ) {
-                            sendBuffer(createSendingMessage(call_scenario->messages[search_index+1] -> send_scheme, (search_index+1)));
+                        if ((reply_code) &&
+                                (0 == strncmp(responsecseqmethod, "INVITE", strlen(responsecseqmethod))) &&
+                                (call_scenario->messages[search_index + 1]->M_type == MSG_TYPE_SEND) &&
+                                (call_scenario->messages[search_index + 1]->send_scheme->isAck())) {
+                            sendBuffer(createSendingMessage(call_scenario->messages[search_index + 1] -> send_scheme, (search_index + 1)));
                             return true;
                         }
                     }
@@ -5337,7 +5337,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
     }
 
     /* If it is still not found, process an unexpected message */
-    if(!found) {
+    if (!found) {
         if (call_scenario->unexpected_jump >= 0) {
             bool recursive = false;
             if (call_scenario->retaddr >= 0) {
@@ -5381,12 +5381,12 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
      */
 
     /* Simulate loss of messages */
-    if(lost(search_index)) {
+    if (lost(search_index)) {
         TRACE_MSG("%s message lost (recv).",
                   TRANSPORT_TO_STRING(transport));
         callDebug("%s message lost (recv) (hash %lu).\n",
                   TRANSPORT_TO_STRING(transport), hash(msg));
-        if(comp_state) {
+        if (comp_state) {
             comp_free(&comp_state);
         }
         call_scenario->messages[search_index] -> nb_lost++;
@@ -5411,7 +5411,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
 
         actionResult = executeAction(msg, call_scenario->messages[search_index]);
 
-        if(actionResult != call::E_AR_NO_ERROR) {
+        if (actionResult != call::E_AR_NO_ERROR) {
             // Store last action result if it is an error
             // and go on with the scenario
             call::last_action_result = actionResult;
@@ -5432,7 +5432,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
     /* This is an ACK/PRACK or a response, and its index is greater than the
      * current active retransmission message, so we stop the retrans timer.
      * True also for CANCEL and BYE that we also want to answer to */
-    if(((reply_code) ||
+    if (((reply_code) ||
             ((!strcmp(request, "ACK")) ||
              (!strcmp(request, "CANCEL")) || (!strcmp(request, "BYE")) ||
              (!strcmp(request, "PRACK"))))  &&
@@ -5442,9 +5442,9 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
          * transactions. Non INVITE transactions continue to retransmit at T2 until a final response is
          * received
          */
-        if ( (0 == reply_code) || // means this is a request.
+        if ((0 == reply_code) ||  // means this is a request.
                 (200 <= reply_code) ||  // final response
-                ((0 != reply_code) && (0 == strncmp (responsecseqmethod, "INVITE", strlen(responsecseqmethod)))) ) { // prov for INVITE
+                ((0 != reply_code) && (0 == strncmp(responsecseqmethod, "INVITE", strlen(responsecseqmethod))))) {   // prov for INVITE
             next_retrans = 0;
         } else {
             /*
@@ -5559,8 +5559,8 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
         /* We are just waiting for a message to be received, if any of the
          * potential messages have a timeout we set it as our timeout. We
          * start from the next message and go until any non-receives. */
-        for(search_index++; search_index < (int)call_scenario->messages.size(); search_index++) {
-            if(call_scenario->messages[search_index] -> M_type != MSG_TYPE_RECV) {
+        for (search_index++; search_index < (int)call_scenario->messages.size(); search_index++) {
+            if (call_scenario->messages[search_index] -> M_type != MSG_TYPE_RECV) {
                 break;
             }
             candidate = call_scenario->messages[search_index] -> timeout;
@@ -5597,55 +5597,55 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
     actions = curmsg->M_actions;
     // looking for action to do on this message
     if (actions == NULL) {
-        return(call::E_AR_NO_ERROR);
+        return (call::E_AR_NO_ERROR);
     }
 
     for (int i = 0; i < actions->getActionSize(); i++) {
         currentAction = actions->getAction(i);
-        if(currentAction == NULL) {
+        if (currentAction == NULL) {
             continue;
         }
 
-        if(currentAction->getActionType() == CAction::E_AT_ASSIGN_FROM_REGEXP) {
+        if (currentAction->getActionType() == CAction::E_AT_ASSIGN_FROM_REGEXP) {
             char msgPart[MAX_SUB_MESSAGE_LENGTH];
 
             /* Where to look. */
             const char* haystack = NULL;
 
-            if(currentAction->getLookingPlace() == CAction::E_LP_HDR) {
-                extractSubMessage (msg,
-                                   currentAction->getLookingChar(),
-                                   msgPart,
-                                   currentAction->getCaseIndep(),
-                                   currentAction->getOccurrence(),
-                                   currentAction->getHeadersOnly());
-                if(currentAction->getCheckIt() == true && (strlen(msgPart) == 0)) {
+            if (currentAction->getLookingPlace() == CAction::E_LP_HDR) {
+                extractSubMessage(msg,
+                                  currentAction->getLookingChar(),
+                                  msgPart,
+                                  currentAction->getCaseIndep(),
+                                  currentAction->getOccurrence(),
+                                  currentAction->getHeadersOnly());
+                if (currentAction->getCheckIt() == true && (strlen(msgPart) == 0)) {
                     // the sub message is not found and the checking action say it
                     // MUST match --> Call will be marked as failed but will go on
                     WARNING("Failed regexp match: header %s not found in message\n%s\n", currentAction->getLookingChar(), msg);
-                    return(call::E_AR_HDR_NOT_FOUND);
+                    return (call::E_AR_HDR_NOT_FOUND);
                 }
                 haystack = msgPart;
-            } else if(currentAction->getLookingPlace() == CAction::E_LP_BODY) {
+            } else if (currentAction->getLookingPlace() == CAction::E_LP_BODY) {
                 haystack = strstr(msg, "\r\n\r\n");
                 if (!haystack) {
                     if (currentAction->getCheckIt() == true) {
                         WARNING("Failed regexp match: body not found in message\n%s\n", msg);
-                        return(call::E_AR_HDR_NOT_FOUND);
+                        return (call::E_AR_HDR_NOT_FOUND);
                     }
                     msgPart[0] = '\0';
                     haystack = msgPart;
                 }
                 haystack += strlen("\r\n\r\n");
-            } else if(currentAction->getLookingPlace() == CAction::E_LP_MSG) {
+            } else if (currentAction->getLookingPlace() == CAction::E_LP_MSG) {
                 haystack = msg;
-            } else if(currentAction->getLookingPlace() == CAction::E_LP_VAR) {
+            } else if (currentAction->getLookingPlace() == CAction::E_LP_VAR) {
                 /* Get the input variable. */
                 haystack = M_callVariableTable->getVar(currentAction->getVarInId())->getString();
                 if (!haystack) {
                     if (currentAction->getCheckIt() == true) {
                         WARNING("Failed regexp match: variable $%d not set", currentAction->getVarInId());
-                        return(call::E_AR_HDR_NOT_FOUND);
+                        return (call::E_AR_HDR_NOT_FOUND);
                     }
                 }
             } else {
@@ -5658,12 +5658,12 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 // Allow easier regexp debugging
                 WARNING("Failed regexp match: looking in '%s', with regexp '%s'",
                         haystack, currentAction->getRegularExpression());
-                return(call::E_AR_REGEXP_DOESNT_MATCH);
+                return (call::E_AR_REGEXP_DOESNT_MATCH);
             } else if (did_match && currentAction->getCheckItInverse()) {
                 // The inverse of the above
                 WARNING("Regexp matched but should not: looking in '%s', with regexp '%s'",
                         haystack, currentAction->getRegularExpression());
-                return(call::E_AR_REGEXP_SHOULDNT_MATCH);
+                return (call::E_AR_REGEXP_SHOULDNT_MATCH);
             }
         } else if (currentAction->getActionType() == CAction::E_AT_ASSIGN_FROM_VALUE) {
             double operand = get_rhs(currentAction);
@@ -5808,7 +5808,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 call_socket->ss_changed_dest = true;
                 if (call_socket->reconnect()) {
                     if (reconnect_allowed()) {
-                        if(errno == EINVAL) {
+                        if (errno == EINVAL) {
                             /* This occurs sometime on HPUX but is not a true INVAL */
                             WARNING("Unable to connect a TCP/SCTP/TLS socket, remote peer error");
                         } else {
@@ -5824,7 +5824,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
 
                         return E_AR_CONNECT_FAILED;
                     } else {
-                        if(errno == EINVAL) {
+                        if (errno == EINVAL) {
                             /* This occurs sometime on HPUX but is not a true INVAL */
                             ERROR("Unable to connect a TCP/SCTP/TLS socket, remote peer error");
                         } else {
@@ -5855,7 +5855,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 char *tmp = createSendingMessage(currentAction->getMessage(0), -2 /* do not add crlf*/);
                 char *username = strdup(tmp);
                 /* Generate the password to verify it against. */
-                tmp= createSendingMessage(currentAction->getMessage(1), -2 /* do not add crlf*/);
+                tmp = createSendingMessage(currentAction->getMessage(1), -2 /* do not add crlf*/);
                 char *password = strdup(tmp);
                 /* Need the body for length and auth-int calculation */
                 const char *body;
@@ -5914,12 +5914,12 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
         } else if (currentAction->getActionType() == CAction::E_AT_VAR_TEST) {
             bool value = currentAction->compare(M_callVariableTable);
             if ((currentAction->getCheckIt() && !value) ||
-                (currentAction->getCheckItInverse() && value)
-            ) {
+                    (currentAction->getCheckItInverse() && value)
+               ) {
                 double lhs = M_callVariableTable->getVar(currentAction->getVarInId())->getDouble();
                 double rhs = currentAction->getVarIn2Id() ?
-                    M_callVariableTable->getVar(currentAction->getVarIn2Id())->getDouble() :
-                    currentAction->getDoubleValue();
+                             M_callVariableTable->getVar(currentAction->getVarIn2Id())->getDouble() :
+                             currentAction->getDoubleValue();
                 char *lhsName = call_scenario->allocVars->getName(currentAction->getVarInId());
                 const char *rhsName = "";
                 if (currentAction->getVarIn2Id()) {
@@ -5929,30 +5929,30 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 call::T_ActionResult result = currentAction->getCheckIt() ? call::E_AR_TEST_DOESNT_MATCH : call::E_AR_TEST_SHOULDNT_MATCH;
 
                 WARNING("test \"%s:%f %s %s:%f\" with check_it%s failed",
-                    lhsName,
-                    lhs,
-                    currentAction->comparatorToString(currentAction->getComparator()),
-                    rhsName,
-                    rhs,
-                    _inverse
-                );
-                return(result);
+                        lhsName,
+                        lhs,
+                        currentAction->comparatorToString(currentAction->getComparator()),
+                        rhsName,
+                        rhs,
+                        _inverse
+                       );
+                return (result);
             }
             // "assign_to" is optional when "check_it" or "check_it_inverse" set
             if (currentAction->getVarId() ||
-                (!currentAction->getCheckIt() && !currentAction->getCheckItInverse())
-            ) {
+                    (!currentAction->getCheckIt() && !currentAction->getCheckItInverse())
+               ) {
                 M_callVariableTable->getVar(currentAction->getVarId())->setBool(value);
             }
         } else if (currentAction->getActionType() == CAction::E_AT_VAR_STRCMP) {
             char *lhs = M_callVariableTable->getVar(currentAction->getVarInId())->getString();
             char *rhs = currentAction->getVarIn2Id() ?
-                M_callVariableTable->getVar(currentAction->getVarIn2Id())->getString() :
-                currentAction->getStringValue();
+                        M_callVariableTable->getVar(currentAction->getVarIn2Id())->getString() :
+                        currentAction->getStringValue();
             int value = strcmp(lhs, rhs);
             if ((currentAction->getCheckIt() && value) ||
-                (currentAction->getCheckItInverse() && !value)
-            ) {
+                    (currentAction->getCheckItInverse() && !value)
+               ) {
                 char *lhsName = call_scenario->allocVars->getName(currentAction->getVarInId());
                 const char *rhsName = "";
                 if (currentAction->getVarIn2Id()) {
@@ -5962,19 +5962,19 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 call::T_ActionResult result = currentAction->getCheckIt() ? call::E_AR_STRCMP_DOESNT_MATCH : call::E_AR_STRCMP_SHOULDNT_MATCH;
 
                 WARNING("strcmp %s:\"%s\" and %s:\"%s\" with check_it%s returned %d",
-                    lhsName,
-                    lhs,
-                    rhsName,
-                    rhs,
-                    _inverse,
-                    value
-                );
-                return(result);
+                        lhsName,
+                        lhs,
+                        rhsName,
+                        rhs,
+                        _inverse,
+                        value
+                       );
+                return (result);
             }
             // "assign_to" is optional when "check_it" or "check_it_inverse" set
             if (currentAction->getVarId() ||
-                (!currentAction->getCheckIt() && !currentAction->getCheckItInverse())
-            ) {
+                    (!currentAction->getCheckIt() && !currentAction->getCheckItInverse())
+               ) {
                 M_callVariableTable->getVar(currentAction->getVarId())->setDouble((double)value);
             }
         } else if (currentAction->getActionType() == CAction::E_AT_VAR_TRIM) {
@@ -6021,7 +6021,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
             char* x = createSendingMessage(currentAction->getMessage(), -2 /* do not add crlf*/);
             // TRACE_MSG("Trying to execute [%s]", x);
             pid_t l_pid;
-            switch(l_pid = fork()) {
+            switch (l_pid = fork()) {
             case -1:
                 // error when forking !
                 ERROR_NO("Forking error main");
@@ -6029,13 +6029,13 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
 
             case 0:
                 // first child process - execute the command
-                if((l_pid = fork()) < 0) {
+                if ((l_pid = fork()) < 0) {
                     ERROR_NO("Forking error child");
                 } else {
-                    if( l_pid == 0) {
+                    if (l_pid == 0) {
                         int ret;
                         ret = system(x); // second child runs
-                        if(ret == -1) {
+                        if (ret == -1) {
                             WARNING("system call error for %s", x);
                         }
                     }
@@ -6046,7 +6046,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 // parent process continue
                 // reap first child immediately
                 pid_t ret;
-                while ((ret=waitpid(l_pid, NULL, 0)) != l_pid) {
+                while ((ret = waitpid(l_pid, NULL, 0)) != l_pid) {
                     if (ret != -1) {
                         ERROR("waitpid returns %1ld for child %1ld", (long) ret, (long) l_pid);
                     }
@@ -6063,7 +6063,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                 break;
             case CAction::E_INTCMD_STOPCALL:
             default:
-                return(call::E_AR_STOP_CALL);
+                return (call::E_AR_STOP_CALL);
                 break;
             }
 #ifdef PCAPPLAY
@@ -6073,7 +6073,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
                    (currentAction->getActionType() == CAction::E_AT_PLAY_DTMF)) {
             play_args_t* play_args = 0;
             if ((currentAction->getActionType() == CAction::E_AT_PLAY_PCAP_AUDIO) ||
-                (currentAction->getActionType() == CAction::E_AT_PLAY_DTMF)) {
+                    (currentAction->getActionType() == CAction::E_AT_PLAY_DTMF)) {
                 play_args = &(this->play_args_a);
             } else if (currentAction->getActionType() == CAction::E_AT_PLAY_PCAP_IMAGE) {
                 play_args = &(this->play_args_i);
@@ -6103,11 +6103,11 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
 
             /* port number is set in [auto_]media_port interpolation */
             if (media_ip_is_ipv6) {
-                struct sockaddr_in6* from = (struct sockaddr_in6*) &(play_args->from);
+                struct sockaddr_in6* from = (struct sockaddr_in6*) & (play_args->from);
                 from->sin6_family = AF_INET6;
                 inet_pton(AF_INET6, media_ip, &(from->sin6_addr));
             } else {
-                struct sockaddr_in* from = (struct sockaddr_in*) &(play_args->from);
+                struct sockaddr_in* from = (struct sockaddr_in*) & (play_args->from);
                 from->sin_family = AF_INET;
                 from->sin_addr.s_addr = inet_addr(media_ip);
             }
@@ -6140,7 +6140,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
         }
         else if (currentAction->getActionType() == CAction::E_AT_RTP_STREAM_PLAY)
         {
-            rtpstream_play(&rtpstream_callinfo,currentAction->getRTPStreamActInfo());
+            rtpstream_play(&rtpstream_callinfo, currentAction->getRTPStreamActInfo());
             // Obtain ID of parent thread used for the related RTP task
             call_scenario->addRtpTaskThreadID(rtpstream_callinfo.threadID);
         }
@@ -6191,7 +6191,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
             }
 
             logSrtpInfo("call::executeAction():  rtpstream_playapattern\n");
-            rtpstream_playapattern(&rtpstream_callinfo,currentAction->getRTPStreamActInfo(), _txUACAudio, _rxUACAudio);
+            rtpstream_playapattern(&rtpstream_callinfo, currentAction->getRTPStreamActInfo(), _txUACAudio, _rxUACAudio);
             // Obtain ID of parent thread used for the related RTP task
             call_scenario->addRtpTaskThreadID(rtpstream_callinfo.threadID);
         }
@@ -6242,7 +6242,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
             }
 
             logSrtpInfo("call::executeAction():  rtpstream_playvpattern\n");
-            rtpstream_playvpattern(&rtpstream_callinfo,currentAction->getRTPStreamActInfo(), _txUACVideo, _rxUACVideo);
+            rtpstream_playvpattern(&rtpstream_callinfo, currentAction->getRTPStreamActInfo(), _txUACVideo, _rxUACVideo);
             // Obtain ID of parent thread used for the related RTP task
             call_scenario->addRtpTaskThreadID(rtpstream_callinfo.threadID);
         }
@@ -6476,7 +6476,7 @@ call::T_ActionResult call::executeAction(const char* msg, message* curmsg)
             ERROR("call::executeAction unknown action");
         }
     } // end for
-    return(call::E_AR_NO_ERROR);
+    return (call::E_AR_NO_ERROR);
 }
 
 void call::extractSubMessage(const char* msg, char* matchingString, char* result, bool case_indep, int occurrence, bool headers)
@@ -6494,7 +6494,7 @@ void call::extractSubMessage(const char* msg, char* matchingString, char* result
         if (!case_indep) {
             ptr = strstr(ptr, matchingString);
             if (ptr == NULL) break;
-            if (headers == true && ptr != msg && *(ptr-1) != '\n') {
+            if (headers == true && ptr != msg && *(ptr - 1) != '\n') {
                 ++ptr;
                 continue;
             }
@@ -6527,12 +6527,12 @@ void call::extractSubMessage(const char* msg, char* matchingString, char* result
         ++ptr;
     }
 
-    if(ptr != NULL && *ptr != 0) {
-        strncpy(result, ptr+len, MAX_SUB_MESSAGE_LENGTH);
+    if (ptr != NULL && *ptr != 0) {
+        strncpy(result, ptr + len, MAX_SUB_MESSAGE_LENGTH);
         sizeOf = strlen(result);
-        if(sizeOf >= MAX_SUB_MESSAGE_LENGTH)
-            sizeOf = MAX_SUB_MESSAGE_LENGTH-1;
-        while((i<sizeOf) && (result[i] != '\n') && (result[i] != '\r'))
+        if (sizeOf >= MAX_SUB_MESSAGE_LENGTH)
+            sizeOf = MAX_SUB_MESSAGE_LENGTH - 1;
+        while ((i < sizeOf) && (result[i] != '\n') && (result[i] != '\r'))
             i++;
         result[i] = '\0';
     } else {
@@ -6569,7 +6569,7 @@ void call::getFieldFromInputFile(const char *fileName, int field, SendingMessage
 
 call::T_AutoMode call::checkAutomaticResponseMode(char* P_recv)
 {
-    if (strcmp(P_recv, "BYE")==0) {
+    if (strcmp(P_recv, "BYE") == 0) {
         return E_AM_UNEXP_BYE;
     } else if (strcmp(P_recv, "CANCEL") == 0) {
         return E_AM_UNEXP_CANCEL;
@@ -6625,7 +6625,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
         // The BYE is unexpected, count it
         call_scenario->messages[msg_index] -> nb_unexp++;
         if (default_behaviors & DEFAULT_BEHAVIOR_ABORTUNEXP) {
-            WARNING("Aborting call on an unexpected BYE for call: %s", (id==NULL)?"none":id);
+            WARNING("Aborting call on an unexpected BYE for call: %s", (id == NULL) ? "none" : id);
             if (default_behaviors & DEFAULT_BEHAVIOR_BYE) {
                 sendBuffer(createSendingMessage(get_default_message("200"), -1));
             }
@@ -6642,7 +6642,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
             computeStat(CStat::E_FAILED_UNEXPECTED_MSG);
             delete this;
         } else {
-            WARNING("Continuing call on an unexpected BYE for call: %s", (id==NULL)?"none":id);
+            WARNING("Continuing call on an unexpected BYE for call: %s", (id == NULL) ? "none" : id);
         }
         break ;
 
@@ -6663,7 +6663,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
         // The CANCEL is unexpected, count it
         call_scenario->messages[msg_index] -> nb_unexp++;
         if (default_behaviors & DEFAULT_BEHAVIOR_ABORTUNEXP) {
-            WARNING("Aborting call on an unexpected CANCEL for call: %s", (id==NULL)?"none":id);
+            WARNING("Aborting call on an unexpected CANCEL for call: %s", (id == NULL) ? "none" : id);
             if (default_behaviors & DEFAULT_BEHAVIOR_BYE) {
                 sendBuffer(createSendingMessage(get_default_message("200"), -1));
             }
@@ -6681,7 +6681,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
             computeStat(CStat::E_FAILED_UNEXPECTED_MSG);
             delete this;
         } else {
-            WARNING("Continuing call on unexpected CANCEL for call: %s", (id==NULL)?"none":id);
+            WARNING("Continuing call on unexpected CANCEL for call: %s", (id == NULL) ? "none" : id);
         }
         break ;
 
@@ -6700,7 +6700,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
         strcpy(last_recv_msg, P_recv);
 
         if (default_behaviors & DEFAULT_BEHAVIOR_PINGREPLY) {
-            WARNING("Automatic response mode for an unexpected PING for call: %s", (id==NULL)?"none":id);
+            WARNING("Automatic response mode for an unexpected PING for call: %s", (id == NULL) ? "none" : id);
             sendBuffer(createSendingMessage(get_default_message("200"), -1));
             // Note: the call ends here but it is not marked as bad. PING is a
             //       normal message.
@@ -6716,7 +6716,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
             CStat::globalStat(CStat::E_AUTO_ANSWERED);
             delete this;
         } else {
-            WARNING("Do not answer on an unexpected PING for call: %s", (id==NULL)?"none":id);
+            WARNING("Do not answer on an unexpected PING for call: %s", (id == NULL) ? "none" : id);
         }
         break ;
 
@@ -6727,7 +6727,7 @@ bool call::automaticResponseMode(T_AutoMode P_case, const char* P_recv)
         old_last_recv_msg = NULL;
         if (last_recv_msg != NULL) {
             last_recv_msg_saved = true;
-            old_last_recv_msg = (char *) malloc(strlen(last_recv_msg)+1);
+            old_last_recv_msg = (char *) malloc(strlen(last_recv_msg) + 1);
             strcpy(old_last_recv_msg, last_recv_msg);
         }
         // usage of last_ keywords
@@ -6837,10 +6837,14 @@ public:
     mockcall(bool is_ipv6) : listener("//testing", true), call("///testing", is_ipv6, 0, NULL) {}
 
     /* Helpers to poke at protected internals */
-    void parse_media_addr(std::string const& msg) { get_remote_media_addr(msg); }
+    void parse_media_addr(std::string const& msg) {
+        get_remote_media_addr(msg);
+    }
 
 #ifdef PCAPPLAY
-    bool has_media() { return hasMediaInformation; }
+    bool has_media() {
+        return hasMediaInformation;
+    }
 
     template<typename T>
     T get_audio_addr() {
@@ -6853,14 +6857,14 @@ public:
 
 bool operator==(const struct sockaddr_in& a, const struct sockaddr_in &b) {
     return a.sin_family == b.sin_family
-        && a.sin_port == b.sin_port
-        && std::memcmp(&a.sin_addr, &b.sin_addr, sizeof(in_addr)) == 0;
+           && a.sin_port == b.sin_port
+           && std::memcmp(&a.sin_addr, &b.sin_addr, sizeof(in_addr)) == 0;
 }
 
 bool operator==(const struct sockaddr_in6& a, const struct sockaddr_in6 &b) {
     return a.sin6_family == b.sin6_family
-        && a.sin6_port == b.sin6_port
-        && std::memcmp(&a.sin6_addr, &b.sin6_addr, sizeof(in_addr)) == 0;
+           && a.sin6_port == b.sin6_port
+           && std::memcmp(&a.sin6_addr, &b.sin6_addr, sizeof(in_addr)) == 0;
 }
 
 const std::string test_sdp_v4 = "v=0\r\n"
