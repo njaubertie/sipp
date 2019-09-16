@@ -1109,8 +1109,8 @@ static unsigned long rtpstream_playrtptask(taskentry_t *taskinfo,
 /* code checked */
 static void* rtpstream_playback_thread(void* params)
 {
-    threaddata_t   *threaddata= (threaddata_t *) params;
-    taskentry_t    *taskinfo;
+    threaddata_t   *threaddata = (threaddata_t *) params;
+    taskentry_t    *taskinfo = NULL;
     int            taskindex;
 
     unsigned long  timenow_ms;
