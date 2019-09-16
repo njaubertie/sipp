@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE scenario SYSTEM "sipp.dtd">
-<scenario name="RTP Echo pause / start test UAC">
+<scenario name="oinv-i200-ibye.xml -- wjd 2014">
 
   <send retrans="500" start_txn="invite">
     <![CDATA[
@@ -51,12 +51,14 @@
     ]]>
   </send>
 
-  <!-- Send the audio for 8 seconds -->
+  <!-- Send some audio to avoid rtptimeout timers kicking in. -->
   <nop>
     <action>
-      <exec rtp_stream="beep_1sec_50x160b.alaw,8,8,PCMA/8000"/>
+      <exec rtp_stream="beep_1sec_50x160b.alaw,-1,8,PCMA/8000"/>
     </action>
   </nop>
+
+  <pause milliseconds="500"/>
 
   <recv request="BYE"/>
 

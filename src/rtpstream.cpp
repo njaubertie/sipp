@@ -480,62 +480,51 @@ static void rtpstream_process_task_flags(taskentry_t* taskinfo)
         taskinfo->flags&= ~TI_RECONNECTSOCKET;
         pthread_mutex_unlock (&(taskinfo->mutex));
     }
-    if (taskinfo->flags&TI_PLAYFILE) {
+    if (taskinfo->flags & TI_PLAYFILE || taskinfo->flags & TI_PLAYAPATTERN) {
         /* copy playback information */
-        taskinfo->audio_pattern_id= taskinfo->new_audio_pattern_id;
-        taskinfo->audio_loop_count= taskinfo->new_audio_loop_count;
-        taskinfo->audio_file_bytes_start= taskinfo->new_audio_file_bytes;
-        taskinfo->audio_current_file_bytes= taskinfo->new_audio_file_bytes;
-        taskinfo->audio_file_num_bytes= taskinfo->new_audio_file_size;
-        taskinfo->audio_file_bytes_left= taskinfo->new_audio_file_size;
-        taskinfo->audio_payload_type= taskinfo->new_audio_payload_type;
+        taskinfo->audio_pattern_id = taskinfo->new_audio_pattern_id;
+        taskinfo->audio_loop_count = taskinfo->new_audio_loop_count;
+        taskinfo->audio_file_bytes_start = taskinfo->new_audio_file_bytes;
+        taskinfo->audio_current_file_bytes = taskinfo->new_audio_file_bytes;
+        taskinfo->audio_file_num_bytes = taskinfo->new_audio_file_size;
+        taskinfo->audio_file_bytes_left = taskinfo->new_audio_file_size;
+        taskinfo->audio_payload_type = taskinfo->new_audio_payload_type;
 
-        taskinfo->audio_ms_per_packet= taskinfo->new_audio_ms_per_packet;
-        taskinfo->audio_bytes_per_packet= taskinfo->new_audio_bytes_per_packet;
-        taskinfo->audio_timeticks_per_packet= taskinfo->new_audio_timeticks_per_packet;
-        taskinfo->audio_timeticks_per_ms= taskinfo->audio_timeticks_per_packet/taskinfo->audio_ms_per_packet;
+        taskinfo->audio_ms_per_packet = taskinfo->new_audio_ms_per_packet;
+        assert(taskinfo->audio_ms_per_packet != 0);
+        taskinfo->audio_bytes_per_packet = taskinfo->new_audio_bytes_per_packet;
+        taskinfo->audio_timeticks_per_packet = taskinfo->new_audio_timeticks_per_packet;
+        assert(taskinfo->audio_timeticks_per_packet != 0);
+        taskinfo->audio_timeticks_per_ms = taskinfo->audio_timeticks_per_packet / taskinfo->audio_ms_per_packet;
 
-        taskinfo->last_audio_timestamp= getmilliseconds()*taskinfo->audio_timeticks_per_ms;
-        taskinfo->flags&= ~TI_PLAYFILE;
-    }
+        taskinfo->last_audio_timestamp = getmilliseconds() * taskinfo->audio_timeticks_per_ms;
+        if (taskinfo->flags & TI_PLAYFILE) {
+            taskinfo->flags &= ~TI_PLAYFILE;
+        } else if (taskinfo->flags & TI_PLAYAPATTERN) {
+            taskinfo->flags &= ~TI_PLAYAPATTERN;
+        }
 
-    if (taskinfo->flags&TI_PLAYAPATTERN)
-    {
-        /* copy playback information */
-        taskinfo->audio_pattern_id= taskinfo->new_audio_pattern_id;
-        taskinfo->audio_loop_count= taskinfo->new_audio_loop_count;
-        taskinfo->audio_file_bytes_start= taskinfo->new_audio_file_bytes;
-        taskinfo->audio_current_file_bytes= taskinfo->new_audio_file_bytes;
-        taskinfo->audio_file_num_bytes= taskinfo->new_audio_file_size;
-        taskinfo->audio_file_bytes_left= taskinfo->new_audio_file_size;
-        taskinfo->audio_payload_type= taskinfo->new_audio_payload_type;
-
-        taskinfo->audio_ms_per_packet= taskinfo->new_audio_ms_per_packet;
-        taskinfo->audio_bytes_per_packet= taskinfo->new_audio_bytes_per_packet;
-        taskinfo->audio_timeticks_per_packet= taskinfo->new_audio_timeticks_per_packet;
-        taskinfo->audio_timeticks_per_ms= taskinfo->audio_timeticks_per_packet/taskinfo->audio_ms_per_packet;
-
-        taskinfo->last_audio_timestamp= getmilliseconds()*taskinfo->audio_timeticks_per_ms;
-        taskinfo->flags &= ~TI_PLAYAPATTERN;
     }
 
     if (taskinfo->flags&TI_PLAYVPATTERN)
     {
         /* copy playback information */
-        taskinfo->video_pattern_id= taskinfo->new_video_pattern_id;
-        taskinfo->video_loop_count= taskinfo->new_video_loop_count;
-        taskinfo->video_file_bytes_start= taskinfo->new_video_file_bytes;
-        taskinfo->video_current_file_bytes= taskinfo->new_video_file_bytes;
-        taskinfo->video_file_num_bytes= taskinfo->new_video_file_size;
-        taskinfo->video_file_bytes_left= taskinfo->new_video_file_size;
-        taskinfo->video_payload_type= taskinfo->new_video_payload_type;
+        taskinfo->video_pattern_id = taskinfo->new_video_pattern_id;
+        taskinfo->video_loop_count = taskinfo->new_video_loop_count;
+        taskinfo->video_file_bytes_start = taskinfo->new_video_file_bytes;
+        taskinfo->video_current_file_bytes = taskinfo->new_video_file_bytes;
+        taskinfo->video_file_num_bytes = taskinfo->new_video_file_size;
+        taskinfo->video_file_bytes_left = taskinfo->new_video_file_size;
+        taskinfo->video_payload_type = taskinfo->new_video_payload_type;
 
-        taskinfo->video_ms_per_packet= taskinfo->new_video_ms_per_packet;
-        taskinfo->video_bytes_per_packet= taskinfo->new_video_bytes_per_packet;
-        taskinfo->video_timeticks_per_packet= taskinfo->new_video_timeticks_per_packet;
-        taskinfo->video_timeticks_per_ms= taskinfo->video_timeticks_per_packet/taskinfo->video_ms_per_packet;
+        taskinfo->video_ms_per_packet = taskinfo->new_video_ms_per_packet;
+        assert(taskinfo->video_ms_per_packet != 0);
+        taskinfo->video_bytes_per_packet = taskinfo->new_video_bytes_per_packet;
+        taskinfo->video_timeticks_per_packet = taskinfo->new_video_timeticks_per_packet;
+        assert(taskinfo->video_timeticks_per_packet != 0);
+        taskinfo->video_timeticks_per_ms = taskinfo->video_timeticks_per_packet / taskinfo->video_ms_per_packet;
 
-        taskinfo->last_video_timestamp= getmilliseconds()*taskinfo->video_timeticks_per_ms;
+        taskinfo->last_video_timestamp = getmilliseconds() * taskinfo->video_timeticks_per_ms;
         taskinfo->flags &= ~TI_PLAYVPATTERN;
     }
 }
@@ -617,15 +606,15 @@ static unsigned long rtpstream_playrtptask(taskentry_t *taskinfo,
         /* are we playing back an audio file/pattern? */
         if (taskinfo->audio_loop_count)
         {
-            target_timestamp= timenow_ms*taskinfo->audio_timeticks_per_ms;
-            next_wake= timenow_ms+taskinfo->audio_ms_per_packet-timenow_ms%taskinfo->audio_ms_per_packet;
+            target_timestamp = timenow_ms * taskinfo->audio_timeticks_per_ms;
+            next_wake = timenow_ms + taskinfo->audio_ms_per_packet - timenow_ms % taskinfo->audio_ms_per_packet;
             if (taskinfo->flags&(TI_NULL_AUDIOIP|TI_PAUSERTP|TI_PAUSERTPAPATTERN))
             {
                 /* when paused, set timestamp so stream appears to be up to date */
-                taskinfo->last_audio_timestamp= target_timestamp;
+                taskinfo->last_audio_timestamp = target_timestamp;
             }
 
-            if (taskinfo->last_audio_timestamp<target_timestamp)
+            if (taskinfo->last_audio_timestamp < target_timestamp)
             {
                 /* need to send rtp payload - build rtp packet header... */
                 memset(udp_send_audio.buffer, 0, sizeof(udp_send_audio));
@@ -855,22 +844,22 @@ static unsigned long rtpstream_playrtptask(taskentry_t *taskinfo,
         }
     }
 
-    if ((taskinfo->video_rtp_socket!=-1) &&
+    if ((taskinfo->video_rtp_socket != -1) &&
         (taskindex >= 0) &&
         (taskindex <= ((int)rs_vpackets.size() - 1)))
     {
         /* are we playing back a video file/pattern? */
         if (taskinfo->video_loop_count)
         {
-            target_timestamp= timenow_ms*taskinfo->video_timeticks_per_ms;
-            next_wake= timenow_ms+taskinfo->video_ms_per_packet-timenow_ms%taskinfo->video_ms_per_packet;
+            target_timestamp = timenow_ms * taskinfo->video_timeticks_per_ms;
+            next_wake = timenow_ms + taskinfo->video_ms_per_packet - timenow_ms % taskinfo->video_ms_per_packet;
             if (taskinfo->flags&(TI_NULL_VIDEOIP|TI_PAUSERTP|TI_PAUSERTPVPATTERN))
             {
                 /* when paused, set timestamp so stream appears to be up to date */
-                taskinfo->last_video_timestamp= target_timestamp;
+                taskinfo->last_video_timestamp = target_timestamp;
             }
 
-            if (taskinfo->last_video_timestamp<target_timestamp)
+            if (taskinfo->last_video_timestamp < target_timestamp)
             {
                 /* need to send rtp payload - build rtp packet header... */
                 memset(udp_send_video.buffer, 0, sizeof(udp_send_video));
@@ -1746,9 +1735,9 @@ static int rtpstream_get_localport (int *rtpsocket, int *rtcpsocket)
 
     debugprint ("rtpstream_get_localport\n");
 
-    if (next_rtp_port < user_media_port)
+    if (next_rtp_port < media_port)
     {
-        next_rtp_port = user_media_port;
+        next_rtp_port = media_port;
     }
 
     /* initialise address family and IP address for media socket */
@@ -1773,11 +1762,11 @@ static int rtpstream_get_localport (int *rtpsocket, int *rtcpsocket)
         /* should normally be the first port we try, unless we have long-running */
         /* calls or somebody else is nicking ports.                              */
 
-        port_number= next_rtp_port;
+        port_number = next_rtp_port;
         /* skip rtp ports in multples of 2 (allow for rtp plus rtcp) */
-        next_rtp_port+= 2;
-        if (next_rtp_port>(max_rtp_port-1)) {
-            next_rtp_port = user_media_port;
+        next_rtp_port += 2;
+        if (next_rtp_port > (max_rtp_port - 1)) {
+            next_rtp_port = media_port;
         }
 
         sockaddr_update_port(&address, port_number);

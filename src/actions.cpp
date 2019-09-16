@@ -722,10 +722,10 @@ void CAction::setRTPStreamActInfo(const char *P_value)
     memset(M_rtpstream_actinfo.filename, 0, sizeof(M_rtpstream_actinfo.filename));
     M_rtpstream_actinfo.pattern_id = -1;
     M_rtpstream_actinfo.loop_count = -1;
-    M_rtpstream_actinfo.bytes_per_packet = 0;
-    M_rtpstream_actinfo.ms_per_packet = 0;
-    M_rtpstream_actinfo.ticks_per_packet = 0;
-    M_rtpstream_actinfo.payload_type = 0;
+    M_rtpstream_actinfo.ms_per_packet = -1;
+    M_rtpstream_actinfo.bytes_per_packet = -1;
+    M_rtpstream_actinfo.ticks_per_packet = -1;
+    M_rtpstream_actinfo.payload_type = -1;
     memset(M_rtpstream_actinfo.payload_name, 0, sizeof(M_rtpstream_actinfo.payload_name));
     M_rtpstream_actinfo.audio_active = 0;
     M_rtpstream_actinfo.video_active = 0;
@@ -891,6 +891,15 @@ void CAction::setRTPStreamActInfo(const char *P_value)
               ERROR("Invalid rtp payload type %d - cannot set playback parameters\n",M_rtpstream_actinfo.payload_type);
           }
           break;
+    }
+
+    if (M_rtpstream_actinfo.ms_per_packet <= 0 ||
+            M_rtpstream_actinfo.bytes_per_packet <= 0 ||
+            M_rtpstream_actinfo.ticks_per_packet <= 0)
+    {
+        ERROR("Unknown static rtp payload type %d with payload_name \"%s\" "
+                "(missing PCMU/8000 or similar in rtp_echo?)",
+                M_rtpstream_actinfo.payload_type, M_rtpstream_actinfo.payload_name);
     }
 
     if (rtpstream_cache_file(M_rtpstream_actinfo.filename,

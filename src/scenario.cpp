@@ -1683,23 +1683,23 @@ void scenario::parseAction(CActions *actions)
 #ifdef RTP_STREAM
             } else if ((ptr = xp_get_keyword_value("rtp_stream"))) {
                 hasMedia = 1;
-                if (!strcmp(cptr, "pauseapattern")) {
+                if (!strcmp(ptr, "pauseapattern")) {
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_PAUSEAPATTERN);
-                } else if (!strcmp(cptr, "resumeapattern")) {
+                } else if (!strcmp(ptr, "resumeapattern")) {
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_RESUMEAPATTERN);
-                } else if (!strncmp(cptr, "apattern", 8)) {
-                    tmpAction->setRTPStreamActInfo(cptr);
+                } else if (!strncmp(ptr, "apattern", 8)) {
+                    tmpAction->setRTPStreamActInfo(ptr);
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_PLAYAPATTERN);
-                } else if (!strcmp(cptr, "pausevpattern")) {
+                } else if (!strcmp(ptr, "pausevpattern")) {
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_PAUSEVPATTERN);
-                } else if (!strcmp(cptr, "resumevpattern")) {
+                } else if (!strcmp(ptr, "resumevpattern")) {
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_RESUMEVPATTERN);
-                } else if (!strncmp(cptr, "vpattern", 8)) {
-                    tmpAction->setRTPStreamActInfo(cptr);
+                } else if (!strncmp(ptr, "vpattern", 8)) {
+                    tmpAction->setRTPStreamActInfo(ptr);
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_PLAYVPATTERN);
-                } else if (!strcmp(cptr, "pause")) {
+                } else if (!strcmp(ptr, "pause")) {
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_PAUSE);
-                } else if (!strcmp(cptr, "resume")) {
+                } else if (!strcmp(ptr, "resume")) {
                     tmpAction->setActionType(CAction::E_AT_RTP_STREAM_RESUME);
                 } else {
                     tmpAction->setRTPStreamActInfo(ptr);
