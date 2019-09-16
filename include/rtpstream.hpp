@@ -21,7 +21,11 @@
 
 #include "jlsrtp.hpp"
 
-#include <tr1/unordered_map>
+#include <unordered_map>
+
+#ifdef RTP_STREAM
+typedef std::unordered_map<pthread_t, std::string> thread_map;
+#endif
 
 #define RTPSTREAM_MAX_FILENAMELEN 256
 #define RTPSTREAM_MAX_PAYLOADNAME 256
@@ -190,7 +194,7 @@ union ResultCheck
 
 int rtpstream_new_call(rtpstream_callinfo_t *callinfo);
 void rtpstream_end_call(rtpstream_callinfo_t *callinfo);
-int rtpstream_shutdown(std::tr1::unordered_map<pthread_t, std::string>& threadIDs);
+int rtpstream_shutdown(thread_map& threadIDs);
 
 int rtpstream_get_local_audioport(rtpstream_callinfo_t *callinfo);
 int rtpstream_get_local_videoport(rtpstream_callinfo_t *callinfo);

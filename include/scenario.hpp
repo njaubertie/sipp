@@ -27,7 +27,7 @@
 #include <map>
 
 #ifdef RTP_STREAM
-#include <tr1/unordered_map>
+#include <unordered_map>
 #endif // RTP_STREAM
 
 #include <sys/socket.h>
@@ -36,6 +36,9 @@
 #include "message.hpp"
 #include "stat.hpp"
 
+#ifdef RTP_STREAM
+typedef std::unordered_map<pthread_t, std::string> thread_map;
+#endif
 
 #define MSG_TYPE_SENDCMD   0
 #define MSG_TYPE_RECVCMD   1
@@ -197,7 +200,7 @@ public:
 #ifdef RTP_STREAM
     void addRtpTaskThreadID(pthread_t id);
     void removeRtpTaskThreadID(pthread_t id);
-    std::tr1::unordered_map<pthread_t, std::string>& fetchRtpTaskThreadIDs();
+    thread_map& fetchRtpTaskThreadIDs();
 #endif // RTP_STREAM
 
     CStat *stats;
@@ -233,7 +236,7 @@ private:
     bool last_recv_optional;
 
 #ifdef RTP_STREAM
-    std::tr1::unordered_map<pthread_t, std::string> threadIDs;
+    thread_map threadIDs;
 #endif // RTP_STREAM
 };
 

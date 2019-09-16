@@ -3312,7 +3312,7 @@ int rtpstream_rtpecho_stopvideo(rtpstream_callinfo_t *callinfo)
 }
 
 /* code checked */
-int rtpstream_shutdown(std::tr1::unordered_map<pthread_t, std::string>& threadIDs)
+int rtpstream_shutdown(thread_map& threadIDs)
 {
     int            count= 0;
     void*          rtpresult;
@@ -3347,7 +3347,7 @@ int rtpstream_shutdown(std::tr1::unordered_map<pthread_t, std::string>& threadID
     }
 
     // PTHREAD JOIN HERE...
-    for (std::tr1::unordered_map<pthread_t, std::string>::iterator iter = threadIDs.begin(); iter != threadIDs.end(); ++iter)
+    for (thread_map::iterator iter = threadIDs.begin(); iter != threadIDs.end(); ++iter)
     {
         printAudioHex("EXISTING THREADID: ", "", 0, (int)(long long)iter->first, 0);
         printVideoHex("EXISTING THREADID: ", "", 0, (int)(long long)iter->first, 0);

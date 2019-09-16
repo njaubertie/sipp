@@ -407,7 +407,7 @@ void scenario::removeRtpTaskThreadID(pthread_t id)
     threadIDs.erase(id);
 }
 
-std::tr1::unordered_map<pthread_t, std::string>& scenario::fetchRtpTaskThreadIDs()
+thread_map& scenario::fetchRtpTaskThreadIDs()
 {
     return threadIDs;
 }
