@@ -387,6 +387,7 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
     next_req_url = NULL;
 
     cseq = 0;
+    current_nc =0;
 
     next_retrans = 0;
     nb_retrans = 0;
@@ -2381,7 +2382,7 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
         createSendingMessage(auth_comp->comp_param.auth_param.aka_OP, -2, my_aka_OP, sizeof(my_aka_OP));
 
         if (createAuthHeader(my_auth_user, my_auth_pass, method, uri, auth_body, dialog_authentication,
-                             my_aka_OP, my_aka_AMF, my_aka_K, result + authlen) == 0) {
+                             my_aka_OP, my_aka_AMF, my_aka_K, &current_nc, result + authlen) == 0) {
             ERROR("%s", result + authlen);
         }
         authlen = strlen(result);
@@ -3161,6 +3162,7 @@ bool call::process_incoming(const char* msg, const struct sockaddr_storage* src)
 
         realloc_ptr = (char *) realloc(dialog_authentication, strlen(auth) + 2);
         if (realloc_ptr) {
+            current_nc=0;
             dialog_authentication = realloc_ptr;
         } else {
             free(dialog_authentication);

@@ -160,6 +160,7 @@ protected:
 
     /* cseq value for [cseq] keyword */
     unsigned int   cseq;
+    unsigned int   current_nc;
 
 #ifdef PCAPPLAY
     int hasMediaInformation;
